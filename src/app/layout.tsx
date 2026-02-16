@@ -63,6 +63,27 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Rune",
+  url: "https://rune.gl",
+  description:
+    "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS, Windows, Linux",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  creator: {
+    "@type": "Organization",
+    name: "Rune",
+    url: "https://rune.gl",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -70,6 +91,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
