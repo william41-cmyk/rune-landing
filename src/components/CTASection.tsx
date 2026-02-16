@@ -8,13 +8,13 @@ import {
   Button,
   HStack,
   Flex,
+  Tooltip,
 } from "@chakra-ui/react";
 import { FiDownload } from "react-icons/fi";
 import { FiMonitor } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
-
-// Use generic icons since SiWindows/SiLinux may not be available in this version
 const SiWindows = FiMonitor;
 const SiLinux = FiMonitor;
 import AnimatedSection from "./AnimatedSection";
@@ -24,7 +24,37 @@ const MotionHeading = motion.create(Heading);
 const MotionText = motion.create(Text);
 const MotionBox = motion.create(Box);
 
+/* ------------------------------------------------------------------ */
+/*  Countdown hook — same UTC target as download page                  */
+/* ------------------------------------------------------------------ */
+
+const TARGET = new Date("2026-02-23T00:00:00Z").getTime();
+
+function useCountdown() {
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const diff = Math.max(0, TARGET - now);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, minutes, seconds, ended: diff === 0 };
+}
+
 export default function CTASection() {
+  const { days, hours, minutes, seconds, ended } = useCountdown();
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  const tooltipLabel = ended
+    ? "Available now"
+    : `${pad(days)}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+
   return (
     <Box
       as="section"
@@ -35,7 +65,7 @@ export default function CTASection() {
       position="relative"
       overflow="hidden"
     >
-      {/* Static DarkVeil background — different variant from hero */}
+      {/* Static DarkVeil background */}
       <Box
         position="absolute"
         top={0}
@@ -58,7 +88,7 @@ export default function CTASection() {
         />
       </Box>
 
-      {/* Top fade — blends from page bg into the shader */}
+      {/* Top fade */}
       <Box
         position="absolute"
         top={0}
@@ -70,7 +100,7 @@ export default function CTASection() {
         pointerEvents="none"
       />
 
-      {/* Bottom fade — blends shader back into page bg / footer */}
+      {/* Bottom fade */}
       <Box
         position="absolute"
         bottom={0}
@@ -83,22 +113,24 @@ export default function CTASection() {
       />
 
       <VStack maxW="700px" mx="auto" spacing={8} position="relative" zIndex={2} textAlign="center">
-        <AnimatedSection>
-          <Heading
-            fontSize={{ base: "5xl", md: "9xl" }}
-            fontWeight={700}
-            letterSpacing="-0.02em"
-            lineHeight={1.1}
-            sx={{
-              background: "linear-gradient(180deg, #f5f5f5 0%, #a3a3a3 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            It just works
-          </Heading>
-        </AnimatedSection>
+        <MotionHeading
+          as="h1"
+          fontSize={{ base: "6xl", md: "7xl", lg: "8xl" }}
+          fontWeight={700}
+          lineHeight={1.05}
+          letterSpacing="-0.03em"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          sx={{
+            background: "#e6e6e6",
+            backgroundClip: "text",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          It just works
+        </MotionHeading>
 
         <AnimatedSection delay={0.1}>
           <MotionBox
@@ -106,21 +138,41 @@ export default function CTASection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
           >
-            <Button
-              bg="#e6e6e6"
-              color="#171717"
-              fontWeight={500}
-              fontSize="md"
-              borderRadius="full"
-              px={5}
-              h="40px"
-              leftIcon={<FiDownload size={14} />}
-              _hover={{ bg: "#d4d4d4" }}
-              _active={{ bg: "#c2c2c2" }}
-              transition="all 0.2s"
+            <Tooltip
+              label={tooltipLabel}
+              fontFamily="mono"
+              fontSize="xs"
+              bg="gray.900"
+              color="gray.50"
+              border="1px solid"
+              borderColor="rgba(255,255,255,0.08)"
+              borderRadius="8px"
+              px={3}
+              py={1.5}
+              hasArrow
+              placement="bottom"
             >
-              Download Now
-            </Button>
+              <Button
+                bg="#e6e6e6"
+                color="#171717"
+                fontWeight={500}
+                fontSize="md"
+                borderRadius="full"
+                px={5}
+                h="40px"
+                leftIcon={<FiDownload size={14} />}
+                isDisabled
+                _disabled={{
+                  bg: "rgba(255,255,255,0.08)",
+                  color: "gray.500",
+                  cursor: "not-allowed",
+                  opacity: 1,
+                }}
+                transition="all 0.2s"
+              >
+                Star on Github
+              </Button>
+            </Tooltip>
           </MotionBox>
         </AnimatedSection>
       </VStack>

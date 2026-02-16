@@ -89,7 +89,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiClock,
             iconColor: "purple",
             description: "Every session is persisted, searchable, and recoverable at any time.",
-            tint: "270, 60%",
+            tint: "270, 75%",
             visual: "sessions",
         },
         {
@@ -97,7 +97,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiRefreshCw,
             iconColor: "blue",
             description: "Browse, resume, and fork any previous coding session instantly.",
-            tint: "210, 60%",
+            tint: "210, 75%",
             visual: "sessions-history",
         },
         {
@@ -105,7 +105,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiGitBranch,
             iconColor: "green",
             description: "Each session runs in its own isolated git worktree branch.",
-            tint: "150, 50%",
+            tint: "150, 65%",
             visual: "sessions-branch",
         },
         {
@@ -113,7 +113,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiTerminal,
             iconColor: "amber",
             description: "Persistent terminal instances that survive across restarts and reconnects.",
-            tint: "35, 65%",
+            tint: "35, 80%",
             visual: "sessions-terminal",
         },
     ],
@@ -123,7 +123,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiGitMerge,
             iconColor: "purple",
             description: "Design multi-agent pipelines with a drag-and-drop node editor.",
-            tint: "270, 60%",
+            tint: "270, 75%",
             visual: "pipelines-editor",
         },
         {
@@ -131,7 +131,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiCpu,
             iconColor: "blue",
             description: "Connect Architect, Coder, and Raven nodes in any configuration.",
-            tint: "210, 65%",
+            tint: "210, 75%",
             visual: "pipelines-nodes",
         },
         {
@@ -139,7 +139,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiPlay,
             iconColor: "green",
             description: "Execute custom pipelines with real-time progress and iteration loops.",
-            tint: "150, 50%",
+            tint: "150, 65%",
             visual: "pipelines-loop",
         },
         {
@@ -147,7 +147,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiSettings,
             iconColor: "amber",
             description: "Fine-tune model parameters, token limits, and retry strategies per node.",
-            tint: "35, 65%",
+            tint: "35, 80%",
             visual: "pipelines-config",
         },
     ],
@@ -157,7 +157,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiLayers,
             iconColor: "amber",
             description: "Pre-loaded capabilities for common frameworks and languages.",
-            tint: "35, 70%",
+            tint: "35, 80%",
             visual: "skills-builtin",
         },
         {
@@ -165,7 +165,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiFileText,
             iconColor: "purple",
             description: "Write markdown skills to teach agents your codebase conventions.",
-            tint: "270, 55%",
+            tint: "270, 70%",
             visual: "skills-markdown",
         },
         {
@@ -173,7 +173,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiBookOpen,
             iconColor: "blue",
             description: "Inject domain knowledge so agents understand your architecture.",
-            tint: "210, 60%",
+            tint: "210, 75%",
             visual: "skills-extend",
         },
         {
@@ -181,7 +181,7 @@ const tabData: Record<string, CardData[]> = {
             icon: FiDatabase,
             iconColor: "green",
             description: "Agents learn your database schema and generate type-safe queries.",
-            tint: "150, 50%",
+            tint: "150, 65%",
             visual: "skills-schema",
         },
     ],
@@ -458,7 +458,7 @@ function CardVisual({ type }: { type: string }) {
                 <Text pl={3}>role <Text as="span" color="gray.600">enum</Text></Text>
                 <Text color="#60a5fa" fontWeight={600} mt={2}>posts</Text>
                 <Text pl={3}>id <Text as="span" color="gray.600">uuid pk</Text></Text>
-                <Text pl={3}>author_id <Text as="span" color="gray.600">fk → users</Text></Text>
+                <Text pl={3}>author_id <Text as="span" color="gray.600">fk â†’ users</Text></Text>
             </Box>
         );
     }
@@ -473,10 +473,10 @@ function CardVisual({ type }: { type: string }) {
 /*
   Card width: 300px on desktop.
   At initial scroll position, 3 full cards + gaps fit in the visible area,
-  with the 4th card showing roughly half — clipped by the container edge.
+  with the 4th card showing roughly half â€” clipped by the container edge.
 
-  Math: container=1200px, pl≈82px, pr≈24px → visible≈1094px
-  3×300 + 3×16(gap) = 948px → remaining 146px = ~49% of 4th card.
+  Math: container=1200px, plâ‰ˆ82px, prâ‰ˆ24px â†’ visibleâ‰ˆ1094px
+  3Ã—300 + 3Ã—16(gap) = 948px â†’ remaining 146px = ~49% of 4th card.
 */
 
 function FeatureCard({ card }: { card: CardData }) {
@@ -492,55 +492,87 @@ function FeatureCard({ card }: { card: CardData }) {
             cursor="pointer"
             role="group"
             transition="all 0.35s cubic-bezier(0.25, 0.4, 0.25, 1)"
-            bg={`linear-gradient(160deg, 
-        hsla(${card.tint}, 35%, 0.6) 0%, 
-        hsla(${card.tint}, 25%, 0.2) 40%,
-        rgba(20, 20, 20, 0.2) 100%
-      )`}
-            border="1px solid"
-            borderColor="rgba(255,255,255,0.02)"
+            bg={`radial-gradient(ellipse at 30% 20%, hsla(${card.tint}, 25%) 0%, hsla(${card.tint}, 12%) 50%, hsla(${card.tint}, 6%) 100%)`}
+            isolation="isolate"
             sx={{
-                boxShadow: "0 4px 24px rgba(0,0,0,0.2)",
+                //boxShadow: "0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset",
             }}
         >
-            <Flex px={5} pt={5} pb={0} align="center" justify="space-between">
-                <HStack spacing={3}>
-                    <GlassIcon icon={card.icon} color={card.iconColor} />
-                    <Text fontSize="md" fontWeight={600} color="gray.50">{card.name}</Text>
-                </HStack>
-                <Flex
-                    w="28px"
-                    h="28px"
-                    borderRadius="full"
-                    bg="rgba(255,255,255,0.05)"
-                    border="1px solid rgba(255,255,255,0.08)"
-                    align="center"
-                    justify="center"
-                    transition="all 0.3s"
-                    _groupHover={{ bg: "rgba(255,255,255,0.08)" }}
-                >
-                    <Icon as={FiChevronRight} boxSize={3.5} color="gray.500" />
-                </Flex>
-            </Flex>
-
-            <Box px={5} pt={3} pb={0}>
-                <Text fontSize="sm" color="gray.400" lineHeight={1.6}>{card.description}</Text>
-            </Box>
-
-            <Box flex={1} px={4} pt={5} pb={5} display="flex" flexDirection="column">
-                <CardVisual type={card.visual} />
-            </Box>
-
+            {/* Noise texture overlay */}
             <Box
                 position="absolute"
-                bottom={0}
-                left={0}
-                right={0}
-                h="60px"
-                bg="linear-gradient(to top, rgba(14,14,14,0.5), transparent)"
+                inset={0}
+                zIndex={1}
+                opacity={0.4}
                 pointerEvents="none"
-                borderRadius="0 0 20px 20px"
+                mixBlendMode="overlay"
+                sx={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                }}
             />
+
+            {/* Metallic shine gradient */}
+            <Box
+                position="absolute"
+                inset={0}
+                zIndex={2}
+                pointerEvents="none"
+                mixBlendMode="overlay"
+                bg="linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0.25) 100%)"
+            />
+
+            {/* Gradient border via mask-composite */}
+            <Box
+                position="absolute"
+                inset={0}
+                borderRadius="20px"
+                zIndex={3}
+                pointerEvents="none"
+                sx={{
+                    padding: "1px",
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.4) 100%)",
+                    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    maskComposite: "exclude",
+                    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                }}
+            />
+
+            {/* Content */}
+            <Flex
+                direction="column"
+                position="relative"
+                zIndex={4}
+                h="100%"
+            >
+                <Flex px={5} pt={5} pb={0} align="center" justify="space-between">
+                    <HStack spacing={3}>
+                        <GlassIcon icon={card.icon} color={card.iconColor} />
+                        <Text fontSize="md" fontWeight={600} color="gray.50">{card.name}</Text>
+                    </HStack>
+                    <Flex
+                        w="28px"
+                        h="28px"
+                        borderRadius="full"
+                        bg="rgba(255,255,255,0.05)"
+                        border="1px solid rgba(255,255,255,0.12)"
+                        align="center"
+                        justify="center"
+                        transition="all 0.3s"
+                        _groupHover={{ bg: "rgba(255,255,255,0.1)" }}
+                    >
+                        <Icon as={FiChevronRight} boxSize={3.5} color="gray.400" />
+                    </Flex>
+                </Flex>
+
+                <Box px={5} pt={3} pb={0}>
+                    <Text fontSize="sm" color="gray.400" lineHeight={1.6}>{card.description}</Text>
+                </Box>
+
+                <Box flex={1} px={4} pt={5} pb={5} display="flex" flexDirection="column">
+                    <CardVisual type={card.visual} />
+                </Box>
+            </Flex>
         </Flex>
     );
 }
@@ -692,7 +724,7 @@ export default function FeaturesCarouselSection() {
                     zIndex={2}
                 />
 
-                {/* Left edge fade — appears when cards scroll left */}
+                {/* Left edge fade â€” appears when cards scroll left */}
                 <Box
                     position="absolute"
                     top={0}

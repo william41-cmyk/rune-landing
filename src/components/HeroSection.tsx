@@ -11,14 +11,14 @@ import {
 import { motion } from "framer-motion";
 import { FiDownload } from "react-icons/fi";
 import DarkVeil from "./DarkVeil";
+import Link from "next/link";
 
 const MotionHeading = motion.create(Heading);
-const MotionText = motion.create(Text);
 const MotionBox = motion.create(Box);
 
 export default function HeroSection() {
   return (
-    <Box position="relative" h="50vh" minH="400px" overflow="hidden" id="hero">
+    <Box as="section" position="relative" h="50vh" minH="400px" overflow="hidden" id="hero">
       {/* Shader Background */}
       <Box position="absolute" inset={0} overflow="hidden">
         <DarkVeil
@@ -44,7 +44,7 @@ export default function HeroSection() {
         pb="0"
         px={{ base: 5, md: 8 }}
       >
-        <VStack spacing={6} maxW="860px" textAlign="center" mb={0}>
+        <VStack spacing={6} maxW="760px" textAlign="center" mb={0}>
 
           {/* Headline */}
           <MotionHeading
@@ -63,24 +63,8 @@ export default function HeroSection() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            Agentic Engineering Made Easier
+            Agentic Engineering, Simplified
           </MotionHeading>
-
-          {/* Subheadline */}
-          <MotionText
-            fontSize={{ base: "xl", md: "3xl" }}
-            color="gray.400"
-            maxW="640px"
-            lineHeight={1.3}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
-          >
-            Visual multi-agent framework that lets you
-            build custom orchestration pipelines
-            to turn your ideas into
-            production-ready code.
-          </MotionText>
 
           {/* CTAs */}
           <MotionBox
@@ -89,21 +73,23 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.5 }}
           >
             <VStack spacing={3}>
-              <Button
-                bg="#e6e6e6"
-                color="#171717"
-                fontWeight={500}
-                fontSize="md"
-                borderRadius="full"
-                px={5}
-                h="40px"
-                leftIcon={<FiDownload size={14} />}
-                _hover={{ bg: "#d4d4d4" }}
-                _active={{ bg: "#c2c2c2" }}
-                transition="all 0.2s"
-              >
-                Download Now
-              </Button>
+              <Link href="/download" passHref>
+                <Button
+                  bg="#e6e6e6"
+                  color="#171717"
+                  fontWeight={500}
+                  fontSize="md"
+                  borderRadius="full"
+                  px={5}
+                  h="40px"
+                  leftIcon={<FiDownload size={14} />}
+                  _hover={{ bg: "#d4d4d4" }}
+                  _active={{ bg: "#c2c2c2" }}
+                  transition="all 0.2s"
+                >
+                  Download Now
+                </Button>
+              </Link>
               <Text fontSize="2xs" color="gray.500">
                 MacOS, Windows & Linux
               </Text>

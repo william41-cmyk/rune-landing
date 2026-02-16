@@ -1,5 +1,3 @@
-"use client";
-
 import { Box } from "@chakra-ui/react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -10,7 +8,7 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <Box minH="100vh" bg="#171717" overflowX="hidden">
+    <Box as="main" minH="100vh" bg="#171717" overflowX="hidden">
       {/* Bordered container â€” everything lives inside the side lines */}
       <Box
         maxW="1200px"

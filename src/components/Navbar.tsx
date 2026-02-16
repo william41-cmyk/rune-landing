@@ -6,9 +6,10 @@ import {
   HStack,
   Text,
   Button,
-  Link as ChakraLink,
+  Link as ChakraLink, Image
 } from "@chakra-ui/react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineCommandLine } from "react-icons/hi2";
 
@@ -44,22 +45,8 @@ export default function Navbar() {
         justify="space-between"
       >
         {/* Logo */}
-        <HStack spacing={2.5} cursor="pointer">
-          <Flex
-            w="32px"
-            h="32px"
-            bg="rgba(168, 85, 247, 0.15)"
-            border="1px solid"
-            borderColor="rgba(168, 85, 247, 0.3)"
-            borderRadius="8px"
-            align="center"
-            justify="center"
-          >
-            <HiOutlineCommandLine size={18} color="#a855f7" />
-          </Flex>
-          <Text fontSize="2xl" fontWeight={700} letterSpacing="-0.02em">
-            RUNE
-          </Text>
+        <HStack spacing={2.5} cursor="pointer" >
+          <Image src="/rune-logo.webp" alt="Rune" h="32px" w="auto" />
         </HStack>
 
         {/* CTA */}
@@ -84,20 +71,22 @@ export default function Navbar() {
           >
             Source
           </ChakraLink>
-          <Button
-            size="sm"
-            bg="#e6e6e6"
-            color="#171717"
-            fontWeight={500}
-            fontSize="sm"
-            borderRadius="full"
-            px={4}
-            _hover={{ bg: "#d4d4d4" }}
-            _active={{ bg: "#c2c2c2" }}
-            transition="all 0.2s"
-          >
-            Download
-          </Button>
+          <Link href="/download" passHref>
+            <Button
+              size="sm"
+              bg="#e6e6e6"
+              color="#171717"
+              fontWeight={500}
+              fontSize="sm"
+              borderRadius="full"
+              px={4}
+              _hover={{ bg: "#d4d4d4" }}
+              _active={{ bg: "#c2c2c2" }}
+              transition="all 0.2s"
+            >
+              Download
+            </Button>
+          </Link>
         </HStack>
       </Flex>
     </Box>

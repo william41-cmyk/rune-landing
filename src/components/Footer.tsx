@@ -6,13 +6,11 @@ import {
   HStack,
   Text,
   Link as ChakraLink,
-  Icon,
+  Image
 } from "@chakra-ui/react";
-import { HiOutlineCommandLine } from "react-icons/hi2";
-import { FiGithub, FiBookOpen, FiFileText, FiTwitter } from "react-icons/fi";
+import { FiBookOpen, FiFileText } from "react-icons/fi";
 
 const links = [
-  { label: "GitHub", href: "#", icon: FiGithub },
   { label: "Documentation", href: "#", icon: FiBookOpen },
   { label: "Changelog", href: "#", icon: FiFileText },
 ];
@@ -24,7 +22,7 @@ export default function Footer() {
       bg="#171717"
       position="relative"
       zIndex={1}
-      borderTop="1px solid"
+      borderTop="1px dashed"
       borderColor="rgba(255,255,255,0.06)"
       py={8}
       px={{ base: 5, md: 8 }}
@@ -37,21 +35,7 @@ export default function Footer() {
       >
         {/* Logo */}
         <HStack spacing={2}>
-          <Flex
-            w="24px"
-            h="24px"
-            bg="rgba(168, 85, 247, 0.15)"
-            border="1px solid"
-            borderColor="rgba(168, 85, 247, 0.3)"
-            borderRadius="6px"
-            align="center"
-            justify="center"
-          >
-            <HiOutlineCommandLine size={13} color="#a855f7" />
-          </Flex>
-          <Text fontSize="md" fontWeight={600} color="gray.300">
-            Rune
-          </Text>
+          <Image src="/rune-logo.webp" alt="Rune" h="24px" w="auto" />
         </HStack>
 
         {/* Links */}
