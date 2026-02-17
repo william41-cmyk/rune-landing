@@ -6,7 +6,7 @@ import { GeistMono } from "geist/font/mono";
 export const metadata: Metadata = {
   metadataBase: new URL("https://rune.gl"),
   title: {
-    default: "Rune â€” Multi-Agent Coding Framework",
+    default: "Multi-Agent Coding Framework",
     template: "%s | Rune",
   },
   description:
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rune.gl",
     siteName: "Rune",
-    title: "Rune â€” Multi-Agent Coding Framework",
+    title: "Multi-Agent Coding Framework",
     description:
       "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
     images: [
