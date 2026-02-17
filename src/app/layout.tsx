@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://rune.gl"),
   title: {
     default: "Multi-Agent Coding Framework",
-    template: "%s | Rune",
+    template: "Rune",
   },
   description:
     "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Rune â€” Agentic Engineering, Simplified",
+        alt: "Agentic Engineering, Simplified",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rune â€” Multi-Agent Coding Framework",
+    title: "Multi-Agent Coding Framework",
     description:
       "Visual multi-agent framework for building custom AI orchestration pipelines.",
     images: ["/og-image.png"],
