@@ -132,7 +132,7 @@ export default function RuneCoinPage() {
                             {/* Coin button */}
                             <Box
                                 as="a"
-                                href="#"
+                                href="https://pump.fun/coin/9fAT1fVVEKMEL6rUeYxSYU8ZjQ5dSiTzAZYTdiPvpump"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 cursor="pointer"
