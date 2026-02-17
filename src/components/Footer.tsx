@@ -8,10 +8,12 @@ import {
   Link as ChakraLink,
   Image
 } from "@chakra-ui/react";
-import { FiBookOpen, FiFileText } from "react-icons/fi";
+import { FiBookOpen, FiFileText, FiDollarSign } from "react-icons/fi";
+import Link from "next/link";
 
 const links = [
-  { label: "Documentation", href: "#", icon: FiBookOpen },
+  { label: "X", href: "https://x.com/runedotgl", icon: FiFileText },
+  { label: "Documentation", href: "/docs", icon: FiBookOpen },
   { label: "Changelog", href: "#", icon: FiFileText },
 ];
 
@@ -23,7 +25,7 @@ export default function Footer() {
       position="relative"
       zIndex={1}
       borderTop="1px dashed"
-      borderColor="rgba(255,255,255,0.06)"
+      borderColor="rgba(255,255,255,0.12)"
       py={8}
       px={{ base: 5, md: 8 }}
     >
@@ -55,6 +57,19 @@ export default function Footer() {
               <Text display={{ base: "none", sm: "block" }}>{link.label}</Text>
             </ChakraLink>
           ))}
+          <Link href="/$rune">
+            <Text
+              display={{ base: "none", sm: "block" }}
+              fontSize="sm"
+              fontWeight={500}
+              color="gray.500"
+              cursor="pointer"
+              transition="all 0.2s"
+              _hover={{ color: "gray.300" }}
+            >
+              $RUNE
+            </Text>
+          </Link>
         </HStack>
 
         {/* Copyright */}

@@ -16,7 +16,7 @@ export default function Home() {
         position="relative"
         borderLeft="1px dashed"
         borderRight="1px dashed"
-        borderColor="rgba(255,255,255,0.08)"
+        borderColor="rgba(255,255,255,0.12)"
       >
         <Navbar />
         <HeroSection />

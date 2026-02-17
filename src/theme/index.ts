@@ -24,9 +24,9 @@ const theme = extendTheme({
     "10xl": "64px",  // hero heading (tablet)
   },
   fonts: {
-    heading: `'Ubuntu', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
-    body: `'Ubuntu', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
-    mono: `'JetBrains Mono', ui-monospace, "SF Mono", Menlo, Monaco, monospace`,
+    heading: `var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
+    body: `var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
+    mono: `var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, Monaco, monospace`,
   },
   colors: {
     gray: {
@@ -56,7 +56,7 @@ const theme = extendTheme({
         scrollBehavior: "smooth",
       },
       "::selection": {
-        bg: "rgba(168, 85, 247, 0.3)",
+        bg: "rgba(255, 255, 255, 0.2)",
         color: "white",
       },
     },

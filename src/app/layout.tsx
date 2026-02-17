@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
-import "@fontsource/ubuntu/400.css";
-import "@fontsource/ubuntu/500.css";
-import "@fontsource/ubuntu/700.css";
-import "@fontsource/jetbrains-mono/400.css";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rune.gl"),
   title: {
-    default: "Rune — Multi-Agent Coding Framework",
+    default: "Rune â€” Multi-Agent Coding Framework",
     template: "%s | Rune",
   },
   description:
@@ -31,7 +29,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rune.gl",
     siteName: "Rune",
-    title: "Rune — Multi-Agent Coding Framework",
+    title: "Rune â€” Multi-Agent Coding Framework",
     description:
       "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
     images: [
@@ -39,13 +37,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Rune — Agentic Engineering, Simplified",
+        alt: "Rune â€” Agentic Engineering, Simplified",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rune — Multi-Agent Coding Framework",
+    title: "Rune â€” Multi-Agent Coding Framework",
     description:
       "Visual multi-agent framework for building custom AI orchestration pipelines.",
     images: ["/og-image.png"],
@@ -90,7 +88,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

@@ -16,7 +16,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import AnimatedSection from "@/components/AnimatedSection";
 import DarkVeil from "@/components/DarkVeil";
 
 /* ------------------------------------------------------------------ */
@@ -105,26 +104,22 @@ export default function DownloadPage() {
                         px={{ base: 5, md: 8 }}
                         textAlign="center"
                     >
-                        <AnimatedSection>
-                            <Link href="/" passHref>
-                                <HStack
-                                    as="a"
-                                    spacing={2}
-                                    color="gray.500"
-                                    cursor="pointer"
-                                    transition="all 0.2s"
-                                    _hover={{ color: "gray.300" }}
-                                    mb={4}
-                                    justify="center"
-                                >
-                                    <Icon as={FiArrowLeft} boxSize={3.5} />
-                                    <Text fontSize="sm" fontWeight={500}>Back to home</Text>
-                                </HStack>
-                            </Link>
-                        </AnimatedSection>
+                        <Link href="/">
+                            <HStack
+                                spacing={2}
+                                color="gray.500"
+                                cursor="pointer"
+                                transition="all 0.2s"
+                                _hover={{ color: "gray.300" }}
+                                mb={4}
+                                justify="center"
+                            >
+                                <Icon as={FiArrowLeft} boxSize={3.5} />
+                                <Text fontSize="sm" fontWeight={500}>Back to home</Text>
+                            </HStack>
+                        </Link>
 
-                        <AnimatedSection delay={0.05}>
-                            <Heading
+                        <Heading
                                 fontSize={{ base: "5xl", md: "7xl" }}
                                 fontWeight={700}
                                 lineHeight={1.1}
@@ -138,10 +133,8 @@ export default function DownloadPage() {
                             >
                                 Download Rune
                             </Heading>
-                        </AnimatedSection>
 
-                        <AnimatedSection delay={0.1}>
-                            <Text
+                        <Text
                                 fontSize={{ base: "md", md: "xl" }}
                                 color="gray.400"
                                 lineHeight={1.5}
@@ -150,7 +143,6 @@ export default function DownloadPage() {
                             >
                                 Available everywhere. Pick your OS and start building.
                             </Text>
-                        </AnimatedSection>
 
                     </VStack>
                 </Box>
@@ -162,7 +154,6 @@ export default function DownloadPage() {
                     px={{ base: 5, md: 8 }}
                     pb={{ base: 16, md: 28 }}
                 >
-                    <AnimatedSection delay={0.2}>
                         <VStack spacing={{ base: 6, md: 8 }} textAlign="center">
                             {ended ? (
                                 <Heading
@@ -227,7 +218,6 @@ export default function DownloadPage() {
                                 </>
                             )}
                         </VStack>
-                    </AnimatedSection>
                 </Box>
 
                 <Box mt="auto">

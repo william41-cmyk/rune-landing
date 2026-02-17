@@ -12,17 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { FiDownload } from "react-icons/fi";
 import { FiMonitor } from "react-icons/fi";
-import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const SiWindows = FiMonitor;
 const SiLinux = FiMonitor;
-import AnimatedSection from "./AnimatedSection";
 import DarkVeil from "./DarkVeil";
-
-const MotionHeading = motion.create(Heading);
-const MotionText = motion.create(Text);
-const MotionBox = motion.create(Box);
 
 /* ------------------------------------------------------------------ */
 /*  Countdown hook — same UTC target as download page                  */
@@ -113,15 +107,12 @@ export default function CTASection() {
       />
 
       <VStack maxW="700px" mx="auto" spacing={8} position="relative" zIndex={2} textAlign="center">
-        <MotionHeading
+        <Heading
           as="h1"
           fontSize={{ base: "6xl", md: "7xl", lg: "8xl" }}
           fontWeight={700}
           lineHeight={1.05}
           letterSpacing="-0.03em"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
           sx={{
             background: "#e6e6e6",
             backgroundClip: "text",
@@ -130,51 +121,45 @@ export default function CTASection() {
           }}
         >
           It just works
-        </MotionHeading>
+        </Heading>
 
-        <AnimatedSection delay={0.1}>
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
+        <Box>
+          <Tooltip
+            label={tooltipLabel}
+            fontFamily="mono"
+            fontSize="xs"
+            bg="gray.900"
+            color="gray.50"
+            border="1px solid"
+            borderColor="rgba(255,255,255,0.08)"
+            borderRadius="8px"
+            px={3}
+            py={1.5}
+            hasArrow
+            placement="bottom"
           >
-            <Tooltip
-              label={tooltipLabel}
-              fontFamily="mono"
-              fontSize="xs"
-              bg="gray.900"
-              color="gray.50"
-              border="1px solid"
-              borderColor="rgba(255,255,255,0.08)"
-              borderRadius="8px"
-              px={3}
-              py={1.5}
-              hasArrow
-              placement="bottom"
+            <Button
+              bg="#e6e6e6"
+              color="#171717"
+              fontWeight={500}
+              fontSize="md"
+              borderRadius="full"
+              px={5}
+              h="40px"
+              leftIcon={<FiDownload size={14} />}
+              isDisabled
+              _disabled={{
+                bg: "rgba(255,255,255,0.08)",
+                color: "gray.500",
+                cursor: "not-allowed",
+                opacity: 1,
+              }}
+              transition="all 0.2s"
             >
-              <Button
-                bg="#e6e6e6"
-                color="#171717"
-                fontWeight={500}
-                fontSize="md"
-                borderRadius="full"
-                px={5}
-                h="40px"
-                leftIcon={<FiDownload size={14} />}
-                isDisabled
-                _disabled={{
-                  bg: "rgba(255,255,255,0.08)",
-                  color: "gray.500",
-                  cursor: "not-allowed",
-                  opacity: 1,
-                }}
-                transition="all 0.2s"
-              >
-                Star on Github
-              </Button>
-            </Tooltip>
-          </MotionBox>
-        </AnimatedSection>
+              Star on Github
+            </Button>
+          </Tooltip>
+        </Box>
       </VStack>
     </Box>
   );

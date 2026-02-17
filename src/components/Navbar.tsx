@@ -32,7 +32,7 @@ export default function Navbar() {
       zIndex={1000}
       backdropFilter={scrolled ? "blur(20px)" : "none"}
       borderBottom="1px dashed"
-      borderColor={scrolled ? "rgba(255,255,255,0.08)" : "transparent"}
+      borderColor={scrolled ? "rgba(255,255,255,0.12)" : "transparent"}
       transition="all 0.3s ease"
       sx={{ WebkitBackdropFilter: scrolled ? "blur(20px)" : "none" }}
     >
@@ -61,16 +61,14 @@ export default function Navbar() {
           >
             Community
           </ChakraLink>
-          <ChakraLink
-            href="#"
+          <Text
             fontSize="md"
             fontWeight={500}
-            color="gray.400"
-            _hover={{ color: "gray.50", textDecoration: "none" }}
-            transition="all 0.2s"
+            color="gray.600"
+            cursor="not-allowed"
           >
             Source
-          </ChakraLink>
+          </Text>
           <Link href="/download" passHref>
             <Button
               size="sm"

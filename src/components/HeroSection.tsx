@@ -8,17 +8,13 @@ import {
   Button,
   VStack,
 } from "@chakra-ui/react";
-import { motion } from "framer-motion";
 import { FiDownload } from "react-icons/fi";
 import DarkVeil from "./DarkVeil";
 import Link from "next/link";
 
-const MotionHeading = motion.create(Heading);
-const MotionBox = motion.create(Box);
-
 export default function HeroSection() {
   return (
-    <Box as="section" position="relative" h="50vh" minH="400px" overflow="hidden" id="hero">
+    <Box as="section" position="relative" h="42vh" minH="380px" overflow="hidden" id="hero">
       {/* Shader Background */}
       <Box position="absolute" inset={0} overflow="hidden">
         <DarkVeil
@@ -47,15 +43,12 @@ export default function HeroSection() {
         <VStack spacing={6} maxW="760px" textAlign="center" mb={0}>
 
           {/* Headline */}
-          <MotionHeading
+          <Heading
             as="h1"
             fontSize={{ base: "6xl", md: "7xl", lg: "8xl" }}
             fontWeight={700}
             lineHeight={1.05}
             letterSpacing="-0.03em"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
             sx={{
               background: "#e6e6e6",
               backgroundClip: "text",
@@ -64,14 +57,10 @@ export default function HeroSection() {
             }}
           >
             Agentic Engineering, Simplified
-          </MotionHeading>
+          </Heading>
 
           {/* CTAs */}
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-          >
+          <Box>
             <VStack spacing={3}>
               <Link href="/download" passHref>
                 <Button
@@ -94,7 +83,7 @@ export default function HeroSection() {
                 MacOS, Windows & Linux
               </Text>
             </VStack>
-          </MotionBox>
+          </Box>
         </VStack>
 
       </Flex>
