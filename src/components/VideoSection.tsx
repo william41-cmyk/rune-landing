@@ -15,7 +15,7 @@ export default function VideoSection() {
           maxW="680px"
           mb={6}
         >
-          Visual multi-agent framework for building
+          Open source visual multi-agent framework for building
           custom AI orchestration pipelines
           to turn your ideas into
           production-ready code.
