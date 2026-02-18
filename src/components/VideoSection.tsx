@@ -12,7 +12,7 @@ export default function VideoSection() {
           color="gray.400"
           lineHeight={1.3}
           textAlign="center"
-          maxW="680px"
+          maxW="700px"
           mb={6}
         >
           Open source visual multi-agent framework for building
