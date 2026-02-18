@@ -255,7 +255,7 @@ const pageData: Record<string, Omit<PageContent, "prev" | "next">> = {
     content: (
       <>
         <SectionHeading id="install-reqs">Requirements</SectionHeading>
-        <P>Rune runs on macOS, Windows, and Linux. You'll need Git installed (for worktree-based session isolation) and an API key from a supported LLM provider.</P>
+        <P>Rune runs on macOS, Windows, and Linux. You'll need either a Claude=code subscription or API key from a supported LLM provider.</P>
 
         <SectionHeading id="install-download">Download</SectionHeading>
         <P>Download the latest release from the Rune website or GitHub releases page. On macOS, drag to Applications. On Windows, run the installer. On Linux, use the AppImage or .deb package.</P>
