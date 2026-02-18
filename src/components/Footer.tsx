@@ -8,13 +8,12 @@ import {
   Link as ChakraLink,
   Image
 } from "@chakra-ui/react";
-import { FiBookOpen, FiFileText, FiDollarSign } from "react-icons/fi";
 import Link from "next/link";
 
 const links = [
-  { label: "X", href: "https://x.com/runedotgl", icon: FiFileText },
-  { label: "Documentation", href: "/docs", icon: FiBookOpen },
-  { label: "Changelog", href: "#", icon: FiFileText },
+  { label: "X", href: "https://x.com/runedotgl" },
+  { label: "Documentation", href: "/docs" },
+  { label: "Changelog", href: "#" },
 ];
 
 export default function Footer() {
@@ -54,12 +53,11 @@ export default function Footer() {
               _hover={{ color: "gray.300", textDecoration: "none" }}
               transition="all 0.2s"
             >
-              <Text display={{ base: "none", sm: "block" }}>{link.label}</Text>
+              <Text>{link.label}</Text>
             </ChakraLink>
           ))}
           <Link href="/$rune">
             <Text
-              display={{ base: "none", sm: "block" }}
               fontSize="sm"
               fontWeight={500}
               color="gray.500"
