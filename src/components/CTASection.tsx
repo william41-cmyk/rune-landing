@@ -124,20 +124,6 @@ export default function CTASection() {
         </Heading>
 
         <Box>
-          <Tooltip
-            label={tooltipLabel}
-            fontFamily="mono"
-            fontSize="xs"
-            bg="gray.900"
-            color="gray.50"
-            border="1px solid"
-            borderColor="rgba(255,255,255,0.08)"
-            borderRadius="8px"
-            px={3}
-            py={1.5}
-            hasArrow
-            placement="bottom"
-          >
             <Button
               bg="#e6e6e6"
               color="#171717"
@@ -158,7 +144,6 @@ export default function CTASection() {
             >
               Star on Github
             </Button>
-          </Tooltip>
         </Box>
       </VStack>
     </Box>
