@@ -79,7 +79,11 @@ export default function HeroSection() {
                   Download Now
                 </Button>
               </Link>
-              <Text fontSize="2xs" color="gray.500">
+              <Text
+                fontSize="xs"
+                fontWeight={500}
+                color="gray.500"
+              >
                 MacOS, Windows & Linux
               </Text>
             </VStack>

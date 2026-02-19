@@ -52,7 +52,7 @@ export default function Navbar() {
         {/* CTA */}
         <HStack spacing={4}>
           <ChakraLink
-            href="#"
+            href="https://x.com/i/communities/2024097721632608293"
             fontSize="md"
             fontWeight={500}
             color="gray.400"

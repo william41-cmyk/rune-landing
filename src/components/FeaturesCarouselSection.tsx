@@ -1223,7 +1223,7 @@ export default function FeaturesCarouselSection() {
                             >
                                 <Text
                                     fontSize="sm"
-                                    fontWeight={activeTab === i ? 600 : 400}
+                                    fontWeight={600}
                                     color={activeTab === i ? "gray.50" : "gray.500"}
                                     transition="color 0.25s ease"
                                     whiteSpace="nowrap"

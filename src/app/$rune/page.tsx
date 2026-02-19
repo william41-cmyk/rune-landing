@@ -106,6 +106,7 @@ export default function RuneCoinPage() {
 
                         <Text
                             fontSize={{ base: "md", md: "xl" }}
+                            fontWeight={500}
                             color="gray.400"
                             lineHeight={1.6}
                             maxW="450px"

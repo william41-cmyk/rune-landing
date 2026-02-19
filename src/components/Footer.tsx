@@ -71,8 +71,8 @@ export default function Footer() {
         </HStack>
 
         {/* Copyright */}
-        <Text fontSize="xs" color="gray.600">
-          &copy; {new Date().getFullYear()} Rune. All rights reserved.
+        <Text fontSize="xs" fontWeight={500} color="gray.600">
+          &copy; {new Date().getFullYear()} Rune.
         </Text>
       </Flex>
     </Box>
