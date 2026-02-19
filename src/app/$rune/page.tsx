@@ -90,30 +90,30 @@ export default function RuneCoinPage() {
                         </Link>
 
                         <Heading
-                                fontSize={{ base: "5xl", md: "7xl" }}
-                                fontWeight={700}
-                                lineHeight={1.1}
-                                letterSpacing="-0.03em"
-                                sx={{
-                                    background: "linear-gradient(180deg, #f5f5f5 0%, #a3a3a3 100%)",
-                                    backgroundClip: "text",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                }}
-                            >
-                                $RUNE
-                            </Heading>
+                            fontSize={{ base: "5xl", md: "7xl" }}
+                            fontWeight={700}
+                            lineHeight={1.1}
+                            letterSpacing="-0.03em"
+                            sx={{
+                                background: "#e6e6e6",
+                                backgroundClip: "text",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                            }}
+                        >
+                            $RUNE
+                        </Heading>
 
                         <Text
-                                fontSize={{ base: "md", md: "xl" }}
-                                color="gray.400"
-                                lineHeight={1.6}
-                                maxW="500px"
-                                mx="auto"
-                            >
-                                The official Rune support token.
-                                Join the community and be part of what&apos;s next.
-                            </Text>
+                            fontSize={{ base: "md", md: "xl" }}
+                            color="gray.400"
+                            lineHeight={1.6}
+                            maxW="450px"
+                            mx="auto"
+                        >
+                            The official Rune support token.
+                            Join the community to support Rune's future development.
+                        </Text>
                     </VStack>
                 </Box>
 
@@ -128,75 +128,75 @@ export default function RuneCoinPage() {
                     pb={{ base: 16, md: 28 }}
                     w="100%"
                 >
-                        <VStack spacing={{ base: 8, md: 10 }} textAlign="center">
-                            {/* Coin button */}
-                            <Box
-                                as="a"
-                                href="https://pump.fun/coin/9fAT1fVVEKMEL6rUeYxSYU8ZjQ5dSiTzAZYTdiPvpump"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                cursor="pointer"
-                            >
-                                <Box position="relative" display="inline-flex">
-                                    {/* Coin container */}
-                                    <Flex
-                                        position="relative"
-                                        w={{ base: "180px", md: "220px" }}
-                                        h={{ base: "180px", md: "220px" }}
-                                        borderRadius="full"
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        sx={{
-                                            /* Triple ring border for coin effect */
-                                            background: `
+                    <VStack spacing={{ base: 8, md: 10 }} textAlign="center">
+                        {/* Coin button */}
+                        <Box
+                            as="a"
+                            href="https://pump.fun/coin/9fAT1fVVEKMEL6rUeYxSYU8ZjQ5dSiTzAZYTdiPvpump"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            cursor="pointer"
+                        >
+                            <Box position="relative" display="inline-flex">
+                                {/* Coin container */}
+                                <Flex
+                                    position="relative"
+                                    w={{ base: "180px", md: "220px" }}
+                                    h={{ base: "180px", md: "220px" }}
+                                    borderRadius="full"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    sx={{
+                                        /* Triple ring border for coin effect */
+                                        background: `
                                                 radial-gradient(circle at 35% 35%, rgba(255,255,255,0.06) 0%, transparent 60%),
                                                 linear-gradient(145deg, #1c1c1c 0%, #161616 100%)
                                             `,
-                                            boxShadow: `
+                                        boxShadow: `
                                                 0 0 0 2px rgba(255,255,255,0.08),
                                                 0 0 0 6px rgba(255,255,255,0.03),
                                                 0 0 0 8px rgba(255,255,255,0.06),
                                                 0 8px 32px rgba(0,0,0,0.5),
                                                 0 0 60px rgba(20, 141, 255, 0.06)
                                             `,
-                                        }}
+                                    }}
+                                >
+                                    {/* Inner ring */}
+                                    <Flex
+                                        w={{ base: "150px", md: "184px" }}
+                                        h={{ base: "150px", md: "184px" }}
+                                        borderRadius="full"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        border="1px solid"
+                                        borderColor="rgba(255,255,255,0.06)"
+                                        bg="rgba(255,255,255,0.02)"
                                     >
-                                        {/* Inner ring */}
-                                        <Flex
-                                            w={{ base: "150px", md: "184px" }}
-                                            h={{ base: "150px", md: "184px" }}
-                                            borderRadius="full"
-                                            alignItems="center"
-                                            justifyContent="center"
-                                            border="1px solid"
-                                            borderColor="rgba(255,255,255,0.06)"
-                                            bg="rgba(255,255,255,0.02)"
-                                        >
-                                            {/* Logo */}
-                                            <Image
-                                                src="/rune-logo.webp"
-                                                alt="Rune"
-                                                h={{ base: "56px", md: "64px" }}
-                                                w="auto"
-                                                filter="brightness(0.9)"
-                                            />
-                                        </Flex>
+                                        {/* Logo */}
+                                        <Image
+                                            src="/rune-logo.webp"
+                                            alt="Rune"
+                                            h={{ base: "56px", md: "64px" }}
+                                            w="auto"
+                                            filter="brightness(0.9)"
+                                        />
                                     </Flex>
-                                </Box>
+                                </Flex>
                             </Box>
+                        </Box>
 
-                            {/* Label under coin */}
-                            <HStack
-                                spacing={2}
-                                color="gray.500"
-                                transition="all 0.2s"
-                            >
-                                <Text fontSize="sm" fontWeight={500}>
-                                    Get $RUNE
-                                </Text>
-                                <Icon as={FiExternalLink} boxSize={3.5} />
-                            </HStack>
-                        </VStack>
+                        {/* Label under coin */}
+                        <HStack
+                            spacing={2}
+                            color="gray.500"
+                            transition="all 0.2s"
+                        >
+                            <Text fontSize="sm" fontWeight={500}>
+                                Get $RUNE
+                            </Text>
+                            <Icon as={FiExternalLink} boxSize={3.5} />
+                        </HStack>
+                    </VStack>
                 </Box>
 
                 <Box mt="auto">

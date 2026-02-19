@@ -120,29 +120,30 @@ export default function DownloadPage() {
                         </Link>
 
                         <Heading
-                                fontSize={{ base: "5xl", md: "7xl" }}
-                                fontWeight={700}
-                                lineHeight={1.1}
-                                letterSpacing="-0.03em"
-                                sx={{
-                                    background: "linear-gradient(180deg, #f5f5f5 0%, #a3a3a3 100%)",
-                                    backgroundClip: "text",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                }}
-                            >
-                                Download Rune
-                            </Heading>
+                            as="h1"
+                            fontSize={{ base: "5xl", lg: "7xl" }}
+                            fontWeight={700}
+                            lineHeight={1.1}
+                            letterSpacing="-0.03em"
+                            sx={{
+                                background: "#e6e6e6",
+                                backgroundClip: "text",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                            }}
+                        >
+                            Download Rune
+                        </Heading>
 
                         <Text
-                                fontSize={{ base: "md", md: "xl" }}
-                                color="gray.400"
-                                lineHeight={1.5}
-                                maxW="500px"
-                                mx="auto"
-                            >
-                                Available everywhere. Pick your OS and start building.
-                            </Text>
+                            fontSize={{ base: "md", md: "xl" }}
+                            color="gray.400"
+                            lineHeight={1.5}
+                            maxW="500px"
+                            mx="auto"
+                        >
+                            Available everywhere. Pick your OS and start building.
+                        </Text>
 
                     </VStack>
                 </Box>
@@ -154,76 +155,76 @@ export default function DownloadPage() {
                     px={{ base: 5, md: 8 }}
                     pb={{ base: 16, md: 28 }}
                 >
-                        <VStack spacing={{ base: 6, md: 8 }} textAlign="center">
-                            {ended ? (
-                                <Heading
-                                    fontSize={{ base: "5xl", md: "8xl" }}
-                                    fontWeight={700}
-                                    letterSpacing="-0.03em"
-                                    lineHeight={1.1}
-                                    color="gray.50"
+                    <VStack spacing={{ base: 6, md: 8 }} textAlign="center">
+                        {ended ? (
+                            <Heading
+                                fontSize={{ base: "5xl", md: "8xl" }}
+                                fontWeight={700}
+                                letterSpacing="-0.03em"
+                                lineHeight={1.1}
+                                color="gray.50"
+                            >
+                                Available now
+                            </Heading>
+                        ) : (
+                            <>
+                                <Flex
+                                    justify="center"
+                                    align="baseline"
+                                    gap={{ base: 3, md: 6 }}
+                                    flexWrap="wrap"
                                 >
-                                    Available now
-                                </Heading>
-                            ) : (
-                                <>
-                                    <Flex
-                                        justify="center"
-                                        align="baseline"
-                                        gap={{ base: 3, md: 6 }}
-                                        flexWrap="wrap"
-                                    >
-                                        {[
-                                            { value: days, label: "Days" },
-                                            { value: hours, label: "Hours" },
-                                            { value: minutes, label: "Min" },
-                                            { value: seconds, label: "Sec" },
-                                        ].map((unit, i, arr) => (
-                                            <HStack key={unit.label} spacing={{ base: 3, md: 6 }}>
-                                                <VStack spacing={1}>
-                                                    <Heading
-                                                        fontSize={{ base: "5xl", md: "9xl" }}
-                                                        fontWeight={700}
-                                                        letterSpacing="-0.03em"
-                                                        lineHeight={1}
-                                                        fontFamily="mono"
-                                                        color="gray.50"
-                                                    >
-                                                        {pad(unit.value)}
-                                                    </Heading>
-                                                    <Text
-                                                        fontSize={{ base: "xs", md: "sm" }}
-                                                        color="gray.500"
-                                                        fontWeight={500}
-                                                        textTransform="uppercase"
-                                                        letterSpacing="0.1em"
-                                                    >
-                                                        {unit.label}
-                                                    </Text>
-                                                </VStack>
-                                                {i < arr.length - 1 && (
-                                                    <Heading
-                                                        fontSize={{ base: "4xl", md: "7xl" }}
-                                                        fontWeight={700}
-                                                        color="gray.500"
-                                                        lineHeight={1}
-                                                        mt={{ base: "-8px", md: "-16px" }}
-                                                    >
-                                                        :
-                                                    </Heading>
-                                                )}
-                                            </HStack>
-                                        ))}
-                                    </Flex>
-                                </>
-                            )}
-                        </VStack>
+                                    {[
+                                        { value: days, label: "Days" },
+                                        { value: hours, label: "Hours" },
+                                        { value: minutes, label: "Min" },
+                                        { value: seconds, label: "Sec" },
+                                    ].map((unit, i, arr) => (
+                                        <HStack key={unit.label} spacing={{ base: 3, md: 6 }}>
+                                            <VStack spacing={1}>
+                                                <Heading
+                                                    fontSize={{ base: "5xl", md: "9xl" }}
+                                                    fontWeight={700}
+                                                    letterSpacing="-0.03em"
+                                                    lineHeight={1}
+                                                    fontFamily="mono"
+                                                    color="gray.50"
+                                                >
+                                                    {pad(unit.value)}
+                                                </Heading>
+                                                <Text
+                                                    fontSize={{ base: "xs", md: "sm" }}
+                                                    color="gray.500"
+                                                    fontWeight={500}
+                                                    textTransform="uppercase"
+                                                    letterSpacing="0.1em"
+                                                >
+                                                    {unit.label}
+                                                </Text>
+                                            </VStack>
+                                            {i < arr.length - 1 && (
+                                                <Heading
+                                                    fontSize={{ base: "4xl", md: "7xl" }}
+                                                    fontWeight={700}
+                                                    color="gray.500"
+                                                    lineHeight={1}
+                                                    mt={{ base: "-8px", md: "-16px" }}
+                                                >
+                                                    :
+                                                </Heading>
+                                            )}
+                                        </HStack>
+                                    ))}
+                                </Flex>
+                            </>
+                        )}
+                    </VStack>
                 </Box>
 
                 <Box mt="auto">
                     <Footer />
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 }
