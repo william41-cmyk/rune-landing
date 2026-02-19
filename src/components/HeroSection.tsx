@@ -82,9 +82,9 @@ export default function HeroSection() {
               <Text
                 fontSize="xs"
                 fontWeight={500}
-                color="gray.500"
+                color="gray.400"
               >
-                MacOS, Windows & Linux
+                macOS, Windows & Linux
               </Text>
             </VStack>
           </Box>
