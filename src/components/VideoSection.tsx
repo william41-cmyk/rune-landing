@@ -13,9 +13,9 @@ export default function VideoSection() {
           lineHeight={1.3}
           textAlign="center"
           maxW="550px"
-          mb={6}
+          mb={5}
         >
-          An open source framework for multi-agent AI workflows. From idea to production-ready code.
+          An open source framework for multi-agent workflows. From idea to production-ready code.
         </Text>
         <Box
           w="100%"
