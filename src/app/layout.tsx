@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | Rune",
   },
   description:
-    "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
+    "An open source framework for multi-agent workflows. From idea to production-ready code.",
   keywords: [
     "AI coding",
     "multi-agent framework",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "Rune",
     title: "Rune — The easiest way to build with AI agents",
     description:
-      "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
+      "An open source framework for multi-agent workflows. From idea to production-ready code.",
     images: [
       {
         url: "/og-image.png",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rune — The easiest way to build with AI agents",
     description:
-      "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
+      "An open source framework for multi-agent workflows. From idea to production-ready code.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -67,7 +67,7 @@ const jsonLd = {
   name: "Rune",
   url: "https://rune.gl",
   description:
-    "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
+    "An open source framework for multi-agent workflows. From idea to production-ready code.",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Windows, Linux",
   offers: {

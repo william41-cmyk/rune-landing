@@ -12,13 +12,10 @@ export default function VideoSection() {
           color="gray.400"
           lineHeight={1.3}
           textAlign="center"
-          maxW="700px"
+          maxW="550px"
           mb={6}
         >
-          Open source visual multi-agent framework for building
-          custom AI orchestration pipelines
-          to turn your ideas into
-          production-ready code.
+          An open source framework for multi-agent AI workflows. From idea to production-ready code.
         </Text>
         <Box
           w="100%"
