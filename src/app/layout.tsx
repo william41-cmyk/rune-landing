@@ -6,11 +6,11 @@ import { GeistMono } from "geist/font/mono";
 export const metadata: Metadata = {
   metadataBase: new URL("https://rune.gl"),
   title: {
-    default: "Multi-Agent Coding Framework",
-    template: "Rune",
+    default: "Rune — The easiest way to build with AI agents",
+    template: "%s | Rune",
   },
   description:
-    "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
+    "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
   keywords: [
     "AI coding",
     "multi-agent framework",
@@ -29,23 +29,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rune.gl",
     siteName: "Rune",
-    title: "Multi-Agent Coding Framework",
+    title: "Rune — The easiest way to build with AI agents",
     description:
-      "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
+      "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Agentic Engineering, Simplified",
+        alt: "Rune — The easiest way to build with AI agents",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Multi-Agent Coding Framework",
+    title: "Rune — The easiest way to build with AI agents",
     description:
-      "Visual multi-agent framework for building custom AI orchestration pipelines.",
+      "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -67,7 +67,7 @@ const jsonLd = {
   name: "Rune",
   url: "https://rune.gl",
   description:
-    "Visual multi-agent framework for building custom AI orchestration pipelines to turn your ideas into production-ready code.",
+    "Open source framework built to make AI agents work together efficiently. From production-ready code to end-to-end automation.",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Windows, Linux",
   offers: {
