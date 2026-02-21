@@ -95,7 +95,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>
+      <body className="chakra-ui-dark" style={{ colorScheme: "dark" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

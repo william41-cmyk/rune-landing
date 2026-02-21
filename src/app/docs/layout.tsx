@@ -13,7 +13,7 @@ import {
   FiLayout, FiMaximize2, FiColumns, FiMove, FiMonitor,
 } from "react-icons/fi";
 import Link from "next/link";
-import { useState, useCallback, useMemo, useEffect, ReactNode } from "react";
+import { useState, useCallback, useMemo, useEffect, ReactNode, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { IconType } from "react-icons";
 
@@ -1194,7 +1194,7 @@ function SidebarSectionComponent({
 /*  Main Docs Page                                                     */
 /* ================================================================== */
 
-export default function DocsPage() {
+function DocsPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -1424,5 +1424,15 @@ export default function DocsPage() {
         </Box>
       </Flex>
     </Box>
+  );
+}
+
+export default function DocsPage() {
+  return (
+    <Suspense fallback={
+      <Box minH="100vh" bg="#171717" />
+    }>
+      <DocsPageInner />
+    </Suspense>
   );
 }
