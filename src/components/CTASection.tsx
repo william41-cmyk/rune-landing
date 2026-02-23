@@ -22,7 +22,7 @@ import DarkVeil from "./DarkVeil";
 /*  Countdown hook — same UTC target as download page                  */
 /* ------------------------------------------------------------------ */
 
-const TARGET = new Date("2026-02-23T21:30:00Z").getTime();
+const TARGET = new Date("2026-02-24T01:30:00Z").getTime();
 
 function useCountdown() {
   const [now, setNow] = useState(() => Date.now());
