@@ -3,51 +3,16 @@
 import {
   Box,
   Heading,
-  Text,
   VStack,
   Button,
-  HStack,
-  Flex,
-  Tooltip,
 } from "@chakra-ui/react";
 import { FiDownload } from "react-icons/fi";
 import { FiMonitor } from "react-icons/fi";
-import { useState, useEffect } from "react";
-
 const SiWindows = FiMonitor;
 const SiLinux = FiMonitor;
 import DarkVeil from "./DarkVeil";
 
-/* ------------------------------------------------------------------ */
-/*  Countdown hook — same UTC target as download page                  */
-/* ------------------------------------------------------------------ */
-
-const TARGET = new Date("2026-02-24T01:30:00Z").getTime();
-
-function useCountdown() {
-  const [now, setNow] = useState(() => Date.now());
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const diff = Math.max(0, TARGET - now);
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-
-  return { days, hours, minutes, seconds, ended: diff === 0 };
-}
-
 export default function CTASection() {
-  const { days, hours, minutes, seconds, ended } = useCountdown();
-  const pad = (n: number) => String(n).padStart(2, "0");
-
-  const tooltipLabel = ended
-    ? "Available now"
-    : `${pad(days)}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
 
   return (
     <Box
