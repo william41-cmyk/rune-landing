@@ -2,12 +2,12 @@
 
 import {
     Box,
-    Flex,
     Heading,
     Text,
     VStack,
     HStack,
     Icon,
+    Tooltip,
 } from "@chakra-ui/react";
 import {
     FiArrowLeft,
@@ -117,7 +117,61 @@ export default function DownloadPage() {
                         >
                             Available everywhere. Pick your OS and start building.
                         </Text>
+                        <VStack spacing={3} mt={4} w="full" maxW="300px">
+                            <Link href="/get" style={{ width: "100%" }}>
+                                <Box
+                                    as="button"
+                                    w="full"
+                                    px={8}
+                                    py={3}
+                                    bg="white"
+                                    color="#171717"
+                                    fontWeight={600}
+                                    fontSize="md"
+                                    borderRadius="lg"
+                                    transition="all 0.2s"
+                                    _hover={{ bg: "gray.200" }}
+                                >
+                                    Download for macOS
+                                </Box>
+                            </Link>
 
+                            <Tooltip label="Currently unavailable" placement="bottom" hasArrow>
+                                <Box
+                                    as="button"
+                                    w="full"
+                                    px={8}
+                                    py={3}
+                                    bg="whiteAlpha.100"
+                                    color="gray.500"
+                                    fontWeight={600}
+                                    fontSize="md"
+                                    borderRadius="lg"
+                                    cursor="not-allowed"
+                                    opacity={0.5}
+                                >
+                                    Download for Windows
+                                </Box>
+                            </Tooltip>
+
+                            <Tooltip label="Currently unavailable" placement="bottom" hasArrow>
+                                <Box
+                                    as="button"
+                                    w="full"
+                                    px={8}
+                                    py={3}
+                                    bg="whiteAlpha.100"
+                                    color="gray.500"
+                                    fontWeight={600}
+                                    fontSize="md"
+                                    borderRadius="lg"
+                                    cursor="not-allowed"
+                                    opacity={0.5}
+                                >
+                                    Download for Linux
+                                </Box>
+                            </Tooltip>
+                        </VStack>
                     </VStack>
                 </Box>
 
