@@ -13,7 +13,7 @@ import Link from "next/link";
 const links = [
   { label: "X", href: "https://x.com/runedotgl" },
   { label: "Documentation", href: "/docs" },
-  { label: "Changelog", href: "#" },
+  { label: "Changelog", href: "/changelog" },
 ];
 
 export default function Footer() {
@@ -34,12 +34,9 @@ export default function Footer() {
         align="center"
         gap={6}
       >
-        {/* Logo */}
         <HStack spacing={2}>
           <Image src="/rune-logo.webp" alt="Rune" h="24px" w="auto" />
         </HStack>
-
-        {/* Links */}
         <HStack spacing={6}>
           {links.map((link) => (
             <ChakraLink
@@ -69,8 +66,6 @@ export default function Footer() {
             </Text>
           </Link>
         </HStack>
-
-        {/* Copyright */}
         <Text fontSize="xs" fontWeight={500} color="gray.600">
           &copy; {new Date().getFullYear()} Rune.
         </Text>

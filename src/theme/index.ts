@@ -6,22 +6,22 @@ const theme = extendTheme({
     useSystemColorMode: false,
   },
   fontSizes: {
-    "2xs": "11px",   // pill text, platform labels
-    xs: "12px",      // copyright, mono node labels
-    sm: "13px",      // footer links, small UI text
-    md: "14px",      // buttons, nav links, card body
-    lg: "15px",      // descriptions, detail text
-    xl: "16px",      // card titles, body text (mobile)
-    "2xl": "18px",   // logo, mode descriptions
-    "3xl": "20px",   // subheadings, body text (desktop)
+    "2xs": "11px",
+    xs: "12px",
+    sm: "13px",
+    md: "14px",
+    lg: "15px",
+    xl: "16px",
+    "2xl": "18px",
+    "3xl": "20px",
     "3.5xl": "22px",
-    "4xl": "32px",   // section headings (mobile)
-    "5xl": "36px",   // CTA heading (mobile)
-    "6xl": "44px",   // hero heading (mobile)
-    "7xl": "48px",   // section headings (desktop)
-    "8xl": "55px",   // hero heading (desktop)
-    "9xl": "56px",   // CTA heading (desktop)
-    "10xl": "64px",  // hero heading (tablet)
+    "4xl": "32px",
+    "5xl": "36px",
+    "6xl": "44px",
+    "7xl": "48px",
+    "8xl": "55px",
+    "9xl": "56px",
+    "10xl": "64px",
   },
   fonts: {
     heading: `var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,

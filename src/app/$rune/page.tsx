@@ -16,10 +16,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DarkVeil from "@/components/DarkVeil";
 
-/* ------------------------------------------------------------------ */
-/*  $RUNE Coin Page                                                    */
-/* ------------------------------------------------------------------ */
-
 export default function RuneCoinPage() {
     return (
         <Box minH="100vh" bg="#171717" overflowX="hidden">
@@ -35,8 +31,6 @@ export default function RuneCoinPage() {
                 minH="100vh"
             >
                 <Navbar />
-
-                {/* Hero area with shader bg */}
                 <Box
                     position="relative"
                     pt={{ base: "120px", md: "140px" }}
@@ -117,8 +111,6 @@ export default function RuneCoinPage() {
                         </Text>
                     </VStack>
                 </Box>
-
-                {/* Coin button section */}
                 <Box
                     position="relative"
                     zIndex={2}
@@ -130,7 +122,6 @@ export default function RuneCoinPage() {
                     w="100%"
                 >
                     <VStack spacing={{ base: 8, md: 10 }} textAlign="center">
-                        {/* Coin button */}
                         <Box
                             as="a"
                             href="https://pump.fun/coin/9fAT1fVVEKMEL6rUeYxSYU8ZjQ5dSiTzAZYTdiPvpump"
@@ -139,7 +130,6 @@ export default function RuneCoinPage() {
                             cursor="pointer"
                         >
                             <Box position="relative" display="inline-flex">
-                                {/* Coin container */}
                                 <Flex
                                     position="relative"
                                     w={{ base: "180px", md: "220px" }}
@@ -148,7 +138,6 @@ export default function RuneCoinPage() {
                                     alignItems="center"
                                     justifyContent="center"
                                     sx={{
-                                        /* Triple ring border for coin effect */
                                         background: `
                                                 radial-gradient(circle at 35% 35%, rgba(255,255,255,0.06) 0%, transparent 60%),
                                                 linear-gradient(145deg, #1c1c1c 0%, #161616 100%)
@@ -162,7 +151,6 @@ export default function RuneCoinPage() {
                                             `,
                                     }}
                                 >
-                                    {/* Inner ring */}
                                     <Flex
                                         w={{ base: "150px", md: "184px" }}
                                         h={{ base: "150px", md: "184px" }}
@@ -173,7 +161,6 @@ export default function RuneCoinPage() {
                                         borderColor="rgba(255,255,255,0.06)"
                                         bg="rgba(255,255,255,0.02)"
                                     >
-                                        {/* Logo */}
                                         <Image
                                             src="/rune-logo.webp"
                                             alt="Rune"
@@ -185,8 +172,6 @@ export default function RuneCoinPage() {
                                 </Flex>
                             </Box>
                         </Box>
-
-                        {/* Label under coin */}
                         <HStack
                             spacing={2}
                             color="gray.500"

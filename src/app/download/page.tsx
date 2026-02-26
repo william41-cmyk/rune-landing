@@ -17,10 +17,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import DarkVeil from "@/components/DarkVeil";
 
-/* ------------------------------------------------------------------ */
-/*  Download Page                                                      */
-/* ------------------------------------------------------------------ */
-
 export default function DownloadPage() {
 
     return (
@@ -37,8 +33,6 @@ export default function DownloadPage() {
                 minH="100vh"
             >
                 <Navbar />
-
-                {/* Hero area with shader bg */}
                 <Box
                     position="relative"
                     overflow="hidden"
@@ -174,8 +168,6 @@ export default function DownloadPage() {
                         </VStack>
                     </VStack>
                 </Box>
-
-                {/* Spacer */}
                 <Box pb={{ base: 16, md: 28 }} />
 
                 <Box mt="auto">

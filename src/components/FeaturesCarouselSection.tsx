@@ -47,8 +47,6 @@ import {
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ─── Rune design tokens (from colors.ts) ───────────────────────────────── */
-
 const rune = {
     bg: {
         primary: "#0d0d0d",
@@ -117,8 +115,6 @@ const rune = {
     },
 } as const;
 
-/* ─── GlassIcon ─────────────────────────────────────────────────────────── */
-
 function GlassIcon({ icon: IconComponent }: { icon: any; color: string }) {
     return (
         <Box
@@ -147,8 +143,6 @@ function GlassIcon({ icon: IconComponent }: { icon: any; color: string }) {
         </Box>
     );
 }
-
-/* ─── ActivityIcon (SVG — matches real ActivityIcon.tsx exactly) ─────────── */
 
 const activityPresets: Record<string, {
     color: string; accent: string; accentCells: number[]; duration: number;
@@ -250,8 +244,6 @@ function ActivityIconMini({ type, size = 14 }: { type: string; size?: number }) 
         </Box>
     );
 }
-
-/* ─── Tab data ──────────────────────────────────────────────────────────── */
 
 interface CardData {
     name: string;
@@ -369,12 +361,8 @@ const tabData: Record<string, CardData[]> = {
 
 const tabs = Object.keys(tabData);
 
-/* ─── Card visuals ──────────────────────────────────────────────────────── */
-
 function CardVisual({ type }: { type: string }) {
 
-    /* ═══════ Sessions: Agent Presets ═══════ */
-    /* Mirrors presets.ts — Fast, Balanced, Quality, Thorough with pipeline flow */
     if (type === "agent-presets") {
         const presets = [
             { id: "fast", label: "Fast", icon: FiZap, desc: "Quick architect + coding. No review.", pipeline: "Architect (quick) → Coder", tokens: "2-4k", active: false },
@@ -412,7 +400,6 @@ function CardVisual({ type }: { type: string }) {
                         </HStack>
                     </Box>
                 ))}
-                {/* Footer showing active preset summary */}
                 <Box px={3} pt={3} mt="auto">
                     <Box h="1px" bg={rune.overlay.grid} mb={3} />
                     <HStack justify="space-between">
@@ -427,8 +414,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Sessions: Stack Config ═══════ */
-    /* Mirrors StackConfig.tsx — dropdowns for project type, languages, frameworks */
     if (type === "stack-config") {
         const sections = [
             { label: "Project Type", icon: FiGlobe, value: "Web App" },
@@ -465,9 +450,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Sessions: Tool Cards ═══════ */
-    /* Matches ToolCard.tsx — borderLeft, HStack spacing={0}, py={1.5} px={2} */
-    /* Write tool is expanded to show code content */
     if (type === "tool-cards") {
         const collapsedTools = [
             { name: "Read", input: "src/App.tsx", color: rune.tool.read, activity: "reading", stat: "0.2s" },
@@ -478,7 +460,6 @@ function CardVisual({ type }: { type: string }) {
             <VStack spacing={0} align="stretch" flex={1}>
                 <Box py={1} borderLeft="1px solid" borderColor={rune.overlay.grid} ml={1}>
                     <VStack spacing={0} align="stretch">
-                        {/* Read — collapsed */}
                         <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                             <Icon as={FiChevronRight} boxSize={3} color={rune.text.placeholder} mr={2} flexShrink={0} />
                             <ActivityIconMini type="reading" size={14} />
@@ -486,8 +467,6 @@ function CardVisual({ type }: { type: string }) {
                             <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>src/App.tsx</Text>
                             <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2}>0.2s</Text>
                         </HStack>
-
-                        {/* Write — expanded with code */}
                         <Box>
                             <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                                 <Icon as={FiChevronDown} boxSize={3} color={rune.text.secondary} mr={2} flexShrink={0} />
@@ -496,7 +475,6 @@ function CardVisual({ type }: { type: string }) {
                                 <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>src/components/Auth.tsx</Text>
                                 <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2}>1.4s</Text>
                             </HStack>
-                            {/* Expanded code content */}
                             <Box ml={7} mr={1} mb={1} py={2} px={2.5} borderRadius="md" bg={rune.overlay.soft} fontFamily="mono" fontSize="2xs" lineHeight={1.9}>
                                 <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"export function AuthProvider({ children }) {"}</Text>
                                 <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"  const [user, setUser] = useState(null)"}</Text>
@@ -507,8 +485,6 @@ function CardVisual({ type }: { type: string }) {
                                 <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"  </AuthCtx>"}</Text>
                             </Box>
                         </Box>
-
-                        {/* Edit — collapsed */}
                         <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                             <Icon as={FiChevronRight} boxSize={3} color={rune.text.placeholder} mr={2} flexShrink={0} />
                             <ActivityIconMini type="editing" size={14} />
@@ -516,8 +492,6 @@ function CardVisual({ type }: { type: string }) {
                             <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>src/utils/api.ts</Text>
                             <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2}>0.8s</Text>
                         </HStack>
-
-                        {/* Bash — collapsed, running */}
                         <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                             <Icon as={FiChevronRight} boxSize={3} color={rune.text.placeholder} mr={2} flexShrink={0} />
                             <ActivityIconMini type="running" size={14} />
@@ -534,7 +508,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Sessions: Session Recovery ═══════ */
     if (type === "session-recovery") {
         const sessions = [
             { task: "Add auth flow with OAuth", agents: "architect, coder, raven", status: "completed", statusColor: rune.accent.green, time: "12m 34s", files: 8 },
@@ -573,7 +546,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Framework: @rune/core ═══════ */
     if (type === "framework-core") {
         return (
             <Box
@@ -609,12 +581,9 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Framework: Custom Agents ═══════ */
-    /* Matches PipelineNodeBox expanded view — borderless, merges with card */
     if (type === "framework-agents") {
         return (
             <VStack spacing={0} align="stretch" w="100%" flex={1}>
-                {/* Header */}
                 <HStack spacing={2.5} px={1} py={2} align="center">
                     <Box flexShrink={0} display="flex" alignItems="center" justifyContent="center" w="28px" h="28px">
                         <svg width="28" height="28" viewBox="0 0 28 28">
@@ -634,17 +603,13 @@ function CardVisual({ type }: { type: string }) {
                         <FiTrash2 size={12} />
                     </Box>
                 </HStack>
-
-                {/* Field rows — no outer box, just dividers */}
                 <Box px={1}>
-                    {/* Instructions */}
                     <HStack justify="space-between" align="start" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                         <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} pt={0.5} minW="70px">Instructions</Text>
                         <Text fontSize="xs" fontFamily="mono" color={rune.text.secondary} flex={1}>
                             Analyze datasets, generate insights, produce reports
                         </Text>
                     </HStack>
-                    {/* Tool Access */}
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                         <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Tool Access</Text>
                         <HStack spacing={0} bg={rune.overlay.soft} p="2px" borderRadius="lg" flex={1}>
@@ -669,12 +634,10 @@ function CardVisual({ type }: { type: string }) {
                             ))}
                         </HStack>
                     </HStack>
-                    {/* Can Loop */}
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                         <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Can Loop</Text>
                         <Switch size="sm" isChecked colorScheme="gray" pointerEvents="none" />
                     </HStack>
-                    {/* Model */}
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                         <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Model</Text>
                         <HStack spacing={1.5} bg={rune.overlay.soft} px={2.5} py={1} borderRadius="md">
@@ -682,7 +645,6 @@ function CardVisual({ type }: { type: string }) {
                             <Icon as={FiChevronDown} boxSize="10px" color={rune.text.placeholder} />
                         </HStack>
                     </HStack>
-                    {/* Memory */}
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                         <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Memory</Text>
                         <HStack spacing={0} bg={rune.overlay.soft} p="2px" borderRadius="lg" flex={1}>
@@ -707,7 +669,6 @@ function CardVisual({ type }: { type: string }) {
                             ))}
                         </HStack>
                     </HStack>
-                    {/* Color */}
                     <HStack justify="space-between" align="center" spacing={3} py={2.5}>
                         <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Color</Text>
                         <HStack spacing={1.5}>
@@ -730,12 +691,9 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Framework: Visual Pipelines ═══════ */
-    /* Canvas with dashed grid bg + PipelineNodeBox compact nodes + Bezier curves */
     if (type === "framework-canvas") {
         return (
             <Box w="100%" position="relative" flex={1}>
-                {/* Dashed grid background — matches NodeEditorCanvas */}
                 <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
                     <defs>
                         <pattern id="feat-grid" x="0" y="0" width="50" height="12" patternUnits="userSpaceOnUse" patternTransform="translate(40, 0)">
@@ -744,8 +702,6 @@ function CardVisual({ type }: { type: string }) {
                     </defs>
                     <rect width="100%" height="100%" fill="url(#feat-grid)" />
                 </svg>
-
-                {/* Node boxes — PipelineNodeBox compact, gradient agent logos */}
                 <VStack spacing={2} position="relative" zIndex={2} align="start" py={2} flex={1}>
                     {[
                         { name: "Validator", gradFrom: "#3b82f6", gradTo: "#06b6d4", access: "Read only", loop: false, id: "v" },
@@ -782,7 +738,6 @@ function CardVisual({ type }: { type: string }) {
                                     </HStack>
                                 </Box>
                             </HStack>
-                            {/* Input port */}
                             <Box
                                 position="absolute"
                                 left="-5px"
@@ -793,7 +748,6 @@ function CardVisual({ type }: { type: string }) {
                                 borderRadius="full"
                                 bg={rune.overlay.hover}
                             />
-                            {/* Output port */}
                             <Box
                                 position="absolute"
                                 right="-5px"
@@ -811,8 +765,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Framework: Any Workflow ═══════ */
-    /* Non-coding pipeline examples showing the framework isn't limited to code gen */
     if (type === "framework-usecases") {
         const pipelines = [
             {
@@ -884,20 +836,15 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Skills: Clarification Cards ═══════ */
-    /* Matches ClarificationCard.tsx — bg={overlay.hover}, borderRadius="md" */
     if (type === "clarification") {
         return (
             <VStack spacing={0} align="stretch" w="100%" flex={1}>
-                {/* Header */}
                 <HStack spacing={2} px={1} py={2} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                     <Icon as={FiHelpCircle} color={rune.text.subtle} boxSize={4} />
                     <Text fontWeight="semibold" color={rune.text.primary} fontSize="sm">
                         Architect has questions
                     </Text>
                 </HStack>
-
-                {/* Question */}
                 <Box px={1} py={3} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                     <Text fontSize="sm" color={rune.text.secondary} mb={1} fontWeight="medium">
                         Where should auth state live?
@@ -936,8 +883,6 @@ function CardVisual({ type }: { type: string }) {
                         </Box>
                     </Flex>
                 </Box>
-
-                {/* Question 2 */}
                 <Box px={1} py={3} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                     <Text fontSize="sm" color={rune.text.secondary} mb={1} fontWeight="medium">
                         Session storage strategy?
@@ -966,8 +911,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Skills: Custom Skills ═══════ */
-    /* Styled like a diff code block — diff.codeBg, mono, real markdown content */
     if (type === "custom-skills") {
         return (
             <Box w="100%" py={1} px={1} fontFamily="mono" fontSize="xs" lineHeight={2.2} flex={1} display="flex" flexDirection="column" justifyContent="flex-start">
@@ -985,8 +928,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Skills: Autonomy Levels ═══════ */
-    /* Three modes with radio-style selection */
     if (type === "autonomy") {
         const levels = [
             { name: "Supervised", desc: "Approve every tool call. You see each step before it runs.", color: rune.accent.blue, active: false, tools: "All tools gated" },
@@ -1030,8 +971,6 @@ function CardVisual({ type }: { type: string }) {
         );
     }
 
-    /* ═══════ Sessions: Git Worktrees ═══════ */
-    /* Shows a mini git branch diagram with worktree isolation */
     if (type === "git-worktrees") {
         const worktrees = [
             { branch: "main", status: "clean", files: 0, active: false },
@@ -1040,7 +979,6 @@ function CardVisual({ type }: { type: string }) {
         ];
         return (
             <VStack spacing={0} align="stretch" w="100%" flex={1}>
-                {/* Branch list */}
                 {worktrees.map((w, i) => (
                     <HStack
                         key={i}
@@ -1074,7 +1012,6 @@ function CardVisual({ type }: { type: string }) {
                         <Icon as={FiGitBranch} boxSize="12px" color={w.active ? rune.text.secondary : rune.text.placeholder} />
                     </HStack>
                 ))}
-                {/* Footer */}
                 <Box px={3} pt={3} mt="auto">
                     <Box h="1px" bg={rune.overlay.grid} mb={3} />
                     <HStack justify="space-between">
@@ -1091,8 +1028,6 @@ function CardVisual({ type }: { type: string }) {
 
     return <Box flex={1} />;
 }
-
-/* ─── Feature card (STYLING UNTOUCHED) ──────────────────────────────────── */
 
 function FeatureCard({ card }: { card: CardData }) {
     return (
@@ -1143,8 +1078,6 @@ function FeatureCard({ card }: { card: CardData }) {
     );
 }
 
-/* ─── Main section (STYLING UNTOUCHED) ──────────────────────────────────── */
-
 const MotionFlex = motion.create(Flex);
 
 export default function FeaturesCarouselSection() {
@@ -1174,7 +1107,6 @@ export default function FeaturesCarouselSection() {
             position="relative"
             overflow="hidden"
         >
-            {/* Row 1: Heading LEFT | Tabs RIGHT */}
             <Flex
                 maxW="1100px"
                 mx="auto"
@@ -1234,8 +1166,6 @@ export default function FeaturesCarouselSection() {
                         ))}
                 </Flex>
             </Flex>
-
-            {/* Row 2: Card carousel */}
             <Box position="relative" overflow="hidden">
                 <Box maxW="1100px" mx="auto" px={{ base: 5, md: 8 }}>
                     <Box mr={{ base: "-40px", md: "-300px" }}>
@@ -1262,8 +1192,6 @@ export default function FeaturesCarouselSection() {
                         </AnimatePresence>
                     </Box>
                 </Box>
-
-                {/* Right edge fade */}
                 <Box
                     position="absolute"
                     top={0}
@@ -1274,8 +1202,6 @@ export default function FeaturesCarouselSection() {
                     bg={`linear-gradient(to right, transparent, ${rune.bg.secondary})`}
                     zIndex={2}
                 />
-
-                {/* Left edge fade */}
                 <Box
                     position="absolute"
                     top={0}
@@ -1289,8 +1215,6 @@ export default function FeaturesCarouselSection() {
                     transition="opacity 0.4s ease"
                 />
             </Box>
-
-            {/* Row 3: Arrows */}
             <Flex
                 maxW="1100px"
                 mx="auto"

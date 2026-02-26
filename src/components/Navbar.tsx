@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineCommandLine } from "react-icons/hi2";
 
-
 export default function Navbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
@@ -44,12 +43,9 @@ export default function Navbar() {
         align="center"
         justify="space-between"
       >
-        {/* Logo */}
         <HStack spacing={2.5} cursor="pointer" >
           <Image src="/rune-logo.webp" alt="Rune" h="32px" w="auto" />
         </HStack>
-
-        {/* CTA */}
         <HStack spacing={4}>
           <ChakraLink
             href="https://x.com/i/communities/2024097721632608293"

@@ -15,7 +15,6 @@ import Link from "next/link";
 export default function HeroSection() {
   return (
     <Box as="section" position="relative" h="42vh" minH="380px" overflow="hidden" id="hero">
-      {/* Shader Background */}
       <Box position="absolute" inset={0} overflow="hidden">
         <DarkVeil
           hueShift={25}
@@ -27,8 +26,6 @@ export default function HeroSection() {
           resolutionScale={1.35}
         />
       </Box>
-
-      {/* Content */}
       <Flex
         position="relative"
         zIndex={1}
@@ -41,8 +38,6 @@ export default function HeroSection() {
         px={{ base: 5, md: 8 }}
       >
         <VStack spacing={6} maxW="760px" textAlign="center" mb={0}>
-
-          {/* Headline */}
           <Heading
             as="h1"
             fontSize={{ base: "6xl", md: "7xl", lg: "8xl" }}
@@ -58,8 +53,6 @@ export default function HeroSection() {
           >
             Agentic Engineering, Simplified
           </Heading>
-
-          {/* CTAs */}
           <Box>
             <VStack spacing={3}>
               <Link href="/download" passHref>
@@ -91,8 +84,6 @@ export default function HeroSection() {
         </VStack>
 
       </Flex>
-
-      {/* Bottom gradient into next section */}
       <Box
         position="absolute"
         bottom={0}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-// @ts-ignore
 import { Renderer, Program, Mesh, Triangle, Vec2 } from "ogl";
 
 const vertex = `attribute vec2 position;void main(){gl_Position=vec4(position,0.0,1.0);}`;

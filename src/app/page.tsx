@@ -9,7 +9,6 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <Box as="main" minH="100vh" bg="#171717" overflowX="hidden">
-      {/* Bordered container â€” everything lives inside the side lines */}
       <Box
         maxW="1200px"
         mx="auto"

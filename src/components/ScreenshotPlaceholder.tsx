@@ -25,7 +25,6 @@ export default function ScreenshotPlaceholder({
         overflow="hidden"
         position="relative"
       >
-        {/* Fake window chrome */}
         <Flex
           h="40px"
           bg="rgba(255,255,255,0.03)"
@@ -39,8 +38,6 @@ export default function ScreenshotPlaceholder({
           <Box w="12px" h="12px" borderRadius="full" bg="rgba(255,255,255,0.1)" />
           <Box w="12px" h="12px" borderRadius="full" bg="rgba(255,255,255,0.1)" />
         </Flex>
-
-        {/* Content area with subtle grid pattern */}
         <Flex
           h="calc(100% - 40px)"
           align="center"
@@ -52,7 +49,6 @@ export default function ScreenshotPlaceholder({
             backgroundSize: "24px 24px",
           }}
         >
-          {/* Simulated IDE layout */}
           <Box position="absolute" left={0} top={0} bottom={0} w="200px" bg="rgba(255,255,255,0.02)" borderRight="1px solid" borderColor="rgba(255,255,255,0.05)">
             {[...Array(8)].map((_, i) => (
               <Box key={i} h="28px" mx={3} my={2} borderRadius="4px" bg={`rgba(255,255,255,${i === 2 ? '0.06' : '0.02'})`} />
@@ -72,8 +68,6 @@ export default function ScreenshotPlaceholder({
           </Flex>
         </Flex>
       </Box>
-
-      {/* Bottom fade */}
       {fadeBottom && (
         <Box
           position="absolute"

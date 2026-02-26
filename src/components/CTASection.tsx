@@ -24,7 +24,6 @@ export default function CTASection() {
       position="relative"
       overflow="hidden"
     >
-      {/* Static DarkVeil background */}
       <Box
         position="absolute"
         top={0}
@@ -46,8 +45,6 @@ export default function CTASection() {
           resolutionScale={1.25}
         />
       </Box>
-
-      {/* Top fade */}
       <Box
         position="absolute"
         top={0}
@@ -58,8 +55,6 @@ export default function CTASection() {
         zIndex={1}
         pointerEvents="none"
       />
-
-      {/* Bottom fade */}
       <Box
         position="absolute"
         bottom={0}

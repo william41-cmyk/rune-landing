@@ -2,7 +2,6 @@
 
 import { Box, Text, VStack } from "@chakra-ui/react";
 
-
 export default function VideoSection() {
   return (
     <Box as="section" pt={0} pb={{ base: 10, md: 16 }} px={{ base: 5, md: 8 }}>

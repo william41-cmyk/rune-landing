@@ -17,10 +17,6 @@ import { useState, useCallback, useMemo, useEffect, ReactNode, Suspense } from "
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { IconType } from "react-icons";
 
-/* ================================================================== */
-/*  Types                                                              */
-/* ================================================================== */
-
 interface SidebarItem { label: string; slug: string }
 interface SidebarSection { title: string; icon: IconType; items: SidebarItem[] }
 interface TocItem { label: string; id: string; depth: number }
@@ -33,10 +29,6 @@ interface PageContent {
   prev?: { label: string; slug: string };
   next?: { label: string; slug: string };
 }
-
-/* ================================================================== */
-/*  Reusable UI Primitives                                             */
-/* ================================================================== */
 
 function SectionHeading({ id, children }: { id: string; children: ReactNode }) {
   return (
@@ -113,10 +105,6 @@ function FeatureCard({ icon, title, desc }: { icon: IconType; title: string; des
   );
 }
 
-/* ================================================================== */
-/*  Sidebar Data                                                       */
-/* ================================================================== */
-
 const sidebarData: SidebarSection[] = [
   {
     title: "Getting Started",
@@ -189,23 +177,16 @@ const sidebarData: SidebarSection[] = [
   },
 ];
 
-/* ================================================================== */
-/*  Navigation helpers                                                 */
-/* ================================================================== */
-
 const allSlugs = sidebarData.flatMap((s) => s.items.map((i) => i.slug));
 
-/** Converts a section title to a URL param key, e.g. "Getting Started" → "getting-started" */
 function sectionKey(title: string): string {
   return title.toLowerCase().replace(/\s+/g, "-");
 }
 
-/** Map of section key → section data for fast lookup */
 const sectionByKey = Object.fromEntries(
   sidebarData.map((s) => [sectionKey(s.title), s])
 );
 
-/** Find the URL param key for a given page slug */
 function findSectionKey(slug: string): string {
   for (const s of sidebarData) {
     if (s.items.some((i) => i.slug === slug)) return sectionKey(s.title);
@@ -213,10 +194,9 @@ function findSectionKey(slug: string): string {
   return "getting-started";
 }
 
-/** Resolve a page slug from URLSearchParams, e.g. ?sessions=git-worktrees → "git-worktrees" */
 function resolveSlugFromParams(params: URLSearchParams): string {
   for (const [key, value] of params.entries()) {
-    if (key === "section") continue; // "section" is the anchor param, skip it
+    if (key === "section") continue;
     const sec = sectionByKey[key];
     if (sec && sec.items.some((i) => i.slug === value)) return value;
   }
@@ -246,13 +226,7 @@ function getNav(slug: string) {
   };
 }
 
-/* ================================================================== */
-/*  ALL PAGE CONTENT                                                   */
-/* ================================================================== */
-
 const pageData: Record<string, Omit<PageContent, "prev" | "next">> = {
-
-  /* ── Getting Started ───────────────────────────────────────────── */
 
   introduction: {
     title: "Introduction",
@@ -366,8 +340,6 @@ sudo dpkg -i rune-latest.deb`}</CodeBlock>
       </>
     ),
   },
-
-  /* ── Agents ────────────────────────────────────────────────────── */
 
   "agent-overview": {
     title: "Agent Overview",
@@ -513,8 +485,6 @@ model: claude-sonnet-4
     ),
   },
 
-  /* ── Pipelines ─────────────────────────────────────────────────── */
-
   "visual-editor": {
     title: "Visual Editor",
     subtitle: "Build agent pipelines with drag-and-drop.",
@@ -596,8 +566,6 @@ model: claude-sonnet-4
       </>
     ),
   },
-
-  /* ── Skills ────────────────────────────────────────────────────── */
 
   "built-in-skills": {
     title: "Built-in Skills",
@@ -685,8 +653,6 @@ comprehensive tests that cover the new functionality.
       </>
     ),
   },
-
-  /* ── Sessions ──────────────────────────────────────────────────── */
 
   "session-manager": {
     title: "Session Manager",
@@ -880,8 +846,6 @@ comprehensive tests that cover the new functionality.
     ),
   },
 
-  /* ── App Interface ────────────────────────────────────────────── */
-
   "layout-overview": {
     title: "Layout Overview",
     subtitle: "How the Rune interface is organized and how to make it your own.",
@@ -999,8 +963,6 @@ comprehensive tests that cover the new functionality.
     ),
   },
 
-  /* ── Configuration ─────────────────────────────────────────────── */
-
   presets: {
     title: "Presets",
     subtitle: "Pre-configured pipeline settings for different workflows.",
@@ -1110,18 +1072,10 @@ review-agent:
   },
 };
 
-/* ================================================================== */
-/*  Build full page map with prev/next                                 */
-/* ================================================================== */
-
 const pages: Record<string, PageContent> = {};
 for (const [slug, data] of Object.entries(pageData)) {
   pages[slug] = { ...data, ...getNav(slug) };
 }
-
-/* ================================================================== */
-/*  Sidebar Section Component                                          */
-/* ================================================================== */
 
 function SidebarSectionComponent({
   section, activeSlug, onSelect, searchQuery,
@@ -1190,10 +1144,6 @@ function SidebarSectionComponent({
   );
 }
 
-/* ================================================================== */
-/*  Main Docs Page                                                     */
-/* ================================================================== */
-
 function DocsPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -1207,7 +1157,6 @@ function DocsPageInner() {
   const [activeTocId, setActiveTocId] = useState(initialSection);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  /* Scroll to section on initial load if ?section= is present */
   useEffect(() => {
     if (initialSection) {
       const el = document.getElementById(initialSection);
@@ -1215,7 +1164,7 @@ function DocsPageInner() {
         setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 100);
       }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const currentPage = pages[activeSlug] || null;
 
@@ -1224,7 +1173,6 @@ function DocsPageInner() {
     setSidebarOpen(false);
     setActiveTocId(section || "");
 
-    /* Update URL: e.g. ?sessions=git-worktrees or ?sessions=git-worktrees&section=gw-what */
     const params = new URLSearchParams();
     params.set(findSectionKey(slug), slug);
     if (section) params.set("section", section);
@@ -1242,7 +1190,6 @@ function DocsPageInner() {
 
   return (
     <Box minH="100vh" bg="#171717" overflowX="hidden">
-      {/* Navbar */}
       <Box position="fixed" top={0} left={0} right={0} w="100%" zIndex={1000}
         bg="rgba(23,23,23,0.8)" backdropFilter="blur(20px)"
         sx={{ WebkitBackdropFilter: "blur(20px)" }}
@@ -1281,10 +1228,7 @@ function DocsPageInner() {
           </HStack>
         </Flex>
       </Box>
-
-      {/* Layout */}
       <Flex maxW="1400px" mx="auto" pt="60px" minH="100vh">
-        {/* Sidebar */}
         <Box as="aside" w="260px" flexShrink={0} position="fixed"
           top="60px" bottom={0}
           left={{ base: sidebarOpen ? 0 : "-100%", lg: "auto" }}
@@ -1318,19 +1262,14 @@ function DocsPageInner() {
             ))}
           </VStack>
         </Box>
-
-        {/* Mobile overlay */}
         {sidebarOpen && (
           <Box display={{ base: "block", lg: "none" }} position="fixed" inset={0}
             bg="rgba(0,0,0,0.5)" zIndex={998} onClick={() => setSidebarOpen(false)} />
         )}
-
-        {/* Main Content */}
         <Box flex={1} ml={{ base: 0, lg: "260px" }} mr={{ base: 0, xl: "220px" }}
           px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }} maxW="800px">
           {currentPage ? (
             <>
-              {/* Breadcrumb */}
               <HStack spacing={2} mb={8}>
                 <Text fontSize="xs" color="gray.500">Docs</Text>
                 <Text fontSize="xs" color="gray.600">/</Text>
@@ -1338,8 +1277,6 @@ function DocsPageInner() {
                 <Text fontSize="xs" color="gray.600">/</Text>
                 <Text fontSize="xs" color="gray.50" fontWeight={500}>{currentPage.title}</Text>
               </HStack>
-
-              {/* Title */}
               <Heading fontSize={{ base: "3xl", md: "4xl" }} fontWeight={700}
                 letterSpacing="-0.02em" lineHeight={1.2} color="gray.50" mb={3}>
                 {currentPage.title}
@@ -1347,11 +1284,7 @@ function DocsPageInner() {
               <Text fontSize="md" color="gray.400" lineHeight={1.8} mb={10}>
                 {currentPage.subtitle}
               </Text>
-
-              {/* Content */}
               <Box>{currentPage.content}</Box>
-
-              {/* Prev / Next */}
               <Flex borderTop="1px solid" borderColor="rgba(255,255,255,0.06)"
                 pt={6} mt={12} justify="space-between">
                 {currentPage.prev ? (
@@ -1381,8 +1314,6 @@ function DocsPageInner() {
             </VStack>
           )}
         </Box>
-
-        {/* TOC Sidebar */}
         <Box as="aside" w="220px" flexShrink={0} position="fixed"
           top="60px" right={{ base: "-100%", xl: "auto" }} bottom={0}
           py={10} pr={6} display={{ base: "none", xl: "block" }} overflowY="auto">
