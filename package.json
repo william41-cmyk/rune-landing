@@ -1,9 +1,9 @@
 {
     "name": "rune-landing",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev & rune-grab serve",
         "build": "next build",
         "start": "next start",
         "lint": "next lint"
@@ -30,6 +30,7 @@
         "@types/react-dom": "^19",
         "eslint": "^9",
         "eslint-config-next": "15.3.9",
+        "rune-grab": "^0.1.7",
         "typescript": "^5.7.3"
     }
 }

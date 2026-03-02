@@ -97,6 +97,9 @@ export default function RootLayout({
       </head>
       <body className="chakra-ui-dark" style={{ colorScheme: "dark" }}>
         <Providers>{children}</Providers>
+
+        {/* rune-grab: dev only element grabber */}
+        {process.env.NODE_ENV === 'development' && <script src="https://unpkg.com/rune-grab/dist/rune-grab.iife.global.js" />}
       </body>
     </html>
   );

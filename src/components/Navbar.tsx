@@ -6,12 +6,14 @@ import {
   HStack,
   Text,
   Button,
-  Link as ChakraLink, Image
+  Image,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { useScroll, useMotionValueEvent } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { HiOutlineCommandLine } from "react-icons/hi2";
+import RuneLogo from "./RuneLogo";
 
 export default function Navbar() {
   const { scrollY } = useScroll();
@@ -44,7 +46,8 @@ export default function Navbar() {
         justify="space-between"
       >
         <HStack spacing={2.5} cursor="pointer" >
-          <Image src="/rune-logo.webp" alt="Rune" h="32px" w="auto" />
+          <Image src="/rune-icon.svg" alt="Rune icon" h="28px" w="auto" />
+          <RuneLogo height={18} color="#e6e6e6" />
         </HStack>
         <HStack spacing={4}>
           <ChakraLink
@@ -65,6 +68,17 @@ export default function Navbar() {
           >
             Source
           </Text>
+          <ChakraLink
+            as={Link}
+            href="/grab"
+            fontSize="md"
+            fontWeight={500}
+            color="gray.400"
+            _hover={{ color: "gray.50", textDecoration: "none" }}
+            transition="all 0.2s"
+          >
+            Grab
+          </ChakraLink>
           <Link href="/download" passHref>
             <Button
               size="sm"
