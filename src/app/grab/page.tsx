@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import {
     Box,
     Heading,
@@ -41,6 +42,16 @@ PromptInput.displayName = "PromptInput";
 /* ── Page ─────────────────────────────────────────────────────────────── */
 
 export default function GrabPage() {
+
+    useEffect(() => {
+        return () => {
+            // Clean up rune-grab when navigating away via client-side routing
+            const menu = document.getElementById("__rune-grab-menu__");
+            if (menu) menu.remove();
+            // Remove the injected script so it doesn't linger
+            document.querySelectorAll('script[src*="rune-grab"]').forEach((s) => s.remove());
+        };
+    }, []);
 
     return (
         <Box minH="100vh" bg="#171717" overflowX="hidden">
