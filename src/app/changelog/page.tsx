@@ -20,7 +20,7 @@ import DarkVeil from "@/components/DarkVeil";
 const releases = [
     {
         version: "v0.2.0",
-        date: "3 March 2026",
+        date: "1 March 2026",
         latest: true,
         sections: [
             {
