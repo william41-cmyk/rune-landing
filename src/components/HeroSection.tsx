@@ -40,7 +40,7 @@ export default function HeroSection() {
         <VStack spacing={6} maxW="760px" textAlign="center" mb={0}>
           <Heading
             as="h1"
-            fontSize={{ base: "6xl", md: "7xl", lg: "8xl" }}
+            fontSize={{ base: "6xl", md: "8xl", lg: "8xl" }}
             fontWeight={700}
             lineHeight={1.05}
             letterSpacing="-0.03em"
