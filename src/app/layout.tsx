@@ -42,8 +42,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og-home.png",
-        width: 1200,
-        height: 630,
+        width: 1920,
+        height: 1080,
         alt: "Rune — The easiest way to build with AI agents",
       },
     ],

@@ -126,7 +126,9 @@ export default function Navbar() {
         <Link href="/">
           <HStack spacing={2.5} cursor="pointer">
             <Image src="/rune-icon.svg" alt="Rune icon" h="28px" w="auto" filter={isDark ? "none" : "invert(1)"} />
-            <RuneLogo height={18} color={c.text.primary} />
+            <Text fontSize="2xl" fontWeight={700} color={c.text.primary} letterSpacing="-0.04em" lineHeight={1}>
+              RUNE
+            </Text>
           </HStack>
         </Link>
         {/* Mobile hamburger */}

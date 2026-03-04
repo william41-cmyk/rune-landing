@@ -18,6 +18,8 @@
         "@fontsource/ubuntu": "^5.2.8",
         "framer-motion": "^11.18.2",
         "geist": "^1.7.0",
+        "html-to-image": "^1.11.13",
+        "html2canvas": "^1.4.1",
         "next": "15.3.9",
         "ogl": "^1.0.11",
         "postprocessing": "^6.38.3",
