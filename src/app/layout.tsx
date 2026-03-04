@@ -103,7 +103,7 @@ export default function RootLayout({
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var m=localStorage.getItem('chakra-ui-color-mode')||'light';document.documentElement.style.colorScheme=m;document.documentElement.dataset.theme=m;document.documentElement.classList.add('chakra-ui-'+m);document.documentElement.style.backgroundColor=m==='dark'?'#0e0e0e':'#f6f5f1';document.documentElement.style.color=m==='dark'?'#e5e5e5':'#1a1a1a'}catch(e){}})()`,
+            __html: `(function(){try{var p=localStorage.getItem('rune-theme-preference');var m=p?localStorage.getItem('chakra-ui-color-mode')||'light':'light';if(!p){localStorage.setItem('chakra-ui-color-mode','light')}document.documentElement.style.colorScheme=m;document.documentElement.dataset.theme=m;document.documentElement.classList.add('chakra-ui-'+m);document.documentElement.style.backgroundColor=m==='dark'?'#0e0e0e':'#f6f5f1';document.documentElement.style.color=m==='dark'?'#e5e5e5':'#1a1a1a'}catch(e){}})()`,
           }}
         />
       </head>
