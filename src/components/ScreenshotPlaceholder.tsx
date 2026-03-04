@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, useColorMode } from "@chakra-ui/react";
+import { colors } from "@/theme/colors";
 
 interface ScreenshotPlaceholderProps {
   label: string;
@@ -13,30 +14,42 @@ export default function ScreenshotPlaceholder({
   height = "500px",
   fadeBottom = false,
 }: ScreenshotPlaceholderProps) {
+  const { colorMode } = useColorMode();
+  const isDark = colorMode === "dark";
+  const c = colors(isDark);
+
   return (
     <Box position="relative" w="100%" maxW="1100px" mx="auto">
       <Box
         h={height}
-        bg="linear-gradient(145deg, #1c1c1c 0%, #161616 100%)"
+        bg={
+          isDark
+            ? `linear-gradient(145deg, ${c.surface} 0%, ${c.surfaceTertiary} 100%)`
+            : `linear-gradient(145deg, ${c.surfaceLight} 0%, ${c.surface} 100%)`
+        }
         border="1px solid"
-        borderColor="rgba(255,255,255,0.08)"
+        borderColor={c.border.subtle}
         borderRadius="16px"
-        boxShadow="0 0 80px rgba(168, 85, 247, 0.08), 0 20px 60px rgba(0,0,0,0.5)"
+        boxShadow={
+          isDark
+            ? `0 0 80px rgba(168, 85, 247, 0.05), 0 20px 60px rgba(0,0,0,0.3)`
+            : `0 0 80px rgba(168, 85, 247, 0.05), 0 20px 60px rgba(0,0,0,0.06)`
+        }
         overflow="hidden"
         position="relative"
       >
         <Flex
           h="40px"
-          bg="rgba(255,255,255,0.03)"
+          bg={c.overlay.subtle}
           borderBottom="1px solid"
-          borderColor="rgba(255,255,255,0.06)"
+          borderColor={c.border.faint}
           align="center"
           px={4}
           gap={2}
         >
-          <Box w="12px" h="12px" borderRadius="full" bg="rgba(255,255,255,0.1)" />
-          <Box w="12px" h="12px" borderRadius="full" bg="rgba(255,255,255,0.1)" />
-          <Box w="12px" h="12px" borderRadius="full" bg="rgba(255,255,255,0.1)" />
+          <Box w="12px" h="12px" borderRadius="full" bg={c.border.subtle} />
+          <Box w="12px" h="12px" borderRadius="full" bg={c.border.subtle} />
+          <Box w="12px" h="12px" borderRadius="full" bg={c.border.subtle} />
         </Flex>
         <Flex
           h="calc(100% - 40px)"
@@ -44,20 +57,44 @@ export default function ScreenshotPlaceholder({
           justify="center"
           position="relative"
           sx={{
-            backgroundImage:
-              "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)",
+            backgroundImage: isDark
+              ? "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)"
+              : "radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px)",
             backgroundSize: "24px 24px",
           }}
         >
-          <Box position="absolute" left={0} top={0} bottom={0} w="200px" bg="rgba(255,255,255,0.02)" borderRight="1px solid" borderColor="rgba(255,255,255,0.05)">
+          <Box
+            position="absolute"
+            left={0}
+            top={0}
+            bottom={0}
+            w="200px"
+            bg={c.overlay.subtle}
+            borderRight="1px solid"
+            borderColor={c.border.veryFaint}
+          >
             {[...Array(8)].map((_, i) => (
-              <Box key={i} h="28px" mx={3} my={2} borderRadius="4px" bg={`rgba(255,255,255,${i === 2 ? '0.06' : '0.02'})`} />
+              <Box
+                key={i}
+                h="28px"
+                mx={3}
+                my={2}
+                borderRadius="4px"
+                bg={i === 2 ? c.overlay.hover : c.overlay.subtle}
+              />
             ))}
           </Box>
           <Flex direction="column" align="center" gap={3}>
-            <Box w="48px" h="48px" borderRadius="12px" bg="rgba(168, 85, 247, 0.1)" border="1px solid" borderColor="rgba(168, 85, 247, 0.2)" />
+            <Box
+              w="48px"
+              h="48px"
+              borderRadius="12px"
+              bg="rgba(168, 85, 247, 0.08)"
+              border="1px solid"
+              borderColor="rgba(168, 85, 247, 0.15)"
+            />
             <Text
-              color="gray.500"
+              color={c.text.subtle}
               fontSize="sm"
               fontFamily="mono"
               fontWeight={500}
@@ -75,7 +112,7 @@ export default function ScreenshotPlaceholder({
           left={0}
           right={0}
           h="120px"
-          bg="linear-gradient(to bottom, transparent, #171717)"
+          bg={`linear-gradient(to bottom, transparent, ${c.bg})`}
           borderRadius="0 0 16px 16px"
           pointerEvents="none"
         />

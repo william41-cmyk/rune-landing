@@ -13,7 +13,8 @@ import {
   FiLayout, FiMaximize2, FiColumns, FiMove, FiMonitor,
 } from "react-icons/fi";
 import Link from "next/link";
-import { useState, useCallback, useMemo, useEffect, ReactNode, Suspense } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useState, useCallback, useMemo, useEffect, useRef, ReactNode, Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import type { IconType } from "react-icons";
 
@@ -32,8 +33,8 @@ interface PageContent {
 
 function SectionHeading({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <Heading id={id} fontSize="xl" fontWeight={700} letterSpacing="-0.01em"
-      color="gray.50" mt={10} mb={4} scrollMarginTop="80px">
+    <Heading id={id} fontSize="xl" fontWeight={700} letterSpacing="-0.03em"
+      color="rune.text.primary" mt={10} mb={4} scrollMarginTop="80px">
       {children}
     </Heading>
   );
@@ -41,8 +42,8 @@ function SectionHeading({ id, children }: { id: string; children: ReactNode }) {
 
 function SubHeading({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <Heading id={id} fontSize="md" fontWeight={600} letterSpacing="-0.01em"
-      color="gray.200" mt={8} mb={3} scrollMarginTop="80px">
+    <Heading id={id} fontSize="md" fontWeight={600} letterSpacing="-0.03em"
+      color="rune.text.primary" mt={8} mb={3} scrollMarginTop="80px">
       {children}
     </Heading>
   );
@@ -50,7 +51,7 @@ function SubHeading({ id, children }: { id: string; children: ReactNode }) {
 
 function P({ children }: { children: ReactNode }) {
   return (
-    <Text fontSize="sm" color="gray.300" lineHeight={1.85} mb={4}>
+    <Text fontSize="sm" color="rune.text.secondary" lineHeight={1.85} mb={4} letterSpacing="-0.03em">
       {children}
     </Text>
   );
@@ -58,7 +59,7 @@ function P({ children }: { children: ReactNode }) {
 
 function InlineCode({ children }: { children: ReactNode }) {
   return (
-    <Code bg="rgba(255,255,255,0.06)" color="gray.200" px={1.5} py={0.5}
+    <Code bg="rune.overlay.soft" color="rune.text.primary" px={1.5} py={0.5}
       borderRadius="4px" fontSize="xs" fontFamily="mono">
       {children}
     </Code>
@@ -67,10 +68,10 @@ function InlineCode({ children }: { children: ReactNode }) {
 
 function CodeBlock({ children, language }: { children: string; language?: string }) {
   return (
-    <Box bg="rgba(255,255,255,0.03)" border="1px solid" borderColor="rgba(255,255,255,0.06)"
+    <Box bg="rune.overlay.subtle" border="1px solid" borderColor="rune.border.subtle"
       borderRadius="10px" p={4} mb={4} overflowX="auto"
-      sx={{ "&::-webkit-scrollbar": { height: "4px" }, "&::-webkit-scrollbar-thumb": { bg: "rgba(255,255,255,0.1)", borderRadius: "full" } }}>
-      <Code display="block" whiteSpace="pre" bg="transparent" color="gray.500"
+      sx={{ "&::-webkit-scrollbar": { height: "4px" }, "&::-webkit-scrollbar-thumb": { bg: "var(--chakra-colors-rune-border-subtle)", borderRadius: "full" } }}>
+      <Code display="block" whiteSpace="pre" bg="transparent" color="rune.text.muted"
         fontSize="xs" lineHeight={1.7} fontFamily="'JetBrains Mono', monospace"
         fontStyle="italic">
         Currently unavailable
@@ -81,26 +82,26 @@ function CodeBlock({ children, language }: { children: string; language?: string
 
 function Callout({ title, icon, children }: { title: string; icon?: IconType; children: ReactNode }) {
   return (
-    <Box bg="rgba(255,255,255,0.03)" border="1px solid" borderColor="rgba(255,255,255,0.08)"
+    <Box bg="rune.overlay.subtle" border="1px solid" borderColor="rune.border.subtle"
       borderRadius="10px" p={4} mb={4}>
       <HStack spacing={2} mb={2}>
-        {icon && <Icon as={icon} boxSize={3.5} color="gray.400" />}
-        <Text fontSize="sm" fontWeight={600} color="gray.200">{title}</Text>
+        {icon && <Icon as={icon} boxSize={3.5} color="rune.text.muted" />}
+        <Text fontSize="sm" fontWeight={600} color="rune.text.primary" letterSpacing="-0.03em">{title}</Text>
       </HStack>
-      <Text fontSize="sm" color="gray.400" lineHeight={1.7}>{children}</Text>
+      <Text fontSize="sm" color="rune.text.muted" lineHeight={1.7} letterSpacing="-0.03em">{children}</Text>
     </Box>
   );
 }
 
 function FeatureCard({ icon, title, desc }: { icon: IconType; title: string; desc: string }) {
   return (
-    <Box bg="rgba(255,255,255,0.02)" border="1px solid" borderColor="rgba(255,255,255,0.06)"
+    <Box bg="rune.overlay.subtle" border="1px solid" borderColor="rune.border.subtle"
       borderRadius="10px" p={4}>
       <HStack spacing={2.5} mb={2}>
-        <Icon as={icon} boxSize={4} color="gray.400" />
-        <Text fontSize="sm" fontWeight={600} color="gray.200">{title}</Text>
+        <Icon as={icon} boxSize={4} color="rune.text.muted" />
+        <Text fontSize="sm" fontWeight={600} color="rune.text.primary" letterSpacing="-0.03em">{title}</Text>
       </HStack>
-      <Text fontSize="xs" color="gray.400" lineHeight={1.7}>{desc}</Text>
+      <Text fontSize="xs" color="rune.text.muted" lineHeight={1.7} letterSpacing="-0.03em">{desc}</Text>
     </Box>
   );
 }
@@ -1077,61 +1078,64 @@ for (const [slug, data] of Object.entries(pageData)) {
   pages[slug] = { ...data, ...getNav(slug) };
 }
 
+// -- Search index built once at module level --
+type SearchEntry = { slug: string; pageTitle: string; section: string; matchText: string; type: "title" | "subtitle" | "heading" };
+const searchIndex: SearchEntry[] = [];
+for (const [slug, data] of Object.entries(pageData)) {
+  const base = { slug, pageTitle: data.title, section: data.section };
+  searchIndex.push({ ...base, matchText: data.title, type: "title" });
+  if (data.subtitle) searchIndex.push({ ...base, matchText: data.subtitle, type: "subtitle" });
+  for (const t of data.toc) searchIndex.push({ ...base, matchText: t.label, type: "heading" });
+}
+
 function SidebarSectionComponent({
-  section, activeSlug, onSelect, searchQuery,
+  section, activeSlug, onSelect,
 }: {
   section: SidebarSection;
   activeSlug: string;
   onSelect: (slug: string) => void;
-  searchQuery: string;
 }) {
   const isActiveSection = section.items.some((i) => i.slug === activeSlug);
   const [isOpen, setIsOpen] = useState(true);
 
-  const filteredItems = useMemo(() => {
-    if (!searchQuery) return section.items;
-    return section.items.filter((item) =>
-      item.label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [section.items, searchQuery]);
-
-  if (searchQuery && filteredItems.length === 0) return null;
+  const filteredItems = section.items;
 
   return (
     <Box>
       <Flex
         align="center" justify="space-between" py={2} px={3}
         cursor="pointer" borderRadius="8px" transition="all 0.2s"
-        _hover={{ bg: "rgba(255,255,255,0.04)" }}
+        _hover={{ bg: "rune.overlay.soft" }}
         onClick={() => setIsOpen(!isOpen)} role="group"
       >
         <HStack spacing={2.5}>
           <Icon as={section.icon} boxSize={3.5}
-            color={isActiveSection ? "gray.300" : "gray.500"}
-            _groupHover={{ color: "gray.300" }} transition="color 0.2s" />
+            color={isActiveSection ? "rune.text.secondary" : "rune.text.muted"}
+            _groupHover={{ color: "rune.text.primary" }} transition="color 0.2s" />
           <Text fontSize="sm" fontWeight={600}
-            color={isActiveSection ? "gray.200" : "gray.300"}
-            letterSpacing="-0.01em">
+            color={isActiveSection ? "rune.text.primary" : "rune.text.muted"}
+            letterSpacing="-0.03em">
             {section.title}
           </Text>
         </HStack>
-        <Icon as={isOpen ? FiChevronDown : FiChevronRight} boxSize={3} color="gray.600" />
+        <Icon as={isOpen ? FiChevronDown : FiChevronRight} boxSize={3} color="rune.text.placeholder" />
       </Flex>
       <Collapse in={isOpen} animateOpacity>
         <VStack align="stretch" spacing={0} pl={3} mt={0.5}>
           {filteredItems.map((item) => (
             <Flex key={item.slug} align="center" py={1.5} px={3} ml={3}
               cursor="pointer" borderRadius="8px" borderLeft="2px solid"
-              borderColor={activeSlug === item.slug ? "gray.400" : "rgba(255,255,255,0.04)"}
-              bg={activeSlug === item.slug ? "rgba(255,255,255,0.06)" : "transparent"}
+              borderColor={activeSlug === item.slug ? "rune.text.subtle" : "rune.overlay.soft"}
+              bg={activeSlug === item.slug ? "rune.overlay.hover" : "transparent"}
               transition="all 0.2s"
               _hover={{
-                bg: activeSlug === item.slug ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.04)",
-                borderColor: activeSlug === item.slug ? "gray.400" : "rgba(255,255,255,0.1)",
+                bg: activeSlug === item.slug ? "rune.overlay.hover" : "rune.overlay.soft",
+                borderColor: activeSlug === item.slug ? "rune.text.subtle" : "rune.border.subtle",
               }}
               onClick={() => onSelect(item.slug)}>
               <Text fontSize="sm"
-                color={activeSlug === item.slug ? "gray.50" : "gray.400"}
+                letterSpacing="-0.03em"
+                color={activeSlug === item.slug ? "rune.text.primary" : "rune.text.muted"}
                 fontWeight={activeSlug === item.slug ? 500 : 400}
                 transition="color 0.2s">
                 {item.label}
@@ -1154,8 +1158,44 @@ function DocsPageInner() {
 
   const [activeSlug, setActiveSlug] = useState(initialSlug);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [activeTocId, setActiveTocId] = useState(initialSection);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Debounce search query (300ms)
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(searchQuery), 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // Search results — only when ≥3 chars (full word gate)
+  const searchResults = useMemo(() => {
+    if (debouncedQuery.length < 3) return [];
+    const q = debouncedQuery.toLowerCase();
+    const seen = new Set<string>();
+    const results: SearchEntry[] = [];
+    for (const entry of searchIndex) {
+      if (entry.matchText.toLowerCase().includes(q) && !seen.has(entry.slug)) {
+        seen.add(entry.slug);
+        results.push(entry);
+        if (results.length >= 8) break;
+      }
+    }
+    return results;
+  }, [debouncedQuery]);
 
   useEffect(() => {
     if (initialSection) {
@@ -1189,11 +1229,11 @@ function DocsPageInner() {
   }, [router, pathname]);
 
   return (
-    <Box minH="100vh" bg="#171717" overflowX="hidden">
+    <Box minH="100vh" bg="rune.bg" overflowX="hidden">
       <Box position="fixed" top={0} left={0} right={0} w="100%" zIndex={1000}
-        bg="rgba(23,23,23,0.8)" backdropFilter="blur(20px)"
+        bg="rune.surface" backdropFilter="blur(20px)"
         sx={{ WebkitBackdropFilter: "blur(20px)" }}
-        borderBottom="1px solid" borderColor="rgba(255,255,255,0.06)">
+        borderBottom="1px solid" borderColor="rune.border.subtle">
         <Flex maxW="1400px" mx="auto" px={{ base: 4, md: 6 }} py={3}
           align="center" justify="space-between">
           <HStack spacing={6}>
@@ -1202,104 +1242,144 @@ function DocsPageInner() {
                 <Image src="/rune-logo.webp" alt="Rune" h="28px" w="auto" />
               </HStack>
             </Link>
-            <Box w="1px" h="20px" bg="rgba(255,255,255,0.08)" display={{ base: "none", md: "block" }} />
-            <Text fontSize="sm" fontWeight={500} color="gray.400" display={{ base: "none", md: "block" }}>
+            <Box w="1px" h="20px" bg="rune.overlay.hover" display={{ base: "none", md: "block" }} />
+            <Text fontSize="sm" fontWeight={500} color="rune.text.muted" display={{ base: "none", md: "block" }} letterSpacing="-0.03em">
               Documentation
             </Text>
           </HStack>
+          <Box ref={searchRef} flex={1} maxW="400px" mx={6} display={{ base: "none", md: "block" }} position="relative">
+            <InputGroup size="sm">
+              <InputLeftElement pointerEvents="none" h="36px">
+                <Icon as={FiSearch} boxSize={3.5} color="rune.text.muted" />
+              </InputLeftElement>
+              <Input placeholder="Search docs..." bg="rune.overlay.soft"
+                border="1px solid" borderColor="rune.border.subtle"
+                borderRadius="10px" h="36px" fontSize="sm" color="rune.text.primary"
+                _placeholder={{ color: "gray.500" }}
+                _hover={{ borderColor: "rune.border.subtle" }}
+                _focus={{ borderColor: "rune.border.default", boxShadow: "none", bg: "rune.overlay.hover", outline: "none" }}
+                _focusVisible={{ boxShadow: "none", outline: "none" }}
+                value={searchQuery}
+                onFocus={() => setSearchFocused(true)}
+                onKeyDown={(e) => { if (e.key === "Escape") { setSearchFocused(false); (e.target as HTMLInputElement).blur(); } }}
+                onChange={(e) => setSearchQuery(e.target.value)} />
+            </InputGroup>
+            {searchFocused && searchResults.length > 0 && (
+              <Box position="absolute" top="calc(100% + 6px)" left={0} right={0}
+                bg="rune.surface" border="1px solid" borderColor="rune.border.subtle"
+                borderRadius="12px" py={1.5} zIndex={2000}
+                boxShadow="0 8px 32px rgba(0,0,0,0.25)"
+                maxH="360px" overflowY="auto"
+                sx={{
+                  "&::-webkit-scrollbar": { width: "4px" },
+                  "&::-webkit-scrollbar-thumb": { bg: "rune.border.subtle", borderRadius: "full" },
+                }}>
+                {searchResults.map((r) => (
+                  <Flex key={r.slug} align="center" gap={2} px={3} py={2} mx={1.5}
+                    cursor="pointer" borderRadius="8px" transition="background 0.15s"
+                    _hover={{ bg: "rune.overlay.soft" }}
+                    onClick={() => {
+                      handleSelect(r.slug);
+                      setSearchQuery("");
+                      setDebouncedQuery("");
+                      setSearchFocused(false);
+                    }}>
+                    <Icon as={FiSearch} boxSize={3} color="rune.text.muted" flexShrink={0} />
+                    <Box flex={1} minW={0}>
+                      <Text fontSize="sm" fontWeight={500} color="rune.text.primary"
+                        letterSpacing="-0.03em" noOfLines={1}>
+                        {r.pageTitle}
+                      </Text>
+                      <Text fontSize="xs" color="rune.text.muted" letterSpacing="-0.03em" noOfLines={1}>
+                        {r.section}{r.type === "heading" ? ` → ${r.matchText}` : ""}
+                      </Text>
+                    </Box>
+                  </Flex>
+                ))}
+              </Box>
+            )}
+          </Box>
           <HStack spacing={4}>
-            <ChakraLink href="/" fontSize="sm" fontWeight={500} color="gray.500"
-              _hover={{ color: "gray.50", textDecoration: "none" }}
+            <ChakraLink href="/" fontSize="sm" fontWeight={500} color="rune.text.muted"
+              _hover={{ color: "rune.text.primary", textDecoration: "none" }}
               transition="all 0.2s" display={{ base: "none", md: "flex" }}>
               Home
             </ChakraLink>
             <Link href="/download" passHref>
-              <Button size="sm" bg="#e6e6e6" color="#171717" fontWeight={500}
+              <Button size="sm" bg="rune.btn.primary.bg" color="rune.btn.primary.text" fontWeight={500}
                 fontSize="sm" borderRadius="full" px={4}
-                _hover={{ bg: "#d4d4d4" }} _active={{ bg: "#c2c2c2" }}
+                _hover={{ opacity: 0.85 }} _active={{ opacity: 0.75 }}
                 transition="all 0.2s">
                 Download
               </Button>
             </Link>
             <Box display={{ base: "flex", lg: "none" }} cursor="pointer"
               onClick={() => setSidebarOpen(!sidebarOpen)} p={1}>
-              <Icon as={sidebarOpen ? FiX : FiMenu} boxSize={5} color="gray.400" />
+              <Icon as={sidebarOpen ? FiX : FiMenu} boxSize={5} color="rune.text.muted" />
             </Box>
           </HStack>
         </Flex>
       </Box>
       <Flex maxW="1400px" mx="auto" pt="60px" minH="100vh">
-        <Box as="aside" w="260px" flexShrink={0} position="fixed"
+        <Flex as="aside" direction="column" w="260px" flexShrink={0} position="fixed"
           top="60px" bottom={0}
           left={{ base: sidebarOpen ? 0 : "-100%", lg: "auto" }}
           overflowY="auto" borderRight="1px solid"
-          borderColor="rgba(255,255,255,0.06)" bg="#171717"
+          borderColor="rune.border.subtle" bg="rune.bg"
           zIndex={999} transition="left 0.3s ease" px={3} py={5}
           sx={{
             "&::-webkit-scrollbar": { width: "4px" },
             "&::-webkit-scrollbar-track": { bg: "transparent" },
-            "&::-webkit-scrollbar-thumb": { bg: "rgba(255,255,255,0.08)", borderRadius: "full" },
+            "&::-webkit-scrollbar-thumb": { bg: "rune.border.subtle", borderRadius: "full" },
           }}>
-          <Box px={1} mb={5}>
-            <InputGroup size="sm">
-              <InputLeftElement pointerEvents="none" h="36px">
-                <Icon as={FiSearch} boxSize={3.5} color="gray.500" />
-              </InputLeftElement>
-              <Input placeholder="Search docs..." bg="rgba(255,255,255,0.04)"
-                border="1px solid" borderColor="rgba(255,255,255,0.06)"
-                borderRadius="10px" h="36px" fontSize="sm" color="gray.50"
-                _placeholder={{ color: "gray.500" }}
-                _hover={{ borderColor: "rgba(255,255,255,0.1)" }}
-                _focus={{ borderColor: "rgba(255,255,255,0.2)", boxShadow: "0 0 0 1px rgba(255,255,255,0.1)", bg: "rgba(255,255,255,0.06)" }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)} />
-            </InputGroup>
+          <Box px={1} mb={4}>
+            <ThemeToggle />
           </Box>
           <VStack align="stretch" spacing={2}>
             {sidebarData.map((section) => (
               <SidebarSectionComponent key={section.title} section={section}
-                activeSlug={activeSlug} onSelect={handleSelect} searchQuery={searchQuery} />
+                activeSlug={activeSlug} onSelect={handleSelect} />
             ))}
           </VStack>
-        </Box>
+        </Flex>
         {sidebarOpen && (
           <Box display={{ base: "block", lg: "none" }} position="fixed" inset={0}
-            bg="rgba(0,0,0,0.5)" zIndex={998} onClick={() => setSidebarOpen(false)} />
+            bg="rune.overlay.hover" zIndex={998} onClick={() => setSidebarOpen(false)} />
         )}
         <Box flex={1} ml={{ base: 0, lg: "260px" }} mr={{ base: 0, xl: "220px" }}
           px={{ base: 5, md: 10 }} py={{ base: 8, md: 12 }} maxW="800px">
           {currentPage ? (
             <>
               <HStack spacing={2} mb={8}>
-                <Text fontSize="xs" color="gray.500">Docs</Text>
-                <Text fontSize="xs" color="gray.600">/</Text>
-                <Text fontSize="xs" color="gray.500">{currentPage.section}</Text>
-                <Text fontSize="xs" color="gray.600">/</Text>
-                <Text fontSize="xs" color="gray.50" fontWeight={500}>{currentPage.title}</Text>
+                <Text fontSize="xs" color="rune.text.muted" letterSpacing="-0.03em">Docs</Text>
+                <Text fontSize="xs" color="rune.text.placeholder" letterSpacing="-0.03em">/</Text>
+                <Text fontSize="xs" color="rune.text.muted" letterSpacing="-0.03em">{currentPage.section}</Text>
+                <Text fontSize="xs" color="rune.text.placeholder" letterSpacing="-0.03em">/</Text>
+                <Text fontSize="xs" color="rune.text.primary" fontWeight={500} letterSpacing="-0.03em">{currentPage.title}</Text>
               </HStack>
               <Heading fontSize={{ base: "3xl", md: "4xl" }} fontWeight={700}
-                letterSpacing="-0.02em" lineHeight={1.2} color="gray.50" mb={3}>
+                letterSpacing="-0.03em" lineHeight={1.2} color="rune.text.primary" mb={3}>
                 {currentPage.title}
               </Heading>
-              <Text fontSize="md" color="gray.400" lineHeight={1.8} mb={10}>
+              <Text fontSize="md" color="rune.text.muted" lineHeight={1.8} mb={10} letterSpacing="-0.03em">
                 {currentPage.subtitle}
               </Text>
               <Box>{currentPage.content}</Box>
-              <Flex borderTop="1px solid" borderColor="rgba(255,255,255,0.06)"
+              <Flex borderTop="1px solid" borderColor="rune.border.subtle"
                 pt={6} mt={12} justify="space-between">
                 {currentPage.prev ? (
-                  <Flex align="center" gap={2} cursor="pointer" color="gray.400"
-                    transition="color 0.2s" _hover={{ color: "gray.50" }}
+                  <Flex align="center" gap={2} cursor="pointer" color="rune.text.muted"
+                    transition="color 0.2s" _hover={{ color: "rune.text.primary" }}
                     onClick={() => handleSelect(currentPage.prev!.slug)}>
                     <Icon as={FiChevronLeft} boxSize={3.5} />
-                    <Text fontSize="sm" fontWeight={500}>{currentPage.prev.label}</Text>
+                    <Text fontSize="sm" fontWeight={500} letterSpacing="-0.03em">{currentPage.prev.label}</Text>
                   </Flex>
                 ) : <Box />}
                 {currentPage.next ? (
-                  <Flex align="center" gap={2} cursor="pointer" color="gray.400"
-                    transition="color 0.2s" _hover={{ color: "gray.50" }}
+                  <Flex align="center" gap={2} cursor="pointer" color="rune.text.muted"
+                    transition="color 0.2s" _hover={{ color: "rune.text.primary" }}
                     onClick={() => handleSelect(currentPage.next!.slug)}>
-                    <Text fontSize="sm" fontWeight={500}>{currentPage.next.label}</Text>
+                    <Text fontSize="sm" fontWeight={500} letterSpacing="-0.03em">{currentPage.next.label}</Text>
                     <Icon as={FiChevronRight} boxSize={3.5} />
                   </Flex>
                 ) : <Box />}
@@ -1309,7 +1389,7 @@ function DocsPageInner() {
             <VStack align="stretch" spacing={4} py={4}>
               {[1, 2, 3].map((i) => (
                 <Box key={i} h={i === 1 ? "32px" : "80px"} w={i === 1 ? "60%" : "100%"}
-                  bg="rgba(255,255,255,0.04)" borderRadius="8px" />
+                  bg="rune.overlay.soft" borderRadius="8px" />
               ))}
             </VStack>
           )}
@@ -1319,7 +1399,7 @@ function DocsPageInner() {
           py={10} pr={6} display={{ base: "none", xl: "block" }} overflowY="auto">
           {currentPage && currentPage.toc.length > 0 && (
             <>
-              <Text fontSize="xs" fontWeight={600} color="gray.400"
+              <Text fontSize="xs" fontWeight={600} color="rune.text.muted"
                 textTransform="uppercase" letterSpacing="0.08em" mb={4}>
                 On This Page
               </Text>
@@ -1327,9 +1407,9 @@ function DocsPageInner() {
                 {currentPage.toc.map((item) => (
                   <Box key={item.id} as="a" href={`?${findSectionKey(activeSlug)}=${activeSlug}&section=${item.id}#${item.id}`} py={1.5}
                     pl={item.depth === 1 ? 4 : 0} borderLeft="2px solid"
-                    borderColor={activeTocId === item.id ? "gray.400" : "rgba(255,255,255,0.04)"}
+                    borderColor={activeTocId === item.id ? "rune.text.subtle" : "rune.overlay.soft"}
                     cursor="pointer" transition="all 0.2s"
-                    _hover={{ borderColor: activeTocId === item.id ? "gray.400" : "rgba(255,255,255,0.1)" }}
+                    _hover={{ borderColor: activeTocId === item.id ? "rune.text.subtle" : "rune.border.subtle" }}
                     onClick={(e: React.MouseEvent) => {
                       e.preventDefault();
                       setActiveTocId(item.id);
@@ -1341,6 +1421,7 @@ function DocsPageInner() {
                       if (el) el.scrollIntoView({ behavior: "smooth" });
                     }}>
                     <Text fontSize="xs"
+                letterSpacing="-0.03em"
                       color={activeTocId === item.id ? "gray.50" : "gray.500"}
                       fontWeight={activeTocId === item.id ? 500 : 400}
                       pl={3} transition="color 0.2s"
@@ -1361,7 +1442,7 @@ function DocsPageInner() {
 export default function DocsPage() {
   return (
     <Suspense fallback={
-      <Box minH="100vh" bg="#171717" />
+      <Box minH="100vh" bg="rune.bg" />
     }>
       <DocsPageInner />
     </Suspense>

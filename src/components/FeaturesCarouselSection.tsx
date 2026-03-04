@@ -11,6 +11,7 @@ import {
     IconButton,
     Badge,
     Switch,
+    useColorMode,
 } from "@chakra-ui/react";
 import {
     FiChevronLeft,
@@ -43,79 +44,57 @@ import {
     FiDroplet,
     FiDatabase,
     FiSmartphone,
+    FiPauseCircle,
 } from "react-icons/fi";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { colors } from "@/theme/colors";
 
-const rune = {
-    bg: {
-        primary: "#0d0d0d",
-        secondary: "#171717",
-        tertiary: "#1c1c1c",
-        cards: "#161616",
-        surface: "#111111",
-    },
-    text: {
-        primary: "#f5f5f5",
-        secondary: "#b3b3b3",
-        muted: "#8a8a8a",
-        subtle: "#6b6b6b",
-        placeholder: "#525252",
-    },
-    border: {
-        subtle: "#262626",
-        default: "#3a3a3a",
-        strong: "#525252",
-    },
-    overlay: {
-        subtle: "rgba(255,255,255,0.03)",
-        soft: "rgba(255,255,255,0.05)",
-        hover: "rgba(255,255,255,0.08)",
-        strong: "rgba(255,255,255,0.12)",
-        border: "rgba(255,255,255,0.08)",
-        borderStrong: "rgba(255,255,255,0.15)",
-        grid: "rgba(255,255,255,0.04)",
-    },
-    accent: {
-        green: "#22c55e",
-        red: "#ef4444",
-        amber: "#f59e0b",
-        blue: "#3b82f6",
-        purple: "#a855f7",
-        pink: "#ec4899",
-        yellow: "#ffc600",
-    },
-    agent: {
-        architect: "#a855f7",
-        coder: "#8a8a8a",
-        raven: "#22c55e",
-        manager: "#6b6b6b",
-    },
-    activity: {
-        thinking: { color: "#6366f1", accent: "#818cf8" },
-        reading: { color: "#8ab4f8", accent: "#bfdbfe" },
-        writing: { color: "#fb923c", accent: "#fdba74" },
-        editing: { color: "#f472b6", accent: "#f9a8d4" },
-        running: { color: "#34d399", accent: "#6ee7b7" },
-        analyzing: { color: "#f97316", accent: "#fb923c" },
-        reviewing: { color: "#c084fc", accent: "#d8b4fe" },
-    },
-    tool: {
-        read: "#8a8a8a",
-        write: "#22c55e",
-        edit: "#ffc600",
-        bash: "#fcd34d",
-        glob: "#8a8a8a",
-        grep: "#8a8a8a",
-    },
-    diff: {
-        codeBg: "rgba(22,22,22,0.95)",
-        add: { color: "#3fb950", bg: "rgba(46,160,67,0.12)" },
-        remove: { color: "#f85149", bg: "rgba(248,81,73,0.12)" },
-    },
-} as const;
+function extendedColors(isDark: boolean) {
+    const c = colors(isDark);
+    return {
+        ...c,
+        activity: {
+            thinking: { color: "#6366f1", accent: "#818cf8" },
+            reading: { color: "#8ab4f8", accent: "#bfdbfe" },
+            writing: { color: "#fb923c", accent: "#fdba74" },
+            editing: { color: "#f472b6", accent: "#f9a8d4" },
+            running: { color: "#34d399", accent: "#6ee7b7" },
+            analyzing: { color: "#f97316", accent: "#fb923c" },
+            reviewing: { color: "#c084fc", accent: "#d8b4fe" },
+        },
+        accent: {
+            green: "#22c55e",
+            red: "#ef4444",
+            amber: "#f59e0b",
+            blue: "#3b82f6",
+            purple: "#a855f7",
+            pink: "#ec4899",
+            yellow: "#ffc600",
+        },
+        tool: {
+            read: "#8a8a8a",
+            write: "#22c55e",
+            edit: "#ffc600",
+            bash: "#fcd34d",
+            glob: "#8a8a8a",
+            grep: "#8a8a8a",
+        },
+        diff: {
+            codeBg: "rgba(22,22,22,0.95)",
+            add: { color: "#3fb950", bg: "rgba(46,160,67,0.12)" },
+            remove: { color: "#f85149", bg: "rgba(248,81,73,0.12)" },
+        },
+        overlay: {
+            ...c.overlay,
+            grid: "rgba(255,255,255,0.04)",
+            border: "rgba(255,255,255,0.08)",
+            borderStrong: "rgba(255,255,255,0.15)",
+        },
+    };
+}
 
-function GlassIcon({ icon: IconComponent }: { icon: any; color: string }) {
+function GlassIcon({ icon: IconComponent, rune }: { icon: any; color?: string; rune: ReturnType<typeof extendedColors> }) {
     return (
         <Box
             as="span"
@@ -128,78 +107,81 @@ function GlassIcon({ icon: IconComponent }: { icon: any; color: string }) {
             alignItems="center"
             justifyContent="center"
             sx={{
-                background: "hsla(0, 0%, 100%, 0.1)",
+                background: rune.overlay.hover,
                 backdropFilter: "blur(12px)",
                 WebkitBackdropFilter: "blur(12px)",
-                boxShadow: "0 0 0 1px hsla(0, 0%, 100%, 0.2) inset",
+                boxShadow: `0 0 0 1px ${rune.overlay.strong} inset`,
             }}
         >
             <Icon
                 as={IconComponent}
                 boxSize="18px"
-                color="white"
+                color={rune.text.primary}
                 filter="drop-shadow(0 1px 2px rgba(0,0,0,0.15))"
             />
         </Box>
     );
 }
 
-const activityPresets: Record<string, {
+function getActivityPresets(rune: ReturnType<typeof extendedColors>): Record<string, {
     color: string; accent: string; accentCells: number[]; duration: number;
     stagger: number[];
-}> = {
-    thinking: {
-        color: rune.activity.thinking.color,
-        accent: rune.activity.thinking.accent,
-        accentCells: [1, 3, 5, 7],
-        duration: 1.8,
-        stagger: [0, 1, 2, 1, 2, 3, 2, 3, 4],
-    },
-    reading: {
-        color: rune.activity.reading.color,
-        accent: rune.activity.reading.accent,
-        accentCells: [2, 5, 8],
-        duration: 2.0,
-        stagger: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    },
-    writing: {
-        color: rune.activity.writing.color,
-        accent: rune.activity.writing.accent,
-        accentCells: [2, 3, 8],
-        duration: 1.6,
-        stagger: [0, 1, 2, 5, 4, 3, 6, 7, 8],
-    },
-    editing: {
-        color: rune.activity.editing.color,
-        accent: rune.activity.editing.accent,
-        accentCells: [1, 4, 7],
-        duration: 1.8,
-        stagger: [6, 7, 8, 5, 4, 3, 0, 1, 2],
-    },
-    running: {
-        color: rune.activity.running.color,
-        accent: rune.activity.running.accent,
-        accentCells: [0, 4, 8],
-        duration: 1.4,
-        stagger: [2, 1, 0, 3, 2, 1, 4, 3, 2],
-    },
-    analyzing: {
-        color: rune.activity.analyzing.color,
-        accent: rune.activity.analyzing.accent,
-        accentCells: [0, 2, 6, 8],
-        duration: 2.2,
-        stagger: [0, 3, 1, 5, 8, 7, 6, 2, 4],
-    },
-    reviewing: {
-        color: rune.activity.reviewing.color,
-        accent: rune.activity.reviewing.accent,
-        accentCells: [0, 2, 6, 8],
-        duration: 2.0,
-        stagger: [4, 3, 2, 3, 2, 1, 2, 1, 0],
-    },
-};
+}> {
+    return {
+        thinking: {
+            color: rune.activity.thinking.color,
+            accent: rune.activity.thinking.accent,
+            accentCells: [1, 3, 5, 7],
+            duration: 1.8,
+            stagger: [0, 1, 2, 1, 2, 3, 2, 3, 4],
+        },
+        reading: {
+            color: rune.activity.reading.color,
+            accent: rune.activity.reading.accent,
+            accentCells: [2, 5, 8],
+            duration: 2.0,
+            stagger: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        },
+        writing: {
+            color: rune.activity.writing.color,
+            accent: rune.activity.writing.accent,
+            accentCells: [2, 3, 8],
+            duration: 1.6,
+            stagger: [0, 1, 2, 5, 4, 3, 6, 7, 8],
+        },
+        editing: {
+            color: rune.activity.editing.color,
+            accent: rune.activity.editing.accent,
+            accentCells: [1, 4, 7],
+            duration: 1.8,
+            stagger: [6, 7, 8, 5, 4, 3, 0, 1, 2],
+        },
+        running: {
+            color: rune.activity.running.color,
+            accent: rune.activity.running.accent,
+            accentCells: [0, 4, 8],
+            duration: 1.4,
+            stagger: [2, 1, 0, 3, 2, 1, 4, 3, 2],
+        },
+        analyzing: {
+            color: rune.activity.analyzing.color,
+            accent: rune.activity.analyzing.accent,
+            accentCells: [0, 2, 6, 8],
+            duration: 2.2,
+            stagger: [0, 3, 1, 5, 8, 7, 6, 2, 4],
+        },
+        reviewing: {
+            color: rune.activity.reviewing.color,
+            accent: rune.activity.reviewing.accent,
+            accentCells: [0, 2, 6, 8],
+            duration: 2.0,
+            stagger: [4, 3, 2, 3, 2, 1, 2, 1, 0],
+        },
+    };
+}
 
-function ActivityIconMini({ type, size = 14 }: { type: string; size?: number }) {
+function ActivityIconMini({ type, size = 14, rune }: { type: string; size?: number; rune: ReturnType<typeof extendedColors> }) {
+    const activityPresets = getActivityPresets(rune);
     const preset = activityPresets[type] || activityPresets.thinking;
     const gap = 1;
     const cellSize = (size - gap * 2) / 3;
@@ -297,38 +279,38 @@ const tabData: Record<string, CardData[]> = {
             visual: "session-recovery",
         },
     ],
-    Framework: [
+    Workflows: [
         {
-            name: "rune/core",
-            icon: FiPackage,
+            name: "Review Loops",
+            icon: FiRefreshCw,
             iconColor: "purple",
-            description: "Install the core as an npm dependency. Build any multi-agent system on top — not just code generation.",
+            description: "Raven iterates on Coder output with configurable depth. One pass, two, three — you set the quality bar.",
             tint: "270, 75%",
-            visual: "framework-core",
+            visual: "review-loops",
         },
         {
-            name: "Custom Agents",
-            icon: FiCpu,
+            name: "Interrupt Control",
+            icon: FiPauseCircle,
             iconColor: "blue",
-            description: "Define agents with custom instructions, tool permissions, and looping — wire them into any topology.",
+            description: "Stop, redirect, or modify a running workflow mid-task without losing progress.",
             tint: "210, 75%",
-            visual: "framework-agents",
+            visual: "interrupt-control",
+        },
+        {
+            name: "Streaming Activity",
+            icon: FiActivity,
+            iconColor: "green",
+            description: "Watch agents think, read, write, and execute in real-time with a live activity feed.",
+            tint: "150, 65%",
+            visual: "streaming-activity",
         },
         {
             name: "Visual Pipelines",
             icon: FiGitMerge,
-            iconColor: "green",
-            description: "Design workflows on a node canvas. Drag, connect, and configure agents without writing orchestration code.",
-            tint: "150, 65%",
-            visual: "framework-canvas",
-        },
-        {
-            name: "Any Workflow",
-            icon: FiGrid,
             iconColor: "amber",
-            description: "Not just coding. Build research agents, customer service swarms, data pipelines — anything multi-agent.",
+            description: "Design workflows on a node canvas. Drag, connect, and configure agents without writing orchestration code.",
             tint: "35, 80%",
-            visual: "framework-usecases",
+            visual: "framework-canvas",
         },
     ],
     Skills: [
@@ -361,14 +343,15 @@ const tabData: Record<string, CardData[]> = {
 
 const tabs = Object.keys(tabData);
 
-function CardVisual({ type }: { type: string }) {
+function CardVisual({ type, rune }: { type: string; rune: ReturnType<typeof extendedColors> }) {
 
     if (type === "agent-presets") {
         const presets = [
-            { id: "fast", label: "Fast", icon: FiZap, desc: "Quick architect + coding. No review.", pipeline: "Architect (quick) → Coder", tokens: "2-4k", active: false },
-            { id: "balanced", label: "Balanced", icon: FiActivity, desc: "Thorough architect + one Raven review.", pipeline: "Architect → Coder → Raven", tokens: "4-8k", active: true },
-            { id: "quality", label: "Quality", icon: FiCheckCircle, desc: "Two Raven reviews. For production code.", pipeline: "Architect → Coder → Raven ×2", tokens: "8-15k", active: false },
-            { id: "thorough", label: "Thorough", icon: FiShield, desc: "Three Raven reviews. Maximum quality.", pipeline: "Architect → Coder → Raven ×3", tokens: "15-30k", active: false },
+            { id: "fast", label: "Fast", icon: FiZap, desc: "Quick architect + coding. No refinement. Best for prototyping.", pipeline: "Architect (quick) → Coder", tokens: "2-4k", active: false },
+            { id: "balanced", label: "Balanced", icon: FiActivity, desc: "Thorough architect + coding + one Raven refinement cycle.", pipeline: "Architect → Coder ↔ Raven ×1", tokens: "4-8k", active: true },
+            { id: "architect", label: "Architect", icon: FiCpu, desc: "Single agent. Deep analysis and clarifying questions only.", pipeline: "Architect", tokens: "1-2k", active: false },
+            { id: "coder", label: "Coder", icon: FiCode, desc: "Single agent. Straight to implementation with optional self-review.", pipeline: "Coder", tokens: "2-6k", active: false },
+            { id: "reviewer", label: "Reviewer", icon: FiEye, desc: "Single agent. Read-only code review and analysis.", pipeline: "Reviewer", tokens: "1-3k", active: false },
         ];
         return (
             <VStack spacing={0} align="stretch" w="100%" flex={1}>
@@ -382,7 +365,7 @@ function CardVisual({ type }: { type: string }) {
                     >
                         <HStack spacing={2.5} mb={1}>
                             <Icon as={p.icon} boxSize="13px" color={p.active ? rune.text.primary : rune.text.subtle} />
-                            <Text fontSize="xs" fontWeight="semibold" color={p.active ? rune.text.primary : rune.text.secondary} flex={1}>
+                            <Text fontSize="xs" fontWeight="semibold" color={p.active ? rune.text.primary : rune.text.secondary} flex={1} letterSpacing="-0.03em">
                                 {p.label}
                             </Text>
                             {p.active && (
@@ -395,18 +378,18 @@ function CardVisual({ type }: { type: string }) {
                             )}
                         </HStack>
                         <HStack spacing={1.5} pl="25px">
-                            <Text fontSize="2xs" color={rune.text.muted} fontFamily="mono" flex={1} noOfLines={1}>{p.pipeline}</Text>
-                            <Text fontSize="2xs" color={rune.text.placeholder} fontFamily="mono" flexShrink={0}>{p.tokens}</Text>
+                            <Text fontSize="2xs" color={rune.text.muted} fontFamily="mono" flex={1} noOfLines={1} letterSpacing="-0.03em">{p.pipeline}</Text>
+                            <Text fontSize="2xs" color={rune.text.placeholder} fontFamily="mono" flexShrink={0} letterSpacing="-0.03em">{p.tokens}</Text>
                         </HStack>
                     </Box>
                 ))}
                 <Box px={3} pt={3} mt="auto">
                     <Box h="1px" bg={rune.overlay.grid} mb={3} />
                     <HStack justify="space-between">
-                        <Text fontSize="2xs" color={rune.text.placeholder}>Active preset</Text>
+                        <Text fontSize="2xs" color={rune.text.placeholder} letterSpacing="-0.03em">Active preset</Text>
                         <HStack spacing={1.5}>
                             <Icon as={FiActivity} boxSize="10px" color={rune.text.secondary} />
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} fontWeight="medium">Balanced</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} fontWeight="medium" letterSpacing="-0.03em">Balanced</Text>
                         </HStack>
                     </HStack>
                 </Box>
@@ -437,10 +420,10 @@ function CardVisual({ type }: { type: string }) {
                         borderColor={rune.overlay.grid}
                     >
                         <Icon as={s.icon} boxSize="12px" color={rune.text.placeholder} flexShrink={0} />
-                        <Text fontSize="xs" color={rune.text.subtle} minW="72px" flexShrink={0}>
+                        <Text fontSize="xs" color={rune.text.subtle} minW="72px" flexShrink={0} letterSpacing="-0.03em">
                             {s.label}
                         </Text>
-                        <Text fontSize="xs" fontFamily="mono" color={rune.text.secondary} flex={1} noOfLines={1}>
+                        <Text fontSize="xs" fontFamily="mono" color={rune.text.secondary} flex={1} noOfLines={1} letterSpacing="-0.03em">
                             {s.value}
                         </Text>
                         <Icon as={FiChevronDown} boxSize="10px" color={rune.text.placeholder} flexShrink={0} />
@@ -462,44 +445,44 @@ function CardVisual({ type }: { type: string }) {
                     <VStack spacing={0} align="stretch">
                         <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                             <Icon as={FiChevronRight} boxSize={3} color={rune.text.placeholder} mr={2} flexShrink={0} />
-                            <ActivityIconMini type="reading" size={14} />
-                            <Text fontFamily="mono" fontSize="xs" color={rune.tool.read} fontWeight="semibold" ml={2} flexShrink={0}>Read</Text>
-                            <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>src/App.tsx</Text>
-                            <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2}>0.2s</Text>
+                            <ActivityIconMini type="reading" size={14} rune={rune} />
+                            <Text fontFamily="mono" fontSize="xs" color={rune.tool.read} fontWeight="semibold" ml={2} flexShrink={0} letterSpacing="-0.03em">Read</Text>
+                            <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1} letterSpacing="-0.03em">src/App.tsx</Text>
+                            <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2} letterSpacing="-0.03em">0.2s</Text>
                         </HStack>
                         <Box>
                             <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                                 <Icon as={FiChevronDown} boxSize={3} color={rune.text.secondary} mr={2} flexShrink={0} />
-                                <ActivityIconMini type="writing" size={14} />
-                                <Text fontFamily="mono" fontSize="xs" color={rune.tool.write} fontWeight="semibold" ml={2} flexShrink={0}>Write</Text>
-                                <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>src/components/Auth.tsx</Text>
-                                <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2}>1.4s</Text>
+                                <ActivityIconMini type="writing" size={14} rune={rune} />
+                                <Text fontFamily="mono" fontSize="xs" color={rune.tool.write} fontWeight="semibold" ml={2} flexShrink={0} letterSpacing="-0.03em">Write</Text>
+                                <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1} letterSpacing="-0.03em">src/components/Auth.tsx</Text>
+                                <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2} letterSpacing="-0.03em">1.4s</Text>
                             </HStack>
                             <Box ml={7} mr={1} mb={1} py={2} px={2.5} borderRadius="md" bg={rune.overlay.soft} fontFamily="mono" fontSize="2xs" lineHeight={1.9}>
-                                <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"export function AuthProvider({ children }) {"}</Text>
-                                <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"  const [user, setUser] = useState(null)"}</Text>
-                                <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"  const session = useSession()"}</Text>
-                                <Text color={rune.text.placeholder}>{"   ..."}</Text>
-                                <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"  return <AuthCtx value={user}>"}</Text>
-                                <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"    {children}"}</Text>
-                                <Text color={rune.diff.add.color}><Text as="span" color={rune.text.placeholder}>+</Text> {"  </AuthCtx>"}</Text>
+                                <Text color={rune.diff.add.color} letterSpacing="-0.03em"><Text as="span" color={rune.text.placeholder} letterSpacing="-0.03em">+</Text> {"export function AuthProvider({ children }) {"}</Text>
+                                <Text color={rune.diff.add.color} letterSpacing="-0.03em"><Text as="span" color={rune.text.placeholder} letterSpacing="-0.03em">+</Text> {"  const [user, setUser] = useState(null)"}</Text>
+                                <Text color={rune.diff.add.color} letterSpacing="-0.03em"><Text as="span" color={rune.text.placeholder} letterSpacing="-0.03em">+</Text> {"  const session = useSession()"}</Text>
+                                <Text color={rune.text.placeholder} letterSpacing="-0.03em">{"   ..."}</Text>
+                                <Text color={rune.diff.add.color} letterSpacing="-0.03em"><Text as="span" color={rune.text.placeholder} letterSpacing="-0.03em">+</Text> {"  return <AuthCtx value={user}>"}</Text>
+                                <Text color={rune.diff.add.color} letterSpacing="-0.03em"><Text as="span" color={rune.text.placeholder} letterSpacing="-0.03em">+</Text> {"    {children}"}</Text>
+                                <Text color={rune.diff.add.color} letterSpacing="-0.03em"><Text as="span" color={rune.text.placeholder} letterSpacing="-0.03em">+</Text> {"  </AuthCtx>"}</Text>
                             </Box>
                         </Box>
                         <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                             <Icon as={FiChevronRight} boxSize={3} color={rune.text.placeholder} mr={2} flexShrink={0} />
-                            <ActivityIconMini type="editing" size={14} />
-                            <Text fontFamily="mono" fontSize="xs" color={rune.tool.edit} fontWeight="semibold" ml={2} flexShrink={0}>Edit</Text>
-                            <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>src/utils/api.ts</Text>
-                            <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2}>0.8s</Text>
+                            <ActivityIconMini type="editing" size={14} rune={rune} />
+                            <Text fontFamily="mono" fontSize="xs" color={rune.tool.edit} fontWeight="semibold" ml={2} flexShrink={0} letterSpacing="-0.03em">Edit</Text>
+                            <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1} letterSpacing="-0.03em">src/utils/api.ts</Text>
+                            <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} ml={2} letterSpacing="-0.03em">0.8s</Text>
                         </HStack>
                         <HStack spacing={0} py={1.5} px={2} borderRadius="md">
                             <Icon as={FiChevronRight} boxSize={3} color={rune.text.placeholder} mr={2} flexShrink={0} />
-                            <ActivityIconMini type="running" size={14} />
-                            <Text fontFamily="mono" fontSize="xs" color={rune.tool.bash} fontWeight="semibold" ml={2} flexShrink={0}>Bash</Text>
-                            <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1}>npm run build</Text>
+                            <ActivityIconMini type="running" size={14} rune={rune} />
+                            <Text fontFamily="mono" fontSize="xs" color={rune.tool.bash} fontWeight="semibold" ml={2} flexShrink={0} letterSpacing="-0.03em">Bash</Text>
+                            <Text fontFamily="mono" fontSize="xs" color={rune.text.muted} ml={2} flex={1} noOfLines={1} letterSpacing="-0.03em">npm run build</Text>
                             <HStack spacing={2} ml={2} flexShrink={0}>
-                                <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle}>3.1s</Text>
-                                <Box w="5px" h="5px" borderRadius="full" bg="#fcd34d" sx={{ animation: "pulse 1.4s ease-in-out infinite" }} />
+                                <Text fontFamily="mono" fontSize="2xs" color={rune.text.subtle} letterSpacing="-0.03em">3.1s</Text>
+                                <Box w="5px" h="5px" borderRadius="full" bg={rune.accent.amber} sx={{ animation: "pulse 1.4s ease-in-out infinite" }} />
                             </HStack>
                         </HStack>
                     </VStack>
@@ -528,19 +511,134 @@ function CardVisual({ type }: { type: string }) {
                     >
                         <HStack spacing={2.5} mb={1}>
                             <Box w="5px" h="5px" borderRadius="full" bg={s.statusColor} flexShrink={0} />
-                            <Text fontSize="xs" fontWeight={500} color={rune.text.primary} noOfLines={1} flex={1}>
+                            <Text fontSize="xs" fontWeight={500} color={rune.text.primary} noOfLines={1} flex={1} letterSpacing="-0.03em">
                                 {s.task}
                             </Text>
-                            <Text fontSize="2xs" fontFamily="mono" color={s.statusColor}>{s.status}</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={s.statusColor} letterSpacing="-0.03em">{s.status}</Text>
                         </HStack>
                         <HStack spacing={2} pl="17px">
-                            <Text fontSize="2xs" color={rune.text.subtle}>{s.agents}</Text>
-                            <Text fontSize="xs" color={rune.text.placeholder}>·</Text>
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.subtle}>{s.time}</Text>
-                            <Text fontSize="xs" color={rune.text.placeholder}>·</Text>
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.subtle}>{s.files} files</Text>
+                            <Text fontSize="2xs" color={rune.text.subtle} letterSpacing="-0.03em">{s.agents}</Text>
+                            <Text fontSize="xs" color={rune.text.placeholder} letterSpacing="-0.03em">·</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.subtle} letterSpacing="-0.03em">{s.time}</Text>
+                            <Text fontSize="xs" color={rune.text.placeholder} letterSpacing="-0.03em">·</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.subtle} letterSpacing="-0.03em">{s.files} files</Text>
                         </HStack>
                     </Box>
+                ))}
+            </VStack>
+        );
+    }
+
+    if (type === "review-loops") {
+        const loops = [
+            { depth: 1, label: "Quick", passes: ["Coder"], status: "done", statusColor: rune.accent.green },
+            { depth: 2, label: "Standard", passes: ["Coder", "Raven"], status: "done", statusColor: rune.accent.green },
+            { depth: 3, label: "Thorough", passes: ["Coder", "Raven", "Raven"], status: "active", statusColor: rune.accent.amber },
+            { depth: 4, label: "Maximum", passes: ["Coder", "Raven", "Raven", "Raven"], status: "queued", statusColor: rune.text.placeholder },
+        ];
+        return (
+            <VStack spacing={0} align="stretch" w="100%" flex={1}>
+                {loops.map((l, i) => (
+                    <Box
+                        key={i}
+                        py={2.5}
+                        px={3}
+                        borderRadius="lg"
+                        bg={l.status === "active" ? rune.overlay.soft : "transparent"}
+                    >
+                        <HStack spacing={2.5} mb={1}>
+                            <Text fontSize="xs" fontWeight="semibold" color={l.status === "queued" ? rune.text.muted : rune.text.primary} letterSpacing="-0.03em">
+                                {l.label}
+                            </Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={l.statusColor} ml="auto" letterSpacing="-0.03em">{l.status}</Text>
+                        </HStack>
+                        <HStack spacing={1} pl={0}>
+                            {l.passes.map((p, j) => (
+                                <HStack key={j} spacing={0}>
+                                    <Text fontSize="2xs" fontFamily="mono" color={l.status === "queued" ? rune.text.placeholder : rune.text.subtle} letterSpacing="-0.03em">{p}</Text>
+                                    {j < l.passes.length - 1 && <Text fontSize="2xs" color={rune.text.placeholder} mx={1} letterSpacing="-0.03em">→</Text>}
+                                </HStack>
+                            ))}
+                        </HStack>
+                    </Box>
+                ))}
+                <Box px={3} pt={3} mt="auto">
+                    <Box h="1px" bg={rune.overlay.grid} mb={3} />
+                    <HStack justify="space-between">
+                        <Text fontSize="2xs" color={rune.text.placeholder} letterSpacing="-0.03em">Review depth</Text>
+                        <HStack spacing={1.5}>
+                            <Icon as={FiRefreshCw} boxSize="10px" color={rune.text.secondary} />
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} fontWeight="medium" letterSpacing="-0.03em">3 passes</Text>
+                        </HStack>
+                    </HStack>
+                </Box>
+            </VStack>
+        );
+    }
+
+    if (type === "interrupt-control") {
+        const actions = [
+            { label: "Pause", icon: FiPauseCircle, desc: "Freeze the current agent mid-step", color: rune.accent.amber, active: true },
+            { label: "Redirect", icon: FiCornerUpRight, desc: "Change the task without restarting", color: rune.accent.blue, active: false },
+            { label: "Cancel", icon: FiTrash2, desc: "Stop and roll back to last checkpoint", color: rune.accent.red, active: false },
+            { label: "Resume", icon: FiPlay, desc: "Continue from exactly where it paused", color: rune.accent.green, active: false },
+        ];
+        return (
+            <VStack spacing={0} align="stretch" w="100%" flex={1}>
+                <Box px={1} py={2} borderBottom="1px solid" borderColor={rune.overlay.grid}>
+                    <HStack spacing={2}>
+                        <Box w="6px" h="6px" borderRadius="full" bg={rune.accent.amber} sx={{ animation: "pulse 1.4s ease-in-out infinite" }} />
+                        <Text fontSize="xs" fontFamily="mono" color={rune.accent.amber} fontWeight="medium" letterSpacing="-0.03em">Workflow paused</Text>
+                    </HStack>
+                    <Text fontSize="2xs" color={rune.text.muted} mt={1} pl="18px" letterSpacing="-0.03em">Coder agent — writing src/auth.ts</Text>
+                </Box>
+                {actions.map((a, i) => (
+                    <HStack
+                        key={i}
+                        py={2.5}
+                        px={1}
+                        spacing={3}
+                        borderBottom={i < actions.length - 1 ? "1px solid" : "none"}
+                        borderColor={rune.overlay.grid}
+                        opacity={a.active ? 1 : 0.5}
+                    >
+                        <Icon as={a.icon} boxSize="14px" color={a.color} flexShrink={0} />
+                        <Box flex={1}>
+                            <Text fontSize="xs" fontWeight="semibold" color={a.active ? rune.text.primary : rune.text.muted} letterSpacing="-0.03em">{a.label}</Text>
+                            <Text fontSize="2xs" color={rune.text.subtle} letterSpacing="-0.03em">{a.desc}</Text>
+                        </Box>
+                    </HStack>
+                ))}
+            </VStack>
+        );
+    }
+
+    if (type === "streaming-activity") {
+        const events = [
+            { agent: "Architect", activity: "thinking", text: "Planning auth implementation...", time: "0.4s" },
+            { agent: "Coder", activity: "reading", text: "src/utils/api.ts", time: "0.2s" },
+            { agent: "Coder", activity: "writing", text: "src/components/Auth.tsx", time: "1.4s" },
+            { agent: "Coder", activity: "editing", text: "src/App.tsx", time: "0.6s" },
+            { agent: "Coder", activity: "running", text: "npm run build", time: "3.1s" },
+            { agent: "Raven", activity: "reviewing", text: "Checking code quality...", time: "2.0s" },
+            { agent: "Raven", activity: "analyzing", text: "Running test coverage...", time: "1.8s" },
+        ];
+        return (
+            <VStack spacing={0} align="stretch" w="100%" flex={1}>
+                {events.map((e, i) => (
+                    <HStack
+                        key={i}
+                        py={1.5}
+                        px={1}
+                        spacing={2}
+                        borderBottom={i < events.length - 1 ? "1px solid" : "none"}
+                        borderColor={rune.overlay.grid}
+                    >
+                        <ActivityIconMini type={e.activity} size={14} rune={rune} />
+                        <Text fontSize="2xs" fontFamily="mono" color={rune.text.subtle} flexShrink={0} minW="52px" letterSpacing="-0.03em">{e.agent}</Text>
+                        <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} flex={1} noOfLines={1} letterSpacing="-0.03em">{e.text}</Text>
+                        <Text fontSize="2xs" fontFamily="mono" color={rune.text.placeholder} flexShrink={0} letterSpacing="-0.03em">{e.time}</Text>
+                    </HStack>
                 ))}
             </VStack>
         );
@@ -563,20 +661,20 @@ function CardVisual({ type }: { type: string }) {
                 bg={rune.overlay.soft}
                 borderRadius="md"
             >
-                <Text color={rune.text.subtle}>{"// install as a dependency"}</Text>
-                <Text><Text as="span" color={rune.accent.purple}>import</Text>{" { Manager, Agent }"}</Text>
-                <Text>{"  "}<Text as="span" color={rune.accent.purple}>from</Text> <Text as="span" color={rune.accent.green}>{`'@rune/core'`}</Text></Text>
+                <Text color={rune.text.subtle} letterSpacing="-0.03em">{"// install as a dependency"}</Text>
+                <Text letterSpacing="-0.03em"><Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">import</Text>{" { Manager, Agent }"}</Text>
+                <Text letterSpacing="-0.03em">{"  "}<Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">from</Text> <Text as="span" color={rune.accent.green} letterSpacing="-0.03em">{`'@rune/core'`}</Text></Text>
                 <Box h="4px" />
-                <Text color={rune.text.subtle}>{"// define your own agent"}</Text>
-                <Text><Text as="span" color={rune.accent.purple}>class</Text> <Text as="span" color={rune.accent.blue}>Analyst</Text> <Text as="span" color={rune.accent.purple}>extends</Text> <Text as="span" color={rune.accent.blue}>Agent</Text> {"{"}</Text>
-                <Text>{"  "}<Text as="span" color={rune.accent.purple}>async</Text> <Text as="span" color={rune.activity.writing.accent}>handle</Text>{"(msg) {"}</Text>
-                <Text color={rune.text.subtle}>{"    // your domain logic"}</Text>
-                <Text>{"  }"}</Text>
-                <Text>{"}"}</Text>
+                <Text color={rune.text.subtle} letterSpacing="-0.03em">{"// define your own agent"}</Text>
+                <Text letterSpacing="-0.03em"><Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">class</Text> <Text as="span" color={rune.accent.blue} letterSpacing="-0.03em">Analyst</Text> <Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">extends</Text> <Text as="span" color={rune.accent.blue} letterSpacing="-0.03em">Agent</Text> {"{"}</Text>
+                <Text letterSpacing="-0.03em">{"  "}<Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">async</Text> <Text as="span" color={rune.activity.writing.accent} letterSpacing="-0.03em">handle</Text>{"(msg) {"}</Text>
+                <Text color={rune.text.subtle} letterSpacing="-0.03em">{"    // your domain logic"}</Text>
+                <Text letterSpacing="-0.03em">{"  }"}</Text>
+                <Text letterSpacing="-0.03em">{"}"}</Text>
                 <Box h="4px" />
-                <Text color={rune.text.subtle}>{"// compose & run"}</Text>
-                <Text><Text as="span" color={rune.accent.purple}>const</Text> mgr = <Text as="span" color={rune.accent.purple}>new</Text> <Text as="span" color={rune.accent.blue}>Manager</Text>{"({ pipeline })"}</Text>
-                <Text><Text as="span" color={rune.accent.purple}>await</Text> mgr.<Text as="span" color={rune.activity.writing.accent}>run</Text>()</Text>
+                <Text color={rune.text.subtle} letterSpacing="-0.03em">{"// compose & run"}</Text>
+                <Text letterSpacing="-0.03em"><Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">const</Text> mgr = <Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">new</Text> <Text as="span" color={rune.accent.blue} letterSpacing="-0.03em">Manager</Text>{"({ pipeline })"}</Text>
+                <Text letterSpacing="-0.03em"><Text as="span" color={rune.accent.purple} letterSpacing="-0.03em">await</Text> mgr.<Text as="span" color={rune.activity.writing.accent} letterSpacing="-0.03em">run</Text>()</Text>
             </Box>
         );
     }
@@ -596,7 +694,7 @@ function CardVisual({ type }: { type: string }) {
                             <circle cx="14" cy="14" r="9" fill="none" stroke="url(#ag-analyst)" strokeWidth="4.5" />
                         </svg>
                     </Box>
-                    <Text fontSize="sm" fontWeight="semibold" color={rune.text.primary} flex={1}>
+                    <Text fontSize="sm" fontWeight="semibold" color={rune.text.primary} flex={1} letterSpacing="-0.03em">
                         Data Analyst
                     </Text>
                     <Box p={1} borderRadius="md" color={rune.text.placeholder} flexShrink={0}>
@@ -605,13 +703,13 @@ function CardVisual({ type }: { type: string }) {
                 </HStack>
                 <Box px={1}>
                     <HStack justify="space-between" align="start" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} pt={0.5} minW="70px">Instructions</Text>
-                        <Text fontSize="xs" fontFamily="mono" color={rune.text.secondary} flex={1}>
+                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} pt={0.5} minW="70px" letterSpacing="-0.03em">Instructions</Text>
+                        <Text fontSize="xs" fontFamily="mono" color={rune.text.secondary} flex={1} letterSpacing="-0.03em">
                             Analyze datasets, generate insights, produce reports
                         </Text>
                     </HStack>
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Tool Access</Text>
+                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px" letterSpacing="-0.03em">Tool Access</Text>
                         <HStack spacing={0} bg={rune.overlay.soft} p="2px" borderRadius="lg" flex={1}>
                             {[
                                 { label: "Full", active: true },
@@ -627,7 +725,7 @@ function CardVisual({ type }: { type: string }) {
                                     borderRadius="md"
                                     textAlign="center"
                                 >
-                                    <Text fontSize="2xs" fontWeight="medium" color={opt.active ? rune.text.primary : rune.text.muted}>
+                                    <Text fontSize="2xs" fontWeight="medium" color={opt.active ? rune.text.primary : rune.text.muted} letterSpacing="-0.03em">
                                         {opt.label}
                                     </Text>
                                 </Box>
@@ -635,18 +733,18 @@ function CardVisual({ type }: { type: string }) {
                         </HStack>
                     </HStack>
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Can Loop</Text>
+                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px" letterSpacing="-0.03em">Can Loop</Text>
                         <Switch size="sm" isChecked colorScheme="gray" pointerEvents="none" />
                     </HStack>
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Model</Text>
+                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px" letterSpacing="-0.03em">Model</Text>
                         <HStack spacing={1.5} bg={rune.overlay.soft} px={2.5} py={1} borderRadius="md">
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary}>Claude Sonnet</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} letterSpacing="-0.03em">Claude Sonnet</Text>
                             <Icon as={FiChevronDown} boxSize="10px" color={rune.text.placeholder} />
                         </HStack>
                     </HStack>
                     <HStack justify="space-between" align="center" spacing={3} py={2.5} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Memory</Text>
+                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px" letterSpacing="-0.03em">Memory</Text>
                         <HStack spacing={0} bg={rune.overlay.soft} p="2px" borderRadius="lg" flex={1}>
                             {[
                                 { label: "None", active: false },
@@ -662,7 +760,7 @@ function CardVisual({ type }: { type: string }) {
                                     borderRadius="md"
                                     textAlign="center"
                                 >
-                                    <Text fontSize="2xs" fontWeight="medium" color={opt.active ? rune.text.primary : rune.text.muted}>
+                                    <Text fontSize="2xs" fontWeight="medium" color={opt.active ? rune.text.primary : rune.text.muted} letterSpacing="-0.03em">
                                         {opt.label}
                                     </Text>
                                 </Box>
@@ -670,7 +768,7 @@ function CardVisual({ type }: { type: string }) {
                         </HStack>
                     </HStack>
                     <HStack justify="space-between" align="center" spacing={3} py={2.5}>
-                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px">Color</Text>
+                        <Text fontSize="xs" color={rune.text.subtle} flexShrink={0} minW="70px" letterSpacing="-0.03em">Color</Text>
                         <HStack spacing={1.5}>
                             {[rune.text.primary, rune.accent.purple, rune.accent.blue, rune.accent.green, rune.accent.amber, rune.accent.red, rune.accent.pink].map(
                                 (color) => (
@@ -729,12 +827,12 @@ function CardVisual({ type }: { type: string }) {
                                     </svg>
                                 </Box>
                                 <Box>
-                                    <Text fontSize="sm" fontWeight="semibold" color={rune.text.primary} noOfLines={1}>
+                                    <Text fontSize="sm" fontWeight="semibold" color={rune.text.primary} noOfLines={1} letterSpacing="-0.03em">
                                         {node.name}
                                     </Text>
                                     <HStack spacing={2} mt={0.5}>
-                                        <Text fontSize="2xs" color={rune.text.subtle}>{node.access}</Text>
-                                        {node.loop && <Text fontSize="2xs" color={rune.text.subtle}>Loop</Text>}
+                                        <Text fontSize="2xs" color={rune.text.subtle} letterSpacing="-0.03em">{node.access}</Text>
+                                        {node.loop && <Text fontSize="2xs" color={rune.text.subtle} letterSpacing="-0.03em">Loop</Text>}
                                     </HStack>
                                 </Box>
                             </HStack>
@@ -804,7 +902,7 @@ function CardVisual({ type }: { type: string }) {
             <VStack spacing={2} align="stretch" w="100%" flex={1}>
                 {pipelines.map((p) => (
                     <Box key={p.name} px={1} py={2.5} borderRadius="lg">
-                        <Text fontSize="xs" fontWeight="semibold" color={rune.text.primary} mb={2} letterSpacing="0.02em">
+                        <Text fontSize="xs" fontWeight="semibold" color={rune.text.primary} mb={2} letterSpacing="-0.03em">
                             {p.name}
                         </Text>
                         <HStack spacing={0}>
@@ -822,10 +920,10 @@ function CardVisual({ type }: { type: string }) {
                                                 <circle cx="6" cy="6" r="3.5" fill="none" stroke={`url(#${agent.id})`} strokeWidth="2.5" />
                                             </svg>
                                         </Box>
-                                        <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary}>{agent.name}</Text>
+                                        <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} letterSpacing="-0.03em">{agent.name}</Text>
                                     </HStack>
                                     {i < p.agents.length - 1 && (
-                                        <Text fontSize="xs" color={rune.text.placeholder} mx={1}>→</Text>
+                                        <Text fontSize="xs" color={rune.text.placeholder} mx={1} letterSpacing="-0.03em">→</Text>
                                     )}
                                 </HStack>
                             ))}
@@ -841,15 +939,15 @@ function CardVisual({ type }: { type: string }) {
             <VStack spacing={0} align="stretch" w="100%" flex={1}>
                 <HStack spacing={2} px={1} py={2} borderBottom="1px solid" borderColor={rune.overlay.grid}>
                     <Icon as={FiHelpCircle} color={rune.text.subtle} boxSize={4} />
-                    <Text fontWeight="semibold" color={rune.text.primary} fontSize="sm">
+                    <Text fontWeight="semibold" color={rune.text.primary} fontSize="sm" letterSpacing="-0.03em">
                         Architect has questions
                     </Text>
                 </HStack>
                 <Box px={1} py={3} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                    <Text fontSize="sm" color={rune.text.secondary} mb={1} fontWeight="medium">
+                    <Text fontSize="sm" color={rune.text.secondary} mb={1} fontWeight="medium" letterSpacing="-0.03em">
                         Where should auth state live?
                     </Text>
-                    <Text fontSize="xs" color={rune.text.muted} mb={2.5}>
+                    <Text fontSize="xs" color={rune.text.muted} mb={2.5} letterSpacing="-0.03em">
                         Determines the state management approach
                     </Text>
                     <Flex flexWrap="wrap" gap={1.5}>
@@ -878,16 +976,16 @@ function CardVisual({ type }: { type: string }) {
                         >
                             <HStack spacing={1}>
                                 <Icon as={FiSkipForward} boxSize={3} />
-                                <Text>Skip</Text>
+                                <Text letterSpacing="-0.03em">Skip</Text>
                             </HStack>
                         </Box>
                     </Flex>
                 </Box>
                 <Box px={1} py={3} borderBottom="1px solid" borderColor={rune.overlay.grid}>
-                    <Text fontSize="sm" color={rune.text.secondary} mb={1} fontWeight="medium">
+                    <Text fontSize="sm" color={rune.text.secondary} mb={1} fontWeight="medium" letterSpacing="-0.03em">
                         Session storage strategy?
                     </Text>
-                    <Text fontSize="xs" color={rune.text.muted} mb={2.5}>
+                    <Text fontSize="xs" color={rune.text.muted} mb={2.5} letterSpacing="-0.03em">
                         How tokens persist across requests
                     </Text>
                     <Flex flexWrap="wrap" gap={1.5}>
@@ -914,16 +1012,16 @@ function CardVisual({ type }: { type: string }) {
     if (type === "custom-skills") {
         return (
             <Box w="100%" py={1} px={1} fontFamily="mono" fontSize="xs" lineHeight={2.2} flex={1} display="flex" flexDirection="column" justifyContent="flex-start">
-                <Text color={rune.accent.blue} fontWeight={600}># API Conventions</Text>
-                <Text color={rune.text.placeholder}>---</Text>
-                <Text color={rune.text.muted}>Use <Text as="span" color={rune.text.secondary}>zod</Text> for all request validation</Text>
-                <Text color={rune.text.muted}>Return <Text as="span" color={rune.text.secondary}>{"{ data, error }"}</Text> envelope</Text>
-                <Text color={rune.text.muted}>Prefix routes with <Text as="span" color={rune.text.secondary}>/api/v1/</Text></Text>
-                <Text color={rune.accent.blue} fontWeight={600} mt={2}># Component Rules</Text>
-                <Text color={rune.text.placeholder}>---</Text>
-                <Text color={rune.text.muted}>Handle <Text as="span" color={rune.text.secondary}>loading, error, empty</Text> states</Text>
-                <Text color={rune.text.muted}>Use <Text as="span" color={rune.text.secondary}>async/await</Text>, never callbacks</Text>
-                <Text color={rune.text.muted}>Colocate <Text as="span" color={rune.text.secondary}>types</Text> with components</Text>
+                <Text color={rune.accent.blue} fontWeight={600} letterSpacing="-0.03em"># API Conventions</Text>
+                <Text color={rune.text.placeholder} letterSpacing="-0.03em">---</Text>
+                <Text color={rune.text.muted} letterSpacing="-0.03em">Use <Text as="span" color={rune.text.secondary} letterSpacing="-0.03em">zod</Text> for all request validation</Text>
+                <Text color={rune.text.muted} letterSpacing="-0.03em">Return <Text as="span" color={rune.text.secondary} letterSpacing="-0.03em">{"{ data, error }"}</Text> envelope</Text>
+                <Text color={rune.text.muted} letterSpacing="-0.03em">Prefix routes with <Text as="span" color={rune.text.secondary} letterSpacing="-0.03em">/api/v1/</Text></Text>
+                <Text color={rune.accent.blue} fontWeight={600} mt={2} letterSpacing="-0.03em"># Component Rules</Text>
+                <Text color={rune.text.placeholder} letterSpacing="-0.03em">---</Text>
+                <Text color={rune.text.muted} letterSpacing="-0.03em">Handle <Text as="span" color={rune.text.secondary} letterSpacing="-0.03em">loading, error, empty</Text> states</Text>
+                <Text color={rune.text.muted} letterSpacing="-0.03em">Use <Text as="span" color={rune.text.secondary} letterSpacing="-0.03em">async/await</Text>, never callbacks</Text>
+                <Text color={rune.text.muted} letterSpacing="-0.03em">Colocate <Text as="span" color={rune.text.secondary} letterSpacing="-0.03em">types</Text> with components</Text>
             </Box>
         );
     }
@@ -947,11 +1045,11 @@ function CardVisual({ type }: { type: string }) {
                         align="start"
                     >
                         <Box flex={1}>
-                            <Text fontSize="xs" fontFamily="mono" fontWeight="semibold" color={l.active ? l.color : rune.text.muted}>
+                            <Text fontSize="xs" fontFamily="mono" fontWeight="semibold" color={l.active ? l.color : rune.text.muted} letterSpacing="-0.03em">
                                 {l.name}
                             </Text>
-                            <Text fontSize="xs" color={rune.text.muted} mt={1} lineHeight={1.5}>{l.desc}</Text>
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.placeholder} mt={1.5}>{l.tools}</Text>
+                            <Text fontSize="xs" color={rune.text.muted} mt={1} lineHeight={1.5} letterSpacing="-0.03em">{l.desc}</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.placeholder} mt={1.5} letterSpacing="-0.03em">{l.tools}</Text>
                         </Box>
                         <Box
                             w="16px"
@@ -993,7 +1091,7 @@ function CardVisual({ type }: { type: string }) {
                         </Box>
                         <Box flex={1}>
                             <HStack spacing={2} mb={0.5}>
-                                <Text fontSize="xs" fontFamily="mono" fontWeight="semibold" color={w.active ? rune.text.primary : rune.text.muted}>
+                                <Text fontSize="xs" fontFamily="mono" fontWeight="semibold" color={w.active ? rune.text.primary : rune.text.muted} letterSpacing="-0.03em">
                                     {w.branch}
                                 </Text>
                                 {w.active && (
@@ -1005,7 +1103,7 @@ function CardVisual({ type }: { type: string }) {
                                     <Box w="8px" h="8px" borderRadius="full" border="1.5px solid" borderColor={rune.text.placeholder} />
                                 )}
                             </HStack>
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.placeholder}>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.placeholder} letterSpacing="-0.03em">
                                 {w.files > 0 ? `${w.files} changed files · ${w.status}` : w.status}
                             </Text>
                         </Box>
@@ -1015,10 +1113,10 @@ function CardVisual({ type }: { type: string }) {
                 <Box px={3} pt={3} mt="auto">
                     <Box h="1px" bg={rune.overlay.grid} mb={3} />
                     <HStack justify="space-between">
-                        <Text fontSize="2xs" color={rune.text.placeholder}>Worktrees</Text>
+                        <Text fontSize="2xs" color={rune.text.placeholder} letterSpacing="-0.03em">Worktrees</Text>
                         <HStack spacing={1.5}>
                             <Icon as={FiGitBranch} boxSize="10px" color={rune.text.secondary} />
-                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} fontWeight="medium">3 active</Text>
+                            <Text fontSize="2xs" fontFamily="mono" color={rune.text.secondary} fontWeight="medium" letterSpacing="-0.03em">3 active</Text>
                         </HStack>
                     </HStack>
                 </Box>
@@ -1029,49 +1127,46 @@ function CardVisual({ type }: { type: string }) {
     return <Box flex={1} />;
 }
 
-function FeatureCard({ card }: { card: CardData }) {
+function FeatureCard({ card, rune }: { card: CardData; rune: ReturnType<typeof extendedColors> }) {
     return (
         <Flex
             direction="column"
             w={{ base: "270px", md: "300px" }}
             minW={{ base: "270px", md: "300px" }}
             h={{ base: "460px", md: "520px" }}
-            borderRadius="20px"
+            borderRadius="lg"
             overflow="hidden"
             cursor="pointer"
             role="group"
             transition="all 0.2s"
-            bg="rgba(255,255,255,0.04)"
+            bg={rune.overlay.subtle}
             border="1px solid"
-            borderColor="rgba(255,255,255,0.08)"
+            borderColor={rune.border.faint}
         >
             <Flex direction="column" h="100%">
                 <Flex px={5} pt={5} pb={0} align="center" justify="space-between">
                     <HStack spacing={3}>
-                        <GlassIcon icon={card.icon} color={card.iconColor} />
-                        <Text fontSize="md" fontWeight={600} color="gray.50">{card.name}</Text>
+                        <Flex
+                            w="36px"
+                            h="36px"
+                            borderRadius="10px"
+                            align="center"
+                            justify="center"
+                            bg={rune.overlay.hover}
+                            flexShrink={0}
+                        >
+                            <Icon as={card.icon} boxSize={4} color={rune.text.secondary} />
+                        </Flex>
+                        <Text fontSize="sm" fontWeight={600} color={rune.text.primary} letterSpacing="-0.03em">{card.name}</Text>
                     </HStack>
-                    <Flex
-                        w="28px"
-                        h="28px"
-                        borderRadius="full"
-                        bg="rgba(255,255,255,0.04)"
-                        border="1px solid rgba(255,255,255,0.08)"
-                        align="center"
-                        justify="center"
-                        transition="all 0.2s"
-                        _groupHover={{ bg: "rgba(255,255,255,0.08)", color: "gray.100" }}
-                    >
-                        <Icon as={FiChevronRight} boxSize={3.5} color="gray.400" />
-                    </Flex>
                 </Flex>
 
                 <Box px={5} pt={3} pb={0}>
-                    <Text fontSize="sm" color="gray.400" lineHeight={1.6}>{card.description}</Text>
+                    <Text fontSize="xs" color={rune.text.muted} lineHeight={1.5} letterSpacing="-0.03em">{card.description}</Text>
                 </Box>
 
                 <Box flex={1} px={4} pt={5} pb={5} display="flex" flexDirection="column">
-                    <CardVisual type={card.visual} />
+                    <CardVisual type={card.visual} rune={rune} />
                 </Box>
             </Flex>
         </Flex>
@@ -1081,6 +1176,9 @@ function FeatureCard({ card }: { card: CardData }) {
 const MotionFlex = motion.create(Flex);
 
 export default function FeaturesCarouselSection() {
+    const { colorMode } = useColorMode();
+    const isDark = colorMode === "dark";
+    const rune = extendedColors(isDark);
     const [activeTab, setActiveTab] = useState(0);
     const [scrollIndex, setScrollIndex] = useState(0);
     const cards = tabData[tabs[activeTab]];
@@ -1119,51 +1217,59 @@ export default function FeaturesCarouselSection() {
             >
                 <VStack align="start" spacing={0} maxW="440px">
                     <Heading
+                letterSpacing="-0.03em"
                         fontSize={{ base: "3xl", md: "3.5xl" }}
-                        letterSpacing="-0.02em"
                         lineHeight={1.3}
-                        color="gray.50"
+                        fontWeight={600}
+                        color={rune.text.primary}
                     >
                         Built for the way you work.
                     </Heading>
-                    <Text fontSize={{ base: "md", md: "3.5xl" }} color="gray.400" lineHeight={1.3}>
+                    <Text
+                letterSpacing="-0.03em"
+                        fontSize={{ base: "md", md: "3.5xl" }}
+                        color={rune.text.secondary}
+                        fontWeight={500}
+                        lineHeight={1.3}
+                    >
                         Everything you need to harness agentic power, your way.
                     </Text>
                 </VStack>
 
                 <Flex
-                        bg="rgba(255,255,255,0.03)"
-                        border="1px solid"
-                        borderColor="rgba(255,255,255,0.06)"
-                        borderRadius="full"
-                        p={1}
-                        mt={{ base: 0, md: 1 }}
-                    >
-                        {tabs.map((tab, i) => (
-                            <Flex
-                                key={tab}
-                                px={{ base: 4, md: 5 }}
-                                py={2}
-                                borderRadius="full"
-                                cursor="pointer"
-                                transition="all 0.25s ease"
-                                bg={activeTab === i ? "rgba(255,255,255,0.1)" : "transparent"}
-                                onClick={() => setActiveTab(i)}
-                                _hover={{
-                                    bg: activeTab === i ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.04)",
-                                }}
+                    bg={rune.overlay.soft}
+                    border="1px solid"
+                    borderColor={rune.overlay.border}
+                    borderRadius="full"
+                    p={1}
+                    mt={{ base: 0, md: 1 }}
+                >
+                    {tabs.map((tab, i) => (
+                        <Flex
+                            key={tab}
+                            px={{ base: 4, md: 5 }}
+                            py={2}
+                            borderRadius="full"
+                            cursor="pointer"
+                            transition="all 0.25s ease"
+                            bg={activeTab === i ? rune.overlay.strong : "transparent"}
+                            onClick={() => setActiveTab(i)}
+                            _hover={{
+                                bg: activeTab === i ? rune.overlay.strong : rune.overlay.soft,
+                            }}
+                        >
+                            <Text
+                letterSpacing="-0.03em"
+                                fontSize="sm"
+                                fontWeight={600}
+                                color={activeTab === i ? rune.text.primary : rune.text.muted}
+                                transition="color 0.25s ease"
+                                whiteSpace="nowrap"
                             >
-                                <Text
-                                    fontSize="sm"
-                                    fontWeight={600}
-                                    color={activeTab === i ? "gray.50" : "gray.500"}
-                                    transition="color 0.25s ease"
-                                    whiteSpace="nowrap"
-                                >
-                                    {tab}
-                                </Text>
-                            </Flex>
-                        ))}
+                                {tab}
+                            </Text>
+                        </Flex>
+                    ))}
                 </Flex>
             </Flex>
             <Box position="relative" overflow="hidden">
@@ -1185,7 +1291,7 @@ export default function FeaturesCarouselSection() {
                             >
                                 {cards.map((card) => (
                                     <Box key={card.name} flexShrink={0}>
-                                        <FeatureCard card={card} />
+                                        <FeatureCard card={card} rune={rune} />
                                     </Box>
                                 ))}
                             </MotionFlex>
@@ -1199,7 +1305,7 @@ export default function FeaturesCarouselSection() {
                     bottom={0}
                     w={{ base: "80px", md: "160px" }}
                     pointerEvents="none"
-                    bg={`linear-gradient(to right, transparent, ${rune.bg.secondary})`}
+                    bg={`linear-gradient(to right, transparent, ${rune.bg})`}
                     zIndex={2}
                 />
                 <Box
@@ -1209,7 +1315,7 @@ export default function FeaturesCarouselSection() {
                     bottom={0}
                     w={{ base: "40px", md: "80px" }}
                     pointerEvents="none"
-                    bg={`linear-gradient(to left, transparent, ${rune.bg.secondary})`}
+                    bg={`linear-gradient(to left, transparent, ${rune.bg})`}
                     zIndex={2}
                     opacity={scrollIndex > 0 ? 1 : 0}
                     transition="opacity 0.4s ease"
@@ -1235,12 +1341,12 @@ export default function FeaturesCarouselSection() {
                         h="40px"
                         minW="40px"
                         borderRadius="full"
-                        color="gray.400"
-                        bg="rgba(255,255,255,0.04)"
+                        color={rune.text.subtle}
+                        bg={rune.surface}
                         border="1px solid"
-                        borderColor="rgba(255,255,255,0.08)"
+                        borderColor={rune.overlay.strong}
                         transition="all 0.2s"
-                        _hover={{ bg: "rgba(255,255,255,0.08)", color: "gray.100" }}
+                        _hover={{ bg: rune.overlay.hover, color: rune.text.primary }}
                         onClick={() => scrollByCard(-1)}
                         isDisabled={scrollIndex === 0}
                         opacity={scrollIndex === 0 ? 0.35 : 1}
@@ -1256,12 +1362,12 @@ export default function FeaturesCarouselSection() {
                         h="40px"
                         minW="40px"
                         borderRadius="full"
-                        color="gray.400"
-                        bg="rgba(255,255,255,0.04)"
+                        color={rune.text.subtle}
+                        bg={rune.surface}
                         border="1px solid"
-                        borderColor="rgba(255,255,255,0.08)"
+                        borderColor={rune.overlay.strong}
                         transition="all 0.2s"
-                        _hover={{ bg: "rgba(255,255,255,0.08)", color: "gray.100" }}
+                        _hover={{ bg: rune.overlay.hover, color: rune.text.primary }}
                         onClick={() => scrollByCard(1)}
                         isDisabled={scrollIndex >= cards.length - 1}
                         opacity={scrollIndex >= cards.length - 1 ? 0.35 : 1}

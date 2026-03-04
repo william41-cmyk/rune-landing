@@ -7,15 +7,12 @@ import {
     Text,
     VStack,
     HStack,
-    Icon,
+    useColorMode,
 } from "@chakra-ui/react";
-import {
-    FiArrowLeft,
-} from "react-icons/fi";
-import Link from "next/link";
+import { colors } from "@/theme/colors";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import DarkVeil from "@/components/DarkVeil";
+import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
     {
@@ -132,15 +129,19 @@ const releases = [
 ];
 
 export default function ChangelogPage() {
+    const { colorMode } = useColorMode();
+    const isDark = colorMode === "dark";
+    const c = colors(isDark);
+
     return (
-        <Box minH="100vh" bg="#171717" overflowX="hidden">
+        <Box minH="100vh" bg={c.bg} overflowX="hidden">
             <Box
                 maxW="1200px"
                 mx="auto"
                 position="relative"
                 borderLeft="1px dashed"
                 borderRight="1px dashed"
-                borderColor="rgba(255,255,255,0.08)"
+                borderColor={c.border.subtle}
                 display="flex"
                 flexDirection="column"
                 minH="100vh"
@@ -149,18 +150,17 @@ export default function ChangelogPage() {
                 <Box
                     position="relative"
                     overflow="hidden"
-                    pt={{ base: "120px", md: "140px" }}
-                    pb={{ base: 10, md: 16 }}
+                    pt={{ base: "120px", md: "180px" }}
+                    pb={{ base: 28, md: 40 }}
                 >
                     <Box position="absolute" inset={0} overflow="hidden" opacity={0.5}>
-                        <DarkVeil
-                            hueShift={25}
-                            noiseIntensity={0.03}
-                            scanlineIntensity={0}
-                            speed={0.15}
-                            scanlineFrequency={0}
-                            warpAmount={0.2}
-                            resolutionScale={1}
+                        <PixelBlast
+                            pixelSize={4}
+                            color={c.pixelBlast}
+                            enableRipples={false}
+                            speed={0}
+                            edgeFade={0.5}
+                            transparent={true}
                         />
                     </Box>
 
@@ -170,43 +170,57 @@ export default function ChangelogPage() {
                         left={0}
                         right={0}
                         h="200px"
-                        bg="linear-gradient(to bottom, transparent, #171717)"
+                        bg={`linear-gradient(to bottom, transparent, ${c.bg})`}
                         zIndex={1}
                         pointerEvents="none"
+                    />
+
+                    {/* Mask for heading */}
+                    <Box
+                        position="absolute"
+                        top="48%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        w="200px"
+                        h="30px"
+                        borderRadius="20px"
+                        bg={c.bg}
+                        boxShadow={`0 0 60px 60px ${c.bg}`}
+                        pointerEvents="none"
+                        zIndex={1}
+                    />
+                    {/* Mask for subtitle */}
+                    <Box
+                        position="absolute"
+                        top="62%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        w="320px"
+                        h="10px"
+                        borderRadius="16px"
+                        bg={c.bg}
+                        boxShadow={`0 0 50px 50px ${c.bg}`}
+                        pointerEvents="none"
+                        zIndex={1}
                     />
 
                     <VStack
                         position="relative"
                         zIndex={2}
                         spacing={5}
-                        maxW="700px"
                         mx="auto"
                         px={{ base: 5, md: 8 }}
                         textAlign="center"
                     >
-                        <Link href="/">
-                            <HStack
-                                spacing={2}
-                                color="gray.500"
-                                cursor="pointer"
-                                transition="all 0.2s"
-                                _hover={{ color: "gray.300" }}
-                                mb={4}
-                                justify="center"
-                            >
-                                <Icon as={FiArrowLeft} boxSize={3.5} />
-                                <Text fontSize="sm" fontWeight={500}>Back to home</Text>
-                            </HStack>
-                        </Link>
-
                         <Heading
-                            as="h1"
-                            fontSize={{ base: "5xl", lg: "7xl" }}
-                            fontWeight={700}
-                            lineHeight={1.1}
-                            letterSpacing="-0.03em"
+                letterSpacing="-0.03em"
+                            as="h2"
+                            fontSize={{ base: "4xl", md: "6xl", lg: "8xl" }}
+                            fontWeight={500}
+                            lineHeight={1.2}
+                            maxW="700px"
                             sx={{
-                                background: "#e6e6e6",
+                                background: c.text.primary,
                                 backgroundClip: "text",
                                 WebkitBackgroundClip: "text",
                                 WebkitTextFillColor: "transparent",
@@ -216,17 +230,20 @@ export default function ChangelogPage() {
                         </Heading>
 
                         <Text
-                            fontSize={{ base: "md", md: "xl" }}
-                            color="gray.400"
+                letterSpacing="-0.03em"
+                            fontSize={{ base: "lg", md: "1xl", lg: "3xl" }}
+                            color={c.text.secondary}
+                            fontWeight={500}
                             lineHeight={1.5}
-                            maxW="500px"
-                            mx="auto"
+                            maxW="550px"
                         >
                             All the latest updates and improvements to Rune.
                         </Text>
                     </VStack>
                 </Box>
                 <VStack
+                    position="relative"
+                    zIndex={3}
                     spacing={0}
                     w="full"
                     px={{ base: 5, md: 8 }}
@@ -240,15 +257,16 @@ export default function ChangelogPage() {
                             w="full"
                             py={10}
                             borderTop="1px dashed"
-                            borderColor="rgba(255,255,255,0.08)"
+                            borderColor={c.border.subtle}
                         >
                             <HStack spacing={3} mb={2} align="center">
                                 <Text
+                letterSpacing="-0.03em"
                                     fontSize="2xl"
                                     fontWeight={700}
                                     fontFamily="var(--font-geist-mono)"
                                     sx={{
-                                        background: "#e6e6e6",
+                                        background: c.text.primary,
                                         backgroundClip: "text",
                                         WebkitBackgroundClip: "text",
                                         WebkitTextFillColor: "transparent",
@@ -258,9 +276,10 @@ export default function ChangelogPage() {
                                 </Text>
                                 {release.latest && (
                                     <Text
+                letterSpacing="-0.03em"
                                         fontSize="xs"
                                         fontWeight={600}
-                                        color="gray.500"
+                                        color={c.text.subtle}
                                     >
                                         latest
                                     </Text>
@@ -268,8 +287,9 @@ export default function ChangelogPage() {
                             </HStack>
 
                             <Text
+                letterSpacing="-0.03em"
                                 fontSize="sm"
-                                color="gray.600"
+                                color={c.text.placeholder}
                                 fontWeight={500}
                                 mb={8}
                             >
@@ -279,9 +299,10 @@ export default function ChangelogPage() {
                                 {release.sections.map((section) => (
                                     <Box key={section.title}>
                                         <Text
+                letterSpacing="-0.03em"
                                             fontSize="sm"
                                             fontWeight={700}
-                                            color="gray.300"
+                                            color={c.text.secondary}
                                             mb={3}
                                         >
                                             {section.title}
@@ -290,16 +311,18 @@ export default function ChangelogPage() {
                                             {section.items.map((item, i) => (
                                                 <HStack key={i} spacing={2} align="start">
                                                     <Text
+                letterSpacing="-0.03em"
                                                         fontSize="sm"
-                                                        color="gray.600"
+                                                        color={c.text.placeholder}
                                                         userSelect="none"
                                                         lineHeight={1.7}
                                                     >
                                                         -
                                                     </Text>
                                                     <Text
+                letterSpacing="-0.03em"
                                                         fontSize="sm"
-                                                        color="gray.500"
+                                                        color={c.text.muted}
                                                         lineHeight={1.7}
                                                     >
                                                         {item}

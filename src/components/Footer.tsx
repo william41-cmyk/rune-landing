@@ -6,9 +6,12 @@ import {
   HStack,
   Text,
   Link as ChakraLink,
-  Image
+  Image,
+  useColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
+import { colors } from "@/theme/colors";
 
 const links = [
   { label: "X", href: "https://x.com/runedotgl" },
@@ -17,14 +20,18 @@ const links = [
 ];
 
 export default function Footer() {
+  const { colorMode } = useColorMode();
+  const isDark = colorMode === "dark";
+  const c = colors(isDark);
+
   return (
     <Box
       as="footer"
-      bg="#171717"
+      bg={c.bg}
       position="relative"
       zIndex={1}
       borderTop="1px dashed"
-      borderColor="rgba(255,255,255,0.12)"
+      borderColor={c.border.subtle}
       py={8}
       px={{ base: 5, md: 8 }}
     >
@@ -35,7 +42,7 @@ export default function Footer() {
         gap={6}
       >
         <HStack spacing={2}>
-          <Image src="/rune-logo.webp" alt="Rune" h="24px" w="auto" />
+          <Image src="/rune-icon.svg" alt="Rune icon" h="28px" w="auto" filter={isDark ? "none" : "invert(1)"} />
         </HStack>
         <HStack spacing={6}>
           {links.map((link) => (
@@ -46,29 +53,42 @@ export default function Footer() {
               alignItems="center"
               gap={1.5}
               fontSize="sm"
-              color="gray.500"
-              _hover={{ color: "gray.300", textDecoration: "none" }}
+              color={c.text.subtle}
+              _hover={{
+                color: c.text.primary,
+                textDecoration: "none",
+              }}
               transition="all 0.2s"
             >
-              <Text>{link.label}</Text>
+              <Text letterSpacing="-0.03em">{link.label}</Text>
             </ChakraLink>
           ))}
           <Link href="/$rune">
             <Text
+                letterSpacing="-0.03em"
               fontSize="sm"
               fontWeight={500}
-              color="gray.500"
+              color={c.text.subtle}
               cursor="pointer"
               transition="all 0.2s"
-              _hover={{ color: "gray.300" }}
+              _hover={{ color: c.text.primary }}
             >
-              $RUNE
+              Token
             </Text>
           </Link>
         </HStack>
-        <Text fontSize="xs" fontWeight={500} color="gray.600">
-          &copy; {new Date().getFullYear()} Rune.
-        </Text>
+        <HStack spacing={4} align="center">
+          <ThemeToggle />
+          <Text
+                letterSpacing="-0.03em"
+            fontSize="xs"
+            fontWeight={500}
+            color={c.text.subtle}
+            whiteSpace="nowrap"
+          >
+            &copy; {new Date().getFullYear()} Rune.
+          </Text>
+        </HStack>
       </Flex>
     </Box>
   );

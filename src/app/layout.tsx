@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
-import { GeistSans } from "geist/font/sans";
+import { Mona_Sans } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
+
+const monaSans = Mona_Sans({
+  subsets: ["latin"],
+  variable: "--font-mona-sans",
+  display: "swap",
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rune.gl"),
@@ -88,14 +95,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${monaSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var m=localStorage.getItem('chakra-ui-color-mode')||'light';document.documentElement.style.colorScheme=m;document.documentElement.dataset.theme=m;document.documentElement.classList.add('chakra-ui-'+m);document.documentElement.style.backgroundColor=m==='dark'?'#0e0e0e':'#f6f5f1';document.documentElement.style.color=m==='dark'?'#e5e5e5':'#1a1a1a'}catch(e){}})()`,
+          }}
+        />
       </head>
-      <body className="chakra-ui-dark" style={{ colorScheme: "dark" }}>
+      <body suppressHydrationWarning>
         <Providers>{children}</Providers>
 
         {/* rune-grab: dev only element grabber */}
