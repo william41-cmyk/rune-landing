@@ -26,7 +26,8 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
-import { FaXTwitter, FaDiscord, FaGithub, FaCoins } from "react-icons/fa6";
+import { FaXTwitter, FaDiscord, FaGithub } from "react-icons/fa6";
+import PillIcon from "./PillIcon";
 import { HiUserGroup } from "react-icons/hi2";
 import Link from "next/link";
 import { useState } from "react";
@@ -59,7 +60,7 @@ const socials = [
   { name: "Community", href: "https://x.com/i/communities/2024097721632608293", icon: HiUserGroup },
   { name: "Discord", href: "https://discord.gg/MrD6dW4u9D", icon: FaDiscord },
   { name: "Github", href: "https://github.com/orgs/RuneLtd/repositories", icon: FaGithub },
-  { name: "Rune Token", href: "https://pump.fun/coin/9fAT1fVVEKMEL6rUeYxSYU8ZjQ5dSiTzAZYTdiPvpump", icon: FaCoins },
+  { name: "Rune Token", href: "https://pump.fun/coin/9fAT1fVVEKMEL6rUeYxSYU8ZjQ5dSiTzAZYTdiPvpump", icon: PillIcon },
 ];
 
 export default function Navbar() {
