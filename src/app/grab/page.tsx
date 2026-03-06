@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     Box,
     Heading,
@@ -37,6 +37,209 @@ StatusBadge.displayName = "StatusBadge";
 
 const PromptInput = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 PromptInput.displayName = "PromptInput";
+
+/* ── Benchmarks ──────────────────────────────────────────────────────── */
+
+const benchmarkGroups = [
+    { label: "Claude Code", withGrab: 9, withoutGrab: 28 },
+    { label: "Claude Cowork", withGrab: 18, withoutGrab: 57 },
+];
+
+function Benchmarks({ isDark }: { isDark: boolean }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(false);
+    const c = colors(isDark);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+            { threshold: 0.25 }
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, []);
+
+    // Fixed 60s axis
+    const axisMax = 60;
+    const ticks = Array.from({ length: axisMax / 10 + 1 }, (_, i) => i * 10);
+
+    const grabColor = isDark ? "#ffffff" : "#1a1a1a";
+    const noGrabColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.12)";
+
+    // Build flat row list: each group has a "with grab" row then a "without grab" row
+    const rows = benchmarkGroups.flatMap((g, gi) => {
+        const parts = g.label.split(" ");
+        const line1 = parts[0];
+        const line2 = parts.slice(1).join(" ");
+        return [
+            { groupLabel: g.label, rowLabel: "+ Grab", value: g.withGrab, color: grabColor, isGrab: true, speedup: `${(g.withoutGrab / g.withGrab).toFixed(0)}x faster`, gi },
+            { groupLabel: g.label, rowLabel: `${line1}\n${line2}`, value: g.withoutGrab, color: noGrabColor, isGrab: false, speedup: "", gi },
+        ];
+    });
+
+    const labelW = { base: "55px", md: "70px" };
+    const barH = "32px";
+
+    return (
+        <VStack ref={ref} spacing={4} w="full" textAlign="left">
+            <Text
+                fontSize="sm"
+                fontWeight={600}
+                color={c.text.subtle}
+                textTransform="uppercase"
+                letterSpacing="0.08em"
+                w="full"
+                textAlign="center"
+            >
+                Benchmarks
+            </Text>
+
+            <Box
+                w="full"
+                bg={c.overlay.subtle}
+                border="1px solid"
+                borderColor={c.border.faint}
+                borderRadius="lg"
+                pl={{ base: 2, md: 3 }}
+                pr={{ base: 5, md: 8 }}
+                py={5}
+            >
+                {/* Chart rows */}
+                <VStack spacing={0} w="full">
+                    {rows.map((row, i) => {
+                        const pct = (row.value / axisMax) * 100;
+                        const isFirstOfGroup = row.isGrab;
+                        const isLastRow = i === rows.length - 1;
+                        return (
+                            <Box key={`${row.groupLabel}-${row.isGrab}`} w="full">
+                                {/* Group divider spacing */}
+                                {!isFirstOfGroup ? null : i > 0 ? <Box h="14px" /> : null}
+
+                                <Flex align="center" w="full" h={barH} mb={isLastRow ? 0 : "5px"}>
+                                    {/* Label */}
+                                    <Box
+                                        w={labelW}
+                                        flexShrink={0}
+                                        pr={2}
+                                        textAlign="right"
+                                    >
+                                        <Text
+                                            fontSize={{ base: "11px", md: "12px" }}
+                                            fontWeight={row.isGrab ? 600 : 500}
+                                            color={row.isGrab ? grabColor : c.text.muted}
+                                            lineHeight="1.3"
+                                            letterSpacing="-0.01em"
+                                            whiteSpace="pre-line"
+                                        >
+                                            {row.rowLabel}
+                                        </Text>
+                                    </Box>
+
+                                    {/* Bar area */}
+                                    <Box flex={1} position="relative" h="full">
+                                        {/* Bar */}
+                                        <Box
+                                            position="absolute"
+                                            top="0"
+                                            left="0"
+                                            h="full"
+                                            bg={row.color}
+                                            borderRadius="md"
+                                            w={visible ? `${pct}%` : "0%"}
+                                            transition={`width 1.4s cubic-bezier(0.22, 1, 0.36, 1) ${i * 0.12}s`}
+                                            minW={visible ? "2px" : "0px"}
+                                        />
+
+                                        {/* Time + speedup label — positioned after bar */}
+                                        <Flex
+                                            position="absolute"
+                                            top="0"
+                                            h="full"
+                                            align="center"
+                                            left={visible ? `${pct}%` : "0%"}
+                                            transition={`left 1.4s cubic-bezier(0.22, 1, 0.36, 1) ${i * 0.12}s`}
+                                            pl="10px"
+                                            pointerEvents="none"
+                                            opacity={visible ? 1 : 0}
+                                            transitionProperty="left, opacity"
+                                            transitionDuration="1.4s, 0.4s"
+                                            transitionDelay={`${i * 0.12}s, ${i * 0.12 + 0.8}s`}
+                                            transitionTimingFunction="cubic-bezier(0.22, 1, 0.36, 1), ease"
+                                        >
+                                            <Text
+                                                fontSize={{ base: "sm", md: "md" }}
+                                                fontWeight={700}
+                                                color={c.text.primary}
+                                                fontFamily="mono"
+                                                whiteSpace="nowrap"
+                                            >
+                                                {row.value}s
+                                            </Text>
+                                            {row.speedup && (
+                                                <Text
+                                                    as="span"
+                                                    fontSize={{ base: "10px", md: "xs" }}
+                                                    fontWeight={600}
+                                                    color={c.text.primary}
+                                                    ml={2}
+                                                    whiteSpace="nowrap"
+                                                    bg={isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.07)"}
+                                                    px={2}
+                                                    py={0.5}
+                                                    borderRadius="full"
+                                                    letterSpacing="-0.01em"
+                                                >
+                                                    {row.speedup}
+                                                </Text>
+                                            )}
+                                        </Flex>
+                                    </Box>
+                                </Flex>
+                            </Box>
+                        );
+                    })}
+                </VStack>
+
+                {/* Time axis — uses same label spacer as rows for alignment */}
+                <Flex w="full" mt={3} align="start">
+                    <Box w={labelW} flexShrink={0} pr={2} />
+                    <Box flex={1} position="relative" h="18px" borderTop="1px solid" borderColor={c.border.faint}>
+                        {ticks.map((t) => {
+                            const pos = (t / axisMax) * 100;
+                            return (
+                                <Text
+                                    key={t}
+                                    position="absolute"
+                                    left={`${pos}%`}
+                                    top="4px"
+                                    transform="translateX(-50%)"
+                                    fontSize="10px"
+                                    fontFamily="mono"
+                                    color={c.text.placeholder}
+                                    fontWeight={500}
+                                >
+                                    {t}s
+                                </Text>
+                            );
+                        })}
+                    </Box>
+                </Flex>
+            </Box>
+
+            <Text
+                fontSize="xs"
+                color={c.text.placeholder}
+                textAlign="center"
+                mt={1}
+                letterSpacing="-0.02em"
+            >
+                Average time to add a new button.
+            </Text>
+        </VStack>
+    );
+}
 
 /* ── Page ─────────────────────────────────────────────────────────────── */
 
@@ -357,6 +560,9 @@ export default function GrabPage() {
                                 ))}
                             </VStack>
                         </VStack>
+
+                        {/* Benchmarks */}
+                        <Benchmarks isDark={isDark} />
 
                         {/* Try it now section */}
                         <VStack spacing={4} w="full">
