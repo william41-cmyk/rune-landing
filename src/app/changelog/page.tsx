@@ -23,6 +23,8 @@ const releases = [
                 title: "Added",
                 items: [
                     "Theme system — new centralized color architecture with light and dark mode support via theme-aware hooks",
+                    "useFont hook — font customization via CSS variables with per-session font loading",
+                    "Step results tracking — session state now records step-by-step agent execution for better activity visibility",
                 ],
             },
             {
@@ -31,7 +33,12 @@ const releases = [
                     "Component architecture — reorganized editor components into panels/, banners/, sidebar/, and views/ subdirectories for cleaner project structure",
                     "Color system — rebuilt with centralized palette definitions and useColors/useThemeMode hooks replacing scattered inline values",
                     "Electron upgraded to latest version with electron-builder bumped to ^26.8.1",
-                    "Settings UI — further refined with updated styling and layout consistent with the new theme system",
+                    "Settings UI — consolidated into a single unified component, removing the old multi-section layout",
+                    "Task input — simplified component structure with better image attachment handling and recovery mode UI for resuming interrupted sessions",
+                    "Agent system — pipeline configuration now fully drives agent execution instead of legacy mode strings",
+                    "Interrupt handling — improved detection and handling across agent lifecycle",
+                    "Joblog — better logging and tracking of agent activities",
+                    "Git operations — improved worktree and branch management",
                     "Chat components — updated ActivityIcon, AgentStatusBar, CompletionSummary, ThinkingAccordion, and ToolCard to use the new color system",
                     "Session components — refined ActivityGroup, BranchSelector, ClarificationCard, CompletionCard, SessionHeader, and ThinkingIndicator styling",
                 ],
