@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -16,9 +15,33 @@ import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
     {
+        version: "v0.2.1",
+        date: "9 March 2026",
+        latest: true,
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Theme system — new centralized color architecture with light and dark mode support via theme-aware hooks",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Component architecture — reorganized editor components into panels/, banners/, sidebar/, and views/ subdirectories for cleaner project structure",
+                    "Color system — rebuilt with centralized palette definitions and useColors/useThemeMode hooks replacing scattered inline values",
+                    "Electron upgraded to latest version with electron-builder bumped to ^26.8.1",
+                    "Settings UI — further refined with updated styling and layout consistent with the new theme system",
+                    "Chat components — updated ActivityIcon, AgentStatusBar, CompletionSummary, ThinkingAccordion, and ToolCard to use the new color system",
+                    "Session components — refined ActivityGroup, BranchSelector, ClarificationCard, CompletionCard, SessionHeader, and ThinkingIndicator styling",
+                ],
+            },
+        ],
+    },
+    {
         version: "v0.2.0",
         date: "1 March 2026",
-        latest: true,
+        latest: false,
         sections: [
             {
                 title: "Added",
