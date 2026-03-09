@@ -16,7 +16,7 @@ import PixelBlast from "@/components/PixelBlast";
 const releases = [
     {
         version: "v0.2.1",
-        date: "9 March 2026",
+        date: "6 March 2026",
         latest: true,
         sections: [
             {
