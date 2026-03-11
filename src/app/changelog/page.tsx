@@ -15,9 +15,31 @@ import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
     {
+        version: "v0.2.2",
+        date: "10 March 2026",
+        latest: true,
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Auto mode — analyzes task prompts with Haiku to automatically select the right workflow (single, fast, or balanced), now the default preset",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Pipeline data model — simplified from graph-based nodes/connections to a linear steps-based schema across database and config",
+                    "Activity events — agents now emit named phases in the UI with agentName and agentId fields, filtering out empty descriptions",
+                    "Session navigation — switching to settings, skills, or pipelines views now clears the active session to prevent stale state",
+                    "Session setup — deferred initialization wrapped in async error handling with session:error events sent to renderer on failure",
+                ],
+            },
+        ],
+    },
+    {
         version: "v0.2.1",
         date: "6 March 2026",
-        latest: true,
+        latest: false,
         sections: [
             {
                 title: "Added",
