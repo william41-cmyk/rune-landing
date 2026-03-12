@@ -15,9 +15,43 @@ import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
     {
+        version: "v0.3.0",
+        date: "12 March 2026",
+        latest: true,
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Internationalization — full i18n system with support for 12 languages (en, de, es, fr, hi, id, it, ja, ko, pt, ru, zh) covering 650+ translated strings across the entire UI, with DeepL-based translation automation script",
+                    "Color preset system — new useColorPreset hook with 6 themes (Neutral, Warm, Cool, Rose, Emerald, Sapphire) each with light and dark variants",
+                    "Custom agent pipeline handoff — structured output protocol where agents emit JSON with done status, summary, findings, and next prompt via transcript",
+                    "Custom agent looping — agents can return done: false with a nextPrompt to re-enter the pipeline, with role-based default handoff messages for each agent type",
+                    "Workflow templates — six default templates (Code Review, Feature Builder, Bug Fix, Research & Write, Refactoring, Testing & QA) with full i18n support",
+                    "Bulk workflow management — pagination, checkbox selection, and bulk delete in the workflows overview",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Settings UI — completely rewritten with tabbed architecture (General, Theme, Configuration, Data) including language selection, color preset picker, font selection, and startup behavior options",
+                    "Sidebar — settings tab integration with dedicated section buttons, back navigation, and transparent background",
+                    "Agent config panel — redesigned with auto-resizing textareas, new handoff message field with smart role-based defaults, and internationalized labels and tool hints",
+                    "Custom agent phases — agents in the activity feed now display custom labels and colors to visually distinguish pipeline steps",
+                    "Placeholder text — adjusted color in both dark and light themes for better readability",
+                    "macOS window — background color now transparent for native vibrancy with backdrop filter support, while maintaining dark background on other platforms",
+                    "Dev build process — new dev:core script with concurrently running core and app in parallel for faster iteration",
+                    "Git tracking — now always enabled regardless of gitMode setting",
+                    "App startup — supports configurable startup view (home or last session) with auto-resume capability",
+                    "Pipeline data model — simplified from graph-based nodes/connections to a linear steps-based schema across database and config",
+                    "Custom agent handoff parsing — changed from file-based step-output.json to inline JSON in transcript with markdown code block detection and fallback strategies",
+                ],
+            },
+        ],
+    },
+    {
         version: "v0.2.2",
         date: "10 March 2026",
-        latest: true,
+        latest: false,
         sections: [
             {
                 title: "Added",
