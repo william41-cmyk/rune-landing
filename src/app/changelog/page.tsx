@@ -15,9 +15,45 @@ import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
     {
+        version: "v0.3.1",
+        date: "12 March 2026",
+        latest: true,
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Monaco editor — replaced embedded code-server with a native Monaco-based code editor, removing the full VS Code dependency for a lighter and faster editing experience",
+                    "Language server support — LSP bridge with support for 9 languages (TypeScript, JavaScript, Python, Rust, Go, CSS, HTML, JSON, Swift, C/C++) providing autocomplete and diagnostics",
+                    "File tree — visual file explorer with expand/collapse, 40+ file type icons, and color-coded folder categories",
+                    "Editor tabs — multi-file tab interface with active tab highlighting, modified file indicators, and close buttons",
+                    "File breadcrumbs — path navigation bar showing the current file location relative to the workspace root",
+                    "Resizable editor panels — draggable dividers between file tree, editor, and terminal sections with min/max constraints",
+                    "Editor theming — custom rune-dark and rune-light syntax themes with token colors for comments, strings, keywords, types, and variables",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Sidebar styling — separated all sidebar layer styles and color tokens into their own namespace for independent theming",
+                    "Terminal panel — moved from the editor tab bar to a dedicated resizable bottom panel",
+                    "Sidebar context menu — updated overlay colors to use sidebar-specific tokens",
+                    "Editor sidebar and pane tabs — updated hover and active states to use sidebar overlay system",
+                    "Settings navigation — opening settings now ensures the sidebar is expanded",
+                    "Translations — updated all 12 language files with new editor-related strings, removing old code-server references",
+                ],
+            },
+            {
+                title: "Removed",
+                items: [
+                    "Code-server — entire embedded VS Code infrastructure removed including server management, default settings, download scripts, and the CodeServerPanel component",
+                ],
+            },
+        ],
+    },
+    {
         version: "v0.3.0",
         date: "11 March 2026",
-        latest: true,
+        latest: false,
         sections: [
             {
                 title: "Added",
