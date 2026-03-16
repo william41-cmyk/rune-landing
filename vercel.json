@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/get",
-      "destination": "https://github.com/william41-cmyk/rune-landing/releases/download/v0.3.1/Rune-0.3.1-arm64.dmg"
+      "destination": "https://github.com/william41-cmyk/rune-landing/releases/download/v0.4.0/Rune-0.4.0-arm64.dmg"
     }
   ]
 }

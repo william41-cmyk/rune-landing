@@ -15,9 +15,52 @@ import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
     {
+        version: "v0.4.0",
+        date: "16 March 2026",
+        latest: true,
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Skill creator agent — new guided skill creation pipeline that assesses, interviews, outlines, and writes SKILL.md files to ~/.claude/skills/",
+                    "OpenClaw skill creator — dedicated agent for creating skills for the OpenClaw platform",
+                    "Skill templates — six pre-built templates (Minimal Light UI, OpenClaw Skill, Code Analyzer, Migration Helper, API Integration, Documentation Generator) for quick-start skill creation",
+                    "Skill session management — separate session type for skill creation with its own database tracking, auto-detection of created skill names, and session renaming",
+                    "File attachments — upload files alongside task prompts with base64 encoding, written to .rune-uploads/ and passed through to all agents",
+                    "Skills directory browsing — browse and edit ~/.claude/skills/ directly in the editor panel with a directory prompt and folder selection UI",
+                    "Per-agent skill configuration — each pipeline step can now specify its own skills array, allowing different agents to use different skill files",
+                    "Terminal context — extracted terminal state management into its own dedicated React context for cleaner separation from editor logic",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Skills panel — completely redesigned with a Your Skills carousel showing recent creations, a templates grid, and browse/edit buttons for each skill",
+                    "Inline code styling — updated to blue text with light blue background, subtle border, and larger border radius for cleaner chat appearance",
+                    "Editor panel — added file tree refresh button and directory prompt UI for choosing a skills folder when no workspace is loaded",
+                    "File tree — now filters out hidden files (dotfiles) across all file loading paths",
+                    "Monaco editor — syncs model content when files change externally, preventing stale content after disk refreshes",
+                    "Session view — expanded to support skill sessions with clarification handling, follow-up messages, pause/resume, and back-to-list navigation",
+                    "Clarification system — now tracks which agent requested clarification and routes responses back to the correct agent instead of hardcoding to architect",
+                    "Architect, Coder, and Reviewer agents — all now support loading custom skills from configured paths with automatic resource directory inlining",
+                    "Scrollbar colors — darkened thumb and hover colors for better visibility in light theme",
+                    "Markdown file icon — improved SVG path for better visual balance",
+                    "Architect agent timeout — changed from 600s to unlimited for complex skill-aware tasks",
+                ],
+            },
+            {
+                title: "Removed",
+                items: [
+                    "Drag-and-drop editor layout — removed PopoutTab, DropZone, and all related drag-drop methods from EditorContext for a simpler editor architecture",
+                    "WindowPreview and DropZoneOverlay components — removed alongside the drag-drop system",
+                ],
+            },
+        ],
+    },
+    {
         version: "v0.3.1",
         date: "12 March 2026",
-        latest: true,
+        latest: false,
         sections: [
             {
                 title: "Added",
@@ -411,7 +454,7 @@ export default function ChangelogPage() {
                             <Text
                 letterSpacing="-0.03em"
                                 fontSize="sm"
-                                color={c.text.placeholder}
+                                color={c.text.muted}
                                 fontWeight={500}
                                 mb={8}
                             >
