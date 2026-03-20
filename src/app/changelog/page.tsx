@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
     Box,
     Heading,
@@ -14,10 +15,37 @@ import Footer from "@/components/Footer";
 import PixelBlast from "@/components/PixelBlast";
 
 const releases = [
+{
+        version: "v0.4.1",
+        date: "19 March 2026",
+        latest: true,
+        product: "code",
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Brand highlighting utility (highlightBrands) and message transform library (transformMessages)",
+                    "Generator data entries for task input",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Internal rebrand — all .rune references migrated to .hugr across branch prefixes, commit messages, agent IDs, and skill filenames",
+                    "AgentConfigPanel expanded with additional configuration options",
+                    "TaskInput component reworked with broader input handling",
+                    "SessionView expanded with additional session management features",
+                    "Colors updated across the app",
+                    "FileBrowser panel adjustments",
+                ],
+            },
+        ],
+    },
     {
         version: "v0.4.0",
         date: "16 March 2026",
-        latest: true,
+        latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -61,6 +89,7 @@ const releases = [
         version: "v0.3.1",
         date: "12 March 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -97,6 +126,7 @@ const releases = [
         version: "v0.3.0",
         date: "11 March 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -131,6 +161,7 @@ const releases = [
         version: "v0.2.2",
         date: "10 March 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -153,6 +184,7 @@ const releases = [
         version: "v0.2.1",
         date: "6 March 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -184,6 +216,7 @@ const releases = [
         version: "v0.2.0",
         date: "1 March 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -227,6 +260,7 @@ const releases = [
         version: "v0.1.1",
         date: "26 February 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Improved",
@@ -265,6 +299,7 @@ const releases = [
         version: "v0.1.0",
         date: "24 February 2026",
         latest: false,
+        product: "code",
         sections: [
             {
                 title: "Added",
@@ -291,12 +326,183 @@ const releases = [
             },
         ],
     },
+{
+        version: "v0.1.0",
+        date: "19 March 2026",
+        latest: true,
+        product: "hugr",
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Provider abstraction — LLMProvider interface with swappable backends, replacing the concrete ClaudeCodeProvider dependency",
+                    "Provider factory (llm/factory.ts) — createProvider(), registerProvider(), listProviders() for dynamic provider registration",
+                    "Shared LLM types — ExecuteOptions, ExecuteResult, StreamActivity, FileChange, CanUseToolFn, and ToolDecision extracted into types/llm.ts",
+                    "Full rebrand — .rune → .hugr, agent IDs, skill filenames, config type names (RuneConfig → HugrConfig), branch prefixes, and session directory naming",
+                    "Pipeline configuration — linear steps-based schema driving agent execution with custom handoff messages",
+                    "Unlimited agent timeouts —  all preset agents and default provider config support long-running sessions",
+                    "SkillCreator stream activity — text type instead of thinking for content events, giving consumers better signal on what is being streamed",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.16",
+        date: "6 March 2026",
+        latest: true,
+        product: "grab",
+        sections: [
+            {
+                title: "Improved",
+                items: [
+                    "Removed unused exports and dead code across CLI, constants, frameworks, and index modules",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.15",
+        date: "6 March 2026",
+        latest: false,
+        product: "grab",
+        sections: [
+            {
+                title: "Improved",
+                items: [
+                    "Overlay border color changed from theme variable to neutral gray for consistent visibility across themes",
+                    "Selection box border updated to match the new neutral overlay styling",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.14",
+        date: "5 March 2026",
+        latest: false,
+        product: "grab",
+        sections: [
+            {
+                title: "Improved",
+                items: [
+                    "forwardRef and memo component detection — displayName is now resolved from the wrapper first, then the inner function, fixing detection for Chakra UI components",
+                    "Fallback components no longer carry misleading source locations from library internals",
+                    "Source map resolution now discards results that land in library code instead of user source files",
+                    "Infrastructure component filtering — stack results containing only providers and wrappers now fall back to meaningful library components instead",
+                    "Refined bundle artifact filtering — relaxed overly broad path exclusions for Next.js and Vite chunks so compiled user code with source maps is no longer discarded",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.12",
+        date: "5 March 2026",
+        latest: false,
+        product: "grab",
+        sections: [
+            {
+                title: "Fixed",
+                items: [
+                    "Component detection for Chakra UI elements in Next.js — added fallback detection for components without debug source info (e.g. server-rendered Chakra primitives)",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "New isCleanComponentName and isInfraName helpers to distinguish meaningful UI components from infrastructure wrappers like providers and context boundaries",
+                    "Component stack now tracks fallback candidates separately, preferring user components but falling back to clean library names when no user source is found",
+                    "Bundle artifact filtering — Next.js static chunks, Vite deps, and webpack runtime files are now excluded from source file detection",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.10",
+        date: "2 March 2026",
+        latest: false,
+        product: "grab",
+        sections: [
+            {
+                title: "Fixed",
+                items: [
+                    "Auto-initialization when imported as a side effect — importing rune-grab now calls init() automatically so users don't need to wire it up manually",
+                ],
+            },
+            {
+                title: "Improved",
+                items: [
+                    "Vite snippet updated to use a TypeScript-safe import.meta cast",
+                    "Vite entry file detection broadened to match any .ts/.tsx/.js/.jsx script reference in index.html, not just main or index files",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.9",
+        date: "2 March 2026",
+        latest: false,
+        product: "grab",
+        sections: [
+            {
+                title: "Improved",
+                items: [
+                    "Vite integration — init snippet now injects into the JS/TS entry file instead of index.html, with automatic entry point detection from the HTML script src attribute",
+                    "CLI fallback instructions updated to reference the JS entry pattern instead of an HTML script tag",
+                ],
+            },
+            {
+                title: "Added",
+                items: [
+                    "New logo, demo GIF, and demo video assets",
+                ],
+            },
+        ],
+    },
+    {
+        version: "v0.1.7",
+        date: "2 March 2026",
+        latest: false,
+        product: "grab",
+        sections: [
+            {
+                title: "Added",
+                items: [
+                    "Initial release — element inspector overlay for capturing screenshots, component hierarchy, text content, and ARIA labels from any web app",
+                    "Framework detection — automatic setup for Vite, Next.js (App Router and Pages Router), and webpack projects via CLI",
+                    "React, Vue, Svelte, and Solid component detection with source map resolution",
+                    "Screenshot capture with configurable padding, DPR scaling, and stream reuse",
+                    "Floating action menu with grab, screenshot, and context extraction controls",
+                    "CLI with init and remove commands for zero-config project integration",
+                ],
+            },
+            {
+                title: "Fixed",
+                items: [
+                    "Screenshot permission handling — updated getDisplayMedia options for broader browser compatibility",
+                ],
+            },
+        ],
+    },
 ];
+
+const tabs = [
+    { key: "code", label: "Code" },
+    { key: "hugr", label: "Hugr" },
+    { key: "grab", label: "Grab" },
+];
+
+const subtitles: Record<string, string> = {
+    code: "All the latest updates and improvements to Rune Code.",
+    hugr: "All the latest updates and improvements to Hugr Framework.",
+    grab: "All the latest updates and improvements to Rune Grab.",
+};
 
 export default function ChangelogPage() {
     const { colorMode } = useColorMode();
     const isDark = colorMode === "dark";
     const c = colors(isDark);
+    const [activeTab, setActiveTab] = useState("code");
+
+    const filtered = releases.filter((r) => r.product === activeTab);
 
     return (
         <Box minH="100vh" bg={c.bg} overflowX="hidden">
@@ -402,10 +608,41 @@ export default function ChangelogPage() {
                             lineHeight={1.5}
                             maxW="550px"
                         >
-                            All the latest updates and improvements to Rune.
+                            {subtitles[activeTab]}
                         </Text>
                     </VStack>
                 </Box>
+                <HStack
+                    position="relative"
+                    zIndex={3}
+                    spacing={0}
+                    mx="auto"
+                    mb={2}
+                >
+                    {tabs.map((tab) => (
+                        <Box
+                            key={tab.key}
+                            as="button"
+                            onClick={() => setActiveTab(tab.key)}
+                            px={5}
+                            py={2}
+                            fontSize="sm"
+                            fontWeight={600}
+                            letterSpacing="-0.03em"
+                            color={activeTab === tab.key ? c.text.primary : c.text.muted}
+                            borderBottom="2px solid"
+                            borderColor={activeTab === tab.key ? c.text.primary : "transparent"}
+                            transition="all 0.15s ease"
+                            _hover={{
+                                color: c.text.secondary,
+                            }}
+                            bg="transparent"
+                            cursor="pointer"
+                        >
+                            {tab.label}
+                        </Box>
+                    ))}
+                </HStack>
                 <VStack
                     position="relative"
                     zIndex={3}
@@ -416,9 +653,9 @@ export default function ChangelogPage() {
                     maxW="700px"
                     mx="auto"
                 >
-                    {releases.map((release) => (
+                    {filtered.map((release) => (
                         <Box
-                            key={release.version}
+                            key={`${release.product}-${release.version}`}
                             w="full"
                             py={10}
                             borderTop="1px dashed"
