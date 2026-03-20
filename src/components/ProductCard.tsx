@@ -21,6 +21,7 @@ interface ProductCardProps {
   href?: string;
   icon?: IconType;
   img?: string;
+  placeholder?: string;
   iconColor?: string;
   badge?: string;
   locked?: boolean;
@@ -32,6 +33,7 @@ export default function ProductCard({
   href,
   icon,
   img,
+  placeholder,
   iconColor,
   badge,
   locked,
@@ -88,7 +90,16 @@ export default function ProductCard({
           flexShrink={0}
           overflow="hidden"
         >
-          {img ? (
+          {placeholder ? (
+            <Text
+              fontSize="xl"
+              fontWeight={700}
+              color={c.text.muted}
+              userSelect="none"
+            >
+              {placeholder}
+            </Text>
+          ) : img ? (
             <Image
               src={img}
               alt={name}

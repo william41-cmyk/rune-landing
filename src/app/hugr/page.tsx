@@ -238,7 +238,7 @@ export default function FrameworkPage() {
                                 WebkitTextFillColor: "transparent",
                             }}
                         >
-                            Workflow Framework
+                            Hugr
                         </Heading>
 
                         <Text

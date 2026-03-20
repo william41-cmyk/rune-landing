@@ -37,7 +37,7 @@ import { colors } from "@/theme/colors";
 const products = [
   { name: "Rune Code", description: "Code the right way", href: "/code", img: "/rune-logo.webp" },
   { name: "Rune Grab", description: "Grab UI context for AI", href: "/grab", img: "/rune-grab-logo.webp" },
-  { name: "Framework", description: "Multi-agent workflows", href: "/framework", img: "/rune-logo.webp" },
+  { name: "Hugr", description: "Multi-agent workflows", href: "/hugr", img: "" },
 ];
 
 const docs = [
@@ -234,15 +234,29 @@ export default function Navbar() {
                         transition="all 0.15s"
                         role="group"
                       >
-                        <Image
-                          src={product.img}
-                          alt={product.name}
-                          w="28px"
-                          h="28px"
-                          borderRadius="6px"
-                          objectFit="contain"
-                          flexShrink={0}
-                        />
+                        {product.img ? (
+                          <Image
+                            src={product.img}
+                            alt={product.name}
+                            w="28px"
+                            h="28px"
+                            borderRadius="6px"
+                            objectFit="contain"
+                            flexShrink={0}
+                          />
+                        ) : (
+                          <Flex
+                            w="28px"
+                            h="28px"
+                            borderRadius="6px"
+                            bg={c.overlay.hover}
+                            align="center"
+                            justify="center"
+                            flexShrink={0}
+                          >
+                            <Text fontSize="sm" fontWeight={700} color={c.text.muted} userSelect="none">?</Text>
+                          </Flex>
+                        )}
                         <Box>
                           <Text
                 letterSpacing="-0.03em"

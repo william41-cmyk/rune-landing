@@ -190,10 +190,10 @@ export default function Home() {
                     img="/rune-grab-logo.webp"
                   />
                   <ProductCard
-                    name="Framework"
+                    name="Hugr"
                     description="An open source framework for multi-agent workflows."
-                    href="/framework"
-                    img="/rune-logo.webp"
+                    href="/hugr"
+                    placeholder="?"
                   />
                   <ProductCard
                     name="Rune Bench"
