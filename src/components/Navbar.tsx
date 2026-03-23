@@ -37,7 +37,7 @@ import { colors } from "@/theme/colors";
 const products = [
   { name: "Rune Code", description: "Code the right way", href: "/code", img: "/rune-logo.webp" },
   { name: "Rune Grab", description: "Grab UI context for AI", href: "/grab", img: "/rune-grab-logo.webp" },
-  { name: "Hugr", description: "Multi-agent workflows", href: "/hugr", img: "" },
+  { name: "Hugr", description: "Multi-agent workflows", href: "/hugr", img: "/hugr.webp" },
 ];
 
 const docs = [

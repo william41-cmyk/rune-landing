@@ -193,7 +193,7 @@ export default function Home() {
                     name="Hugr"
                     description="An open source framework for multi-agent workflows."
                     href="/hugr"
-                    placeholder="?"
+                    img="/hugr.webp"
                   />
                   <ProductCard
                     name="Rune Bench"

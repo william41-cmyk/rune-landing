@@ -312,7 +312,7 @@ export default function FrameworkPage() {
                                             fontSize="md"
                                             fontFamily="mono"
                                         >
-                                            currently unavailable
+                                            npm i @runeltd/hugr
                                         </Code>
                                     </HStack>
                                 </Flex>
@@ -399,20 +399,130 @@ export default function FrameworkPage() {
                             lineHeight={1.8}
                             overflowX="auto"
                         >
-                            <Text color={c.text.subtle} letterSpacing="-0.03em">{"// Define an agent"}</Text>
-                            <Text letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" researcher = agent({"}</Text>
-                            <Text pl={4} letterSpacing="-0.03em">{"name: "}<Box as="span" color={c.text.primary}>{'"researcher"'}</Box>{","}</Text>
-                            <Text pl={4} letterSpacing="-0.03em">{"model: "}<Box as="span" color={c.text.primary}>{'"claude-sonnet-4-20250514"'}</Box>{","}</Text>
-                            <Text pl={4} letterSpacing="-0.03em">{"tools: [webSearch, readFile],"}</Text>
+                            <Text letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"import"}</Box>{" {"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"Manager,"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"Joblog,"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"JsonlStorage,"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"ClaudeCodeProvider,"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"loadConfig,"}</Text>
+                            <Text letterSpacing="-0.03em">{"} "}<Box as="span" color={c.text.muted}>{"from"}</Box>{" "}<Box as="span" color={c.text.primary}>{"'@runeltd/hugr'"}</Box>{";"}</Text>
+
+                            <Text mt={3} letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" projectPath = process.cwd();"}</Text>
+                            <Text letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" config = "}<Box as="span" color={c.text.muted}>{"await"}</Box>{" loadConfig({ projectPath, preset: "}<Box as="span" color={c.text.primary}>{"'balanced'"}</Box>{" });"}</Text>
+
+                            <Text mt={3} letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" storage = "}<Box as="span" color={c.text.muted}>{"new"}</Box>{" JsonlStorage("}<Box as="span" color={c.text.primary}>{"'/tmp/hugr-demo'"}</Box>{");"}</Text>
+                            <Text letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" joblog = "}<Box as="span" color={c.text.muted}>{"new"}</Box>{" Joblog({ storage });"}</Text>
+
+                            <Text mt={3} letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" llm = "}<Box as="span" color={c.text.muted}>{"new"}</Box>{" ClaudeCodeProvider({"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"projectPath,"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"timeout: config.provider.timeout,"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"maxRetries: config.provider.maxRetries,"}</Text>
                             <Text letterSpacing="-0.03em">{"});"}</Text>
-                            <Text mt={3} color={c.text.subtle} letterSpacing="-0.03em">{"// Chain into a workflow"}</Text>
-                            <Text letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" pipeline = workflow(["}</Text>
-                            <Text pl={4} letterSpacing="-0.03em">{"researcher,"}</Text>
-                            <Text pl={4} letterSpacing="-0.03em">{"summarizer,"}</Text>
-                            <Text pl={4} letterSpacing="-0.03em">{"reviewer,"}</Text>
-                            <Text letterSpacing="-0.03em">{"]);"}</Text>
-                            <Text mt={3} letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" result = "}<Box as="span" color={c.text.muted}>{"await"}</Box>{" pipeline.run("}<Box as="span" color={c.text.primary}>{'"Analyze Q4 trends"'}</Box>{");"}</Text>
+
+                            <Text mt={3} letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"const"}</Box>{" manager = "}<Box as="span" color={c.text.muted}>{"new"}</Box>{" Manager({ joblog, llm, config, projectPath });"}</Text>
+
+                            <Text mt={3} letterSpacing="-0.03em">{"manager.on("}<Box as="span" color={c.text.primary}>{"'activity'"}</Box>{", ({ type, message, agentName }) => {"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"console.log("}<Box as="span" color={c.text.primary}>{"`[${agentName ?? type}] ${message}`"}</Box>{");"}</Text>
+                            <Text letterSpacing="-0.03em">{"});"}</Text>
+
+                            <Text mt={3} letterSpacing="-0.03em"><Box as="span" color={c.text.muted}>{"await"}</Box>{" manager.runSession({"}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"task: "}<Box as="span" color={c.text.primary}>{"'Research the top 5 competitors and summarise their pricing models'"}</Box>{","}</Text>
+                            <Text pl={4} letterSpacing="-0.03em">{"sessionId: "}<Box as="span" color={c.text.primary}>{"'demo-001'"}</Box>{","}</Text>
+                            <Text letterSpacing="-0.03em">{"});"}</Text>
                         </Box>
+                    </VStack>
+                </Box>
+
+                {/* ── Dashboard ────────────────────────────────────── */}
+                <Box px={{ base: 5, md: 8 }} pb={{ base: 16, md: 24 }}>
+                    <VStack spacing={6} maxW="700px" mx="auto">
+                        <Text
+                            fontSize="sm"
+                            fontWeight={600}
+                            color={c.text.subtle}
+                            textTransform="uppercase"
+                            letterSpacing="0.08em"
+                        >
+                            Dashboard
+                        </Text>
+
+                        <Text
+                            fontSize="md"
+                            color={c.text.secondary}
+                            lineHeight={1.7}
+                            letterSpacing="-0.03em"
+                            textAlign="center"
+                        >
+                            Hugr includes a web-based dashboard for managing everything visually:
+                        </Text>
+
+                        <Box
+                            w="full"
+                            bg={c.overlay.soft}
+                            border="1px dashed"
+                            borderColor={c.border.subtle}
+                            borderRadius="lg"
+                            px={5}
+                            py={4}
+                        >
+                            <Flex align="center" justify="space-between">
+                                <HStack spacing={3}>
+                                    <Icon as={FiTerminal} color={c.text.subtle} boxSize={4} />
+                                    <Code
+                                        bg="transparent"
+                                        color={c.text.secondary}
+                                        fontSize="md"
+                                        fontFamily="mono"
+                                    >
+                                        npx hugr-dashboard
+                                    </Code>
+                                </HStack>
+                            </Flex>
+                        </Box>
+
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} w="full">
+                            {[
+                                { icon: FiActivity, title: "Overview", description: "Active sessions, total sessions, registered workers, saved workflows at a glance." },
+                                { icon: FiGitBranch, title: "Workflows", description: "Build pipelines visually from templates or from scratch. Drag and drop workers, configure iterations, and enable/disable steps." },
+                                { icon: FiTerminal, title: "Sessions", description: "Pick a workflow, describe a task, and run it. Watch live activity as workers hand off to each other. Respond to clarification questions in real time. Stop sessions mid-run." },
+                                { icon: FiCpu, title: "Workers", description: "Browse the built-in library and preset workers, or create your own with a custom name, description, system prompt, tool selection, and skill files from anywhere on your filesystem." },
+                                { icon: FiBell, title: "Triggers", description: "Automate workflows with cron schedules, webhooks, HTTP polling, and file system watchers. 20+ built-in templates to get started." },
+                                { icon: FiSliders, title: "Settings", description: "Configure API keys for all supported providers (OpenAI, Anthropic, Gemini, Mistral, xAI, Groq, AWS Bedrock), manage your data storage path, check runtime status, and set your theme." },
+                            ].map((item) => (
+                                <Box
+                                    key={item.title}
+                                    bg={c.overlay.subtle}
+                                    border="1px solid"
+                                    borderColor={c.border.faint}
+                                    borderRadius="lg"
+                                    px={5}
+                                    py={5}
+                                >
+                                    <HStack spacing={3} align="start">
+                                        <Flex
+                                            w="36px"
+                                            h="36px"
+                                            borderRadius="10px"
+                                            align="center"
+                                            justify="center"
+                                            bg={c.overlay.hover}
+                                            flexShrink={0}
+                                            mt={0.5}
+                                        >
+                                            <Icon as={item.icon} boxSize={4} color={c.text.secondary} />
+                                        </Flex>
+                                        <Box>
+                                            <Text fontSize="sm" fontWeight={600} color={c.text.primary} letterSpacing="-0.03em">
+                                                {item.title}
+                                            </Text>
+                                            <Text fontSize="xs" color={c.text.muted} mt={1} lineHeight={1.5} letterSpacing="-0.03em">
+                                                {item.description}
+                                            </Text>
+                                        </Box>
+                                    </HStack>
+                                </Box>
+                            ))}
+                        </SimpleGrid>
                     </VStack>
                 </Box>
 
@@ -421,46 +531,47 @@ export default function FrameworkPage() {
                     <VStack spacing={4} maxW="700px" mx="auto" textAlign="center">
                         <HStack spacing={3}>
                             <Button
+                                as="a"
+                                href="https://github.com/RuneLtd/hugr"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 size="sm"
                                 bg={c.overlay.medium}
-                                color={c.text.subtle}
+                                color={c.text.secondary}
                                 fontWeight={500}
                                 fontSize="sm"
                                 borderRadius="full"
                                 px={5}
                                 leftIcon={<FaGithub size={14} />}
-                                isDisabled
-                                _disabled={{
-                                    bg: c.overlay.medium,
-                                    color: c.text.subtle,
-                                    cursor: "not-allowed",
-                                    opacity: 1,
-                                    border: "1px solid",
-                                    borderColor: c.border.faint,
-                                    boxShadow: "none",
+                                border="1px solid"
+                                borderColor={c.border.faint}
+                                _hover={{
+                                    bg: c.overlay.hover,
+                                    color: c.text.primary,
+                                    borderColor: c.border.default,
                                 }}
                                 transition="all 0.2s"
                             >
                                 View on GitHub
                             </Button>
                             <Button
+                                as="a"
+                                href="https://www.npmjs.com/package/@runeltd/hugr"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 size="sm"
                                 bg="transparent"
-                                color={c.text.subtle}
+                                color={c.text.secondary}
                                 fontWeight={500}
                                 fontSize="sm"
                                 border="1px solid"
                                 borderColor={c.border.subtle}
                                 borderRadius="full"
                                 px={5}
-                                isDisabled
-                                _disabled={{
-                                    bg: "transparent",
-                                    color: c.text.subtle,
-                                    cursor: "not-allowed",
-                                    opacity: 0.5,
-                                    borderColor: c.border.faint,
-                                    boxShadow: "none",
+                                _hover={{
+                                    bg: c.overlay.hover,
+                                    color: c.text.primary,
+                                    borderColor: c.border.default,
                                 }}
                                 transition="all 0.2s"
                             >
