@@ -47,7 +47,7 @@ import PixelBlast from "@/components/PixelBlast";
 const features = [
     {
         icon: FiLayers,
-        title: "Multi-agent orchestration",
+        title: "Multi-agent workflows",
         description: "Define agents, wire them together, and let the framework handle routing, retries, and state.",
     },
     {
