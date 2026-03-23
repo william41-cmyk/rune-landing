@@ -225,7 +225,7 @@ export default function FrameworkPage() {
                     >
 
                         <Heading
-                letterSpacing="-0.03em"
+                            letterSpacing="-0.03em"
                             as="h2"
                             fontSize={{ base: "4xl", md: "6xl", lg: "8xl" }}
                             fontWeight={500}
@@ -242,14 +242,14 @@ export default function FrameworkPage() {
                         </Heading>
 
                         <Text
-                letterSpacing="-0.03em"
+                            letterSpacing="-0.03em"
                             fontSize={{ base: "lg", md: "1xl", lg: "3xl" }}
                             color={c.text.secondary}
                             fontWeight={500}
                             lineHeight={1.5}
                             maxW="550px"
                         >
-                            An open source framework for building, chaining, and orchestrating multi-agent workflows in TypeScript.
+                            An open source framework for building and chaining multi-agent workflows in TypeScript.
                         </Text>
 
                         <HStack spacing={3} mt={2}>
