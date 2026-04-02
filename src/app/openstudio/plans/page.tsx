@@ -259,7 +259,7 @@ export default function PlansPage() {
                 boxShadow="0 4px 16px rgba(0,0,0,0.3)"
                 _hover={{ bg: "rgba(255,255,255,0.9)" }}
               >
-                {isLifetime ? "Buy once" : "7 day free trial"} <Box as="span">&#8594;</Box>
+                {isLifetime ? "Buy once" : "Get Pro"} <Box as="span">&#8594;</Box>
               </Box>
             </Box>
 

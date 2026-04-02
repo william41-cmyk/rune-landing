@@ -158,7 +158,6 @@ export default function AccountPage() {
 
   const isPro = subscription?.plan === "pro";
   const isLifetime = subscription?.billing_type === "lifetime";
-  const isOnTrial = subscription?.status === "on_trial";
   const initial = email ? email[0].toUpperCase() : "?";
 
   return (
@@ -222,10 +221,10 @@ export default function AccountPage() {
                       borderRadius="full"
                       fontSize="11px"
                       fontWeight="600"
-                      bg={isOnTrial ? "rgba(245, 158, 11, 0.1)" : isPro ? "rgba(34, 197, 94, 0.1)" : "rgba(107, 114, 128, 0.08)"}
-                      color={isOnTrial ? "#d97706" : isPro ? "#16a34a" : "#9ca3af"}
+                      bg={isPro ? "rgba(34, 197, 94, 0.1)" : "rgba(107, 114, 128, 0.08)"}
+                      color={isPro ? "#16a34a" : "#9ca3af"}
                     >
-                      {isOnTrial ? "Trial" : subscription?.status ?? "active"}
+                      {subscription?.status ?? "active"}
                     </Box>
                   </HStack>
                 )}
@@ -238,16 +237,7 @@ export default function AccountPage() {
                 </HStack>
               )}
 
-              {isOnTrial && subscription?.current_period_end && (
-                <HStack justify="space-between" px={6} py={4}>
-                  <Text fontSize="14px" color="#6b7280">Trial ends</Text>
-                  <Text fontSize="14px" fontWeight="600" color="#111827">
-                    {new Date(subscription.current_period_end).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                  </Text>
-                </HStack>
-              )}
-
-              {!isOnTrial && !isLifetime && isPro && subscription?.current_period_end && (
+              {!isLifetime && isPro && subscription?.current_period_end && (
                 <HStack justify="space-between" px={6} py={4}>
                   <Text fontSize="14px" color="#6b7280">Renews</Text>
                   <Text fontSize="14px" fontWeight="600" color="#111827">

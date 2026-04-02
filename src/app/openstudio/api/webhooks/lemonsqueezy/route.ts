@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
         user_id: userId,
         plan,
         status,
+        billing_type: "monthly",
         lemon_squeezy_subscription_id: String(payload.data.id),
         lemon_squeezy_customer_id: String(attrs.customer_id),
         lemon_squeezy_variant_id: String(attrs.variant_id),
