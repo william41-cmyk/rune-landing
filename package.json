@@ -1,6 +1,6 @@
 {
     "name": "rune-landing",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "private": true,
     "scripts": {
         "dev": "next dev & rune-grab serve",
@@ -16,6 +16,8 @@
         "@fontsource/inter": "^5.1.1",
         "@fontsource/jetbrains-mono": "^5.1.2",
         "@fontsource/ubuntu": "^5.2.8",
+        "@supabase/ssr": "^0.9.0",
+        "@supabase/supabase-js": "^2.100.1",
         "framer-motion": "^11.18.2",
         "geist": "^1.7.0",
         "html-to-image": "^1.11.13",
