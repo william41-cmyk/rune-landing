@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     description: "Native to macOS, simple to use, and just $5 a month. Record your screen, make it look beautiful, and export.",
     images: ["/openstudio_2.png"],
   },
+  icons: {
+    icon: "/openstudio-favicon.png",
+  },
   robots: {
     index: true,
     follow: true,
