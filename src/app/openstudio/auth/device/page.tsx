@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Box,
@@ -17,6 +17,20 @@ import {
 import { supabase } from "@/lib/supabase";
 
 export default function DeviceAuthPage() {
+  return (
+    <Suspense
+      fallback={
+        <Box minH="100vh" bg="#f8fafc" display="flex" alignItems="center" justifyContent="center">
+          <Spinner color="#1a84fe" />
+        </Box>
+      }
+    >
+      <DeviceAuthContent />
+    </Suspense>
+  );
+}
+
+function DeviceAuthContent() {
   const searchParams = useSearchParams();
   const stateParam = searchParams.get("state") ?? "";
   const [email, setEmail] = useState("");
