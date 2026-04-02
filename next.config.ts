@@ -17,20 +17,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "openstudio.gl" }],
-        destination: "/openstudio/:path*",
-      },
-      {
-        source: "/",
-        has: [{ type: "host", value: "openstudio.gl" }],
-        destination: "/openstudio",
-      },
-    ];
-  },
 };
 
 export default nextConfig;
