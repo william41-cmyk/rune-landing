@@ -23,6 +23,8 @@ interface Subscription {
   lemon_squeezy_customer_id: string | null;
   current_period_end: string | null;
   has_used_trial: boolean;
+  device_name: string | null;
+  device_fingerprint: string | null;
 }
 
 function AccountNavbar({ onSignOut }: { onSignOut: () => void }) {
@@ -98,7 +100,9 @@ function AccountContent() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPolling, setIsPolling] = useState(false);
+  const [isUnlinking, setIsUnlinking] = useState(false);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const pollingStartedRef = useRef(false);
 
   useEffect(() => {
     async function load() {
@@ -116,7 +120,7 @@ function AccountContent() {
 
       const { data } = await supabase
         .from("subscriptions")
-        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end, has_used_trial")
+        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end, has_used_trial, device_name, device_fingerprint")
         .eq("user_id", session.user.id)
         .single();
 
@@ -128,12 +132,15 @@ function AccountContent() {
           lemon_squeezy_customer_id: null,
           current_period_end: null,
           has_used_trial: false,
+          device_name: null,
+          device_fingerprint: null,
         }
       );
       setLoading(false);
 
-      if (searchParams.get("checkout") === "true") {
-        router.replace("/account", { scroll: false });
+      if (searchParams.get("checkout") === "true" && !pollingStartedRef.current) {
+        pollingStartedRef.current = true;
+        window.history.replaceState(null, "", "/openstudio/account");
         startPolling();
       }
     }
@@ -143,7 +150,7 @@ function AccountContent() {
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [router, searchParams]);
+  }, [router]);
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -158,7 +165,7 @@ function AccountContent() {
       if (!s) return;
       const { data } = await supabase
         .from("subscriptions")
-        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end, has_used_trial")
+        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end, has_used_trial, device_name, device_fingerprint")
         .eq("user_id", s.user.id)
         .single();
       if (data) setSubscription(data);
@@ -169,6 +176,20 @@ function AccountContent() {
       }
     }, 20000);
     pollingRef.current = interval;
+  }
+
+  async function handleUnlinkDevice() {
+    setIsUnlinking(true);
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    const res = await fetch("/openstudio/api/unlink-device", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+    if (res.ok) {
+      setSubscription((prev) => prev ? { ...prev, device_fingerprint: null, device_name: null } : prev);
+    }
+    setIsUnlinking(false);
   }
 
   function handleManageSubscription() {
@@ -350,6 +371,50 @@ function AccountContent() {
               )}
             </Box>
           </Box>
+
+          {isPro && subscription?.device_fingerprint && (
+            <Box
+              bg="white"
+              border="1px solid"
+              borderColor="#e2e8f0"
+              borderRadius="16px"
+              overflow="hidden"
+              boxShadow="0 1px 3px rgba(0,0,0,0.04)"
+            >
+              <HStack px={6} py={5} borderBottom="1px solid" borderColor="#f1f5f9">
+                <Text fontSize="13px" fontWeight="600" color="#9ca3af" textTransform="uppercase" letterSpacing="0.05em">
+                  Linked Device
+                </Text>
+              </HStack>
+              <HStack px={6} py={5} justify="space-between">
+                <HStack spacing={3}>
+                  <Text fontSize="20px">💻</Text>
+                  <VStack align="start" spacing={0}>
+                    <Text fontSize="14px" fontWeight="600" color="#111827">
+                      {subscription.device_name || "Mac"}
+                    </Text>
+                    <Text fontSize="12px" color="#9ca3af">
+                      Currently linked
+                    </Text>
+                  </VStack>
+                </HStack>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  fontSize="12px"
+                  fontWeight="600"
+                  color="#6b7280"
+                  borderColor="#e2e8f0"
+                  borderRadius="8px"
+                  _hover={{ bg: "#f8fafc", borderColor: "#d1d5db" }}
+                  onClick={handleUnlinkDevice}
+                  isLoading={isUnlinking}
+                >
+                  Unlink
+                </Button>
+              </HStack>
+            </Box>
+          )}
 
           <Box
             bg="white"

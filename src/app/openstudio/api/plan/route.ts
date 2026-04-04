@@ -22,11 +22,31 @@ export async function GET(request: NextRequest) {
 
   const serviceClient = createServiceClient();
 
+  const deviceFingerprint = request.headers.get("X-Device-Fingerprint");
+  const deviceName = request.headers.get("X-Device-Name");
+
   const { data: subscription } = await serviceClient
     .from("subscriptions")
-    .select("plan, status, billing_type, current_period_end, has_used_trial")
+    .select("plan, status, billing_type, current_period_end, has_used_trial, device_fingerprint, device_name")
     .eq("user_id", user.id)
     .single();
+
+  let deviceMismatch = false;
+
+  if (deviceFingerprint && subscription) {
+    if (!subscription.device_fingerprint) {
+      await serviceClient
+        .from("subscriptions")
+        .update({
+          device_fingerprint: deviceFingerprint,
+          device_name: deviceName || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id);
+    } else if (subscription.device_fingerprint !== deviceFingerprint) {
+      deviceMismatch = true;
+    }
+  }
 
   return NextResponse.json({
     user_id: user.id,
@@ -36,5 +56,7 @@ export async function GET(request: NextRequest) {
     billing_type: subscription?.billing_type ?? "monthly",
     current_period_end: subscription?.current_period_end ?? null,
     has_used_trial: subscription?.has_used_trial ?? false,
+    device_mismatch: deviceMismatch,
+    linked_device_name: subscription?.device_name ?? null,
   });
 }
