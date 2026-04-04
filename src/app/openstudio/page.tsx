@@ -88,6 +88,8 @@ function OpenStudioNavbar() {
             Pricing
           </ChakraLink>
           <ChakraLink
+            as={NextLink}
+            href="/download"
             fontSize="13px"
             color="#6b7280"
             fontWeight="medium"
@@ -159,6 +161,11 @@ function Hero() {
   return (
     <Box as="section" pt={{ base: 32, md: 44 }} pb={{ base: 12, md: 16 }} px={{ base: 5, md: 8 }}>
       <VStack spacing={6} maxW="600px" mx="auto" textAlign="center">
+        <ChakraLink
+          as={NextLink}
+          href="/download"
+          _hover={{ textDecoration: "none" }}
+        >
         <Box
           bg="#0a0a0a"
           borderRadius="full"
@@ -194,6 +201,7 @@ function Hero() {
             </Text>
           </Box>
         </Box>
+        </ChakraLink>
 
         <Text
         // maxW="400px"

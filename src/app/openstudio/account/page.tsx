@@ -437,9 +437,8 @@ function AccountContent() {
                 What you get
               </Text>
               <Button
-                as={ChakraLink}
-                href="https://openstudio.gl"
-                isExternal
+                as={NextLink}
+                href="/download"
                 size="xs"
                 h="28px"
                 px={3}
