@@ -70,14 +70,10 @@ export async function POST(request: NextRequest) {
       updateData.trial_started_at = new Date().toISOString();
     }
 
-    console.log("Webhook upsert data:", JSON.stringify(updateData));
-    const { error: upsertError } = await supabase.from("subscriptions").upsert(
+    await supabase.from("subscriptions").upsert(
       updateData,
       { onConflict: "user_id" }
     );
-    if (upsertError) {
-      console.error("Upsert error:", JSON.stringify(upsertError));
-    }
   }
 
   if (eventName === "subscription_cancelled") {
@@ -130,6 +126,22 @@ export async function POST(request: NextRequest) {
         updated_at: new Date().toISOString(),
       })
       .eq("user_id", userId);
+  }
+
+  if (
+    eventName === "subscription_payment_success" ||
+    eventName === "subscription_payment_recovered"
+  ) {
+    await supabase
+      .from("subscriptions")
+      .update({
+        plan: "pro",
+        status: "active",
+        current_period_end: attrs.renews_at,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId)
+      .neq("billing_type", "lifetime");
   }
 
   if (eventName === "order_created") {

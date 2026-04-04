@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -88,6 +88,8 @@ export default function AccountPage() {
   const [userId, setUserId] = useState("");
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPolling, setIsPolling] = useState(false);
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -123,11 +125,36 @@ export default function AccountPage() {
     }
 
     load();
+
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+    };
   }, [router]);
 
   async function handleSignOut() {
     await supabase.auth.signOut();
     router.push("/");
+  }
+
+  function startPolling() {
+    if (pollingRef.current) clearInterval(pollingRef.current);
+    setIsPolling(true);
+    const interval = setInterval(async () => {
+      const { data: { session: s } } = await supabase.auth.getSession();
+      if (!s) return;
+      const { data } = await supabase
+        .from("subscriptions")
+        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end, has_used_trial")
+        .eq("user_id", s.user.id)
+        .single();
+      if (data) setSubscription(data);
+      if (data?.plan === "pro") {
+        clearInterval(interval);
+        pollingRef.current = null;
+        setIsPolling(false);
+      }
+    }, 20000);
+    pollingRef.current = interval;
   }
 
   function handleUpgrade(type: "monthly" | "lifetime") {
@@ -141,6 +168,7 @@ export default function AccountPage() {
     }
     if (checkoutUrl) {
       window.open(`${checkoutUrl}?checkout[email]=${encodeURIComponent(email)}&checkout[custom][user_id]=${userId}`, "_blank");
+      startPolling();
     }
   }
 
@@ -304,8 +332,6 @@ export default function AccountPage() {
                 </Button>
               ) : (
                 <Button
-                  as={NextLink}
-                  href="/plans"
                   w="100%"
                   h="40px"
                   bg="#1a84fe"
@@ -316,8 +342,10 @@ export default function AccountPage() {
                   _hover={{ bg: "#1574e0" }}
                   _active={{ bg: "#1264c4" }}
                   boxShadow="0 1px 2px rgba(26, 132, 254, 0.2)"
+                  onClick={() => handleUpgrade("monthly")}
+                  isDisabled={isPolling}
                 >
-                  {hasUsedTrial ? "Upgrade to Pro" : "Start free trial"}
+                  {isPolling ? <Spinner size="sm" /> : (hasUsedTrial ? "Upgrade to Pro" : "Start free trial")}
                 </Button>
               )}
             </Box>
