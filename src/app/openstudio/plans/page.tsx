@@ -55,7 +55,7 @@ export default function PlansPage() {
         `${checkoutUrl}?checkout[email]=${encodeURIComponent(email)}&checkout[custom][user_id]=${userId}`,
         "_blank"
       );
-      router.push("/account");
+      router.push("/account?checkout=true");
     }
   }
 
