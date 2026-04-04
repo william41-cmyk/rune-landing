@@ -140,7 +140,7 @@ function AccountContent() {
 
       if (searchParams.get("checkout") === "true" && !pollingStartedRef.current) {
         pollingStartedRef.current = true;
-        window.history.replaceState(null, "", "/openstudio/account");
+        window.history.replaceState(null, "", "/account");
         startPolling();
       }
     }
