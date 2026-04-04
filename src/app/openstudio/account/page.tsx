@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Box,
@@ -83,6 +83,14 @@ function AccountNavbar({ onSignOut }: { onSignOut: () => void }) {
 }
 
 export default function AccountPage() {
+  return (
+    <Suspense fallback={<Box minH="100vh" bg="#f8fafc" display="flex" alignItems="center" justifyContent="center"><Spinner color="#1a84fe" size="lg" /></Box>}>
+      <AccountContent />
+    </Suspense>
+  );
+}
+
+function AccountContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
