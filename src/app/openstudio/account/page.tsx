@@ -333,7 +333,7 @@ function AccountContent() {
             <Box px={6} py={5} borderTop="1px solid" borderColor="#f1f5f9">
               {isPro && isLifetime ? (
                 <Text fontSize="14px" fontWeight="500" color="#16a34a" textAlign="center">
-                  Lifetime access — you're all set
+                  Lifetime access - you're all set
                 </Text>
               ) : isPro ? (
                 <Button
@@ -417,7 +417,7 @@ function AccountContent() {
               ) : (
                 <Box px={6} py={5}>
                   <Text fontSize="14px" color="#9ca3af">
-                    No device linked — open the app to link this account to your Mac.
+                    No device linked - open the app to link this account to your Mac.
                   </Text>
                 </Box>
               )}

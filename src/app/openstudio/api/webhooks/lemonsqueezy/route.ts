@@ -50,6 +50,33 @@ export async function POST(request: NextRequest) {
     eventName === "subscription_updated"
   ) {
     const status = attrs.status;
+
+    if (status === "on_trial" && eventName === "subscription_created") {
+      const { data: existing } = await supabase
+        .from("subscriptions")
+        .select("has_used_trial")
+        .eq("user_id", userId)
+        .single();
+
+      if (existing?.has_used_trial) {
+        const lsApiKey = process.env.LEMONSQUEEZY_API_KEY;
+        if (lsApiKey) {
+          await fetch(
+            `https://api.lemonsqueezy.com/v1/subscriptions/${payload.data.id}`,
+            {
+              method: "DELETE",
+              headers: {
+                Accept: "application/vnd.api+json",
+                "Content-Type": "application/vnd.api+json",
+                Authorization: `Bearer ${lsApiKey}`,
+              },
+            }
+          );
+        }
+        return NextResponse.json({ received: true, trial_blocked: true });
+      }
+    }
+
     const plan =
       status === "active" || status === "on_trial" ? "pro" : "free";
 
