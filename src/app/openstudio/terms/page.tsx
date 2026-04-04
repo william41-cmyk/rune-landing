@@ -20,7 +20,7 @@ export default function TermsOfServicePage() {
     >
       <Box maxW="720px" mx="auto" px={{ base: 5, md: 8 }} py={16}>
         <VStack align="start" spacing={2} mb={12}>
-          <ChakraLink as={NextLink} href="/openstudio" _hover={{ textDecoration: "none" }}>
+          <ChakraLink as={NextLink} href="/" _hover={{ textDecoration: "none" }}>
             <HStack spacing={2}>
               <Image src="/openstudio_2.png" alt="OpenStudio" boxSize="28px" borderRadius="7px" />
               <Text fontSize="15px" fontWeight="600" color="#111827">OpenStudio</Text>

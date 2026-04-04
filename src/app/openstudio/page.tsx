@@ -776,7 +776,7 @@ function OpenStudioFooter() {
         <HStack spacing={6}>
           <ChakraLink
             as={NextLink}
-            href="/openstudio/privacy"
+            href="/privacy"
             fontSize="15px"
             fontWeight="500"
             color="#6b7280"
@@ -786,7 +786,7 @@ function OpenStudioFooter() {
           </ChakraLink>
           <ChakraLink
             as={NextLink}
-            href="/openstudio/terms"
+            href="/terms"
             fontSize="15px"
             fontWeight="500"
             color="#6b7280"
@@ -796,7 +796,7 @@ function OpenStudioFooter() {
           </ChakraLink>
           <ChakraLink
             as={NextLink}
-            href="/openstudio/refund"
+            href="/refund"
             fontSize="15px"
             fontWeight="500"
             color="#6b7280"
