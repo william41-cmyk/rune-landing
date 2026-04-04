@@ -177,6 +177,17 @@ export default function SignupPage() {
               Send code
             </Button>
 
+            <Text fontSize="11px" color="#9ca3af" textAlign="center" lineHeight={1.5}>
+              By creating an account, you agree to our{" "}
+              <ChakraLink as={NextLink} href="/openstudio/terms" color="#6b7280" _hover={{ color: "#111827" }}>
+                Terms of Service
+              </ChakraLink>{" "}
+              and{" "}
+              <ChakraLink as={NextLink} href="/openstudio/privacy" color="#6b7280" _hover={{ color: "#111827" }}>
+                Privacy Policy
+              </ChakraLink>
+            </Text>
+
             <Text fontSize="sm" color="#6b7280" textAlign="center">
               Already have an account?{" "}
               <ChakraLink as={NextLink} href="/login" color="#1a84fe" fontWeight="600" _hover={{ textDecoration: "underline" }}>

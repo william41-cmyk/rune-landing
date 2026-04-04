@@ -476,6 +476,26 @@ function AccountContent() {
           </Box>
 
         </VStack>
+
+        <Flex
+          maxW="500px"
+          mx="auto"
+          justify="center"
+          align="center"
+          gap={5}
+          pt={4}
+          pb={8}
+        >
+          <ChakraLink as={NextLink} href="/openstudio/privacy" fontSize="13px" color="#9ca3af" _hover={{ color: "#111827" }}>
+            Privacy
+          </ChakraLink>
+          <ChakraLink as={NextLink} href="/openstudio/terms" fontSize="13px" color="#9ca3af" _hover={{ color: "#111827" }}>
+            Terms
+          </ChakraLink>
+          <ChakraLink as={NextLink} href="/openstudio/refund" fontSize="13px" color="#9ca3af" _hover={{ color: "#111827" }}>
+            Refunds
+          </ChakraLink>
+        </Flex>
       </Box>
     </Box>
   );

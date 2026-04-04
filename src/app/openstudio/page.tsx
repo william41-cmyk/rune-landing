@@ -775,6 +775,36 @@ function OpenStudioFooter() {
         </HStack>
         <HStack spacing={6}>
           <ChakraLink
+            as={NextLink}
+            href="/openstudio/privacy"
+            fontSize="15px"
+            fontWeight="500"
+            color="#6b7280"
+            _hover={{ color: "#111827" }}
+          >
+            Privacy
+          </ChakraLink>
+          <ChakraLink
+            as={NextLink}
+            href="/openstudio/terms"
+            fontSize="15px"
+            fontWeight="500"
+            color="#6b7280"
+            _hover={{ color: "#111827" }}
+          >
+            Terms
+          </ChakraLink>
+          <ChakraLink
+            as={NextLink}
+            href="/openstudio/refund"
+            fontSize="15px"
+            fontWeight="500"
+            color="#6b7280"
+            _hover={{ color: "#111827" }}
+          >
+            Refunds
+          </ChakraLink>
+          <ChakraLink
             href="https://x.com/openstudiodotgl"
             isExternal
             fontSize="15px"
