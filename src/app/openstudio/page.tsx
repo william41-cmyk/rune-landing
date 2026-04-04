@@ -267,10 +267,13 @@ function Hero() {
               },
             }}
           >
-            Get started
+            Start free trial
           </Box>
         </Box>
 
+        <Text fontSize="xs" color="#9ca3af">
+          3 day free trial, then $5/mo.
+        </Text>
       </VStack>
 
       <Box
@@ -696,7 +699,7 @@ function Pricing() {
               boxShadow="0 4px 16px rgba(0,0,0,0.3)"
               _hover={{ bg: "rgba(255,255,255,0.9)" }}
             >
-             {isLifetime ? "Buy once" : "Get Pro"} <Box as="span">&#8594;</Box>
+             {isLifetime ? "Buy once" : "3 day free trial"} <Box as="span">&#8594;</Box>
             </Box>
           </Box>
 

@@ -18,6 +18,7 @@ export default function PlansPage() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState("");
+  const [hasUsedTrial, setHasUsedTrial] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -27,14 +28,28 @@ export default function PlansPage() {
       }
       setEmail(session.user.email ?? "");
       setUserId(session.user.id);
-      setLoading(false);
+
+      supabase
+        .from("subscriptions")
+        .select("has_used_trial")
+        .eq("user_id", session.user.id)
+        .single()
+        .then(({ data }) => {
+          setHasUsedTrial(data?.has_used_trial ?? false);
+          setLoading(false);
+        });
     });
   }, [router]);
 
   function handleSelectPlan(type: "monthly" | "lifetime") {
-    const checkoutUrl = type === "lifetime"
-      ? process.env.NEXT_PUBLIC_LEMONSQUEEZY_LIFETIME_CHECKOUT_URL
-      : process.env.NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL;
+    let checkoutUrl: string | undefined;
+    if (type === "lifetime") {
+      checkoutUrl = process.env.NEXT_PUBLIC_LEMONSQUEEZY_LIFETIME_CHECKOUT_URL;
+    } else if (hasUsedTrial) {
+      checkoutUrl = process.env.NEXT_PUBLIC_LEMONSQUEEZY_NOTRIAL_CHECKOUT_URL;
+    } else {
+      checkoutUrl = process.env.NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL;
+    }
     if (checkoutUrl) {
       window.open(
         `${checkoutUrl}?checkout[email]=${encodeURIComponent(email)}&checkout[custom][user_id]=${userId}`,
@@ -259,7 +274,7 @@ export default function PlansPage() {
                 boxShadow="0 4px 16px rgba(0,0,0,0.3)"
                 _hover={{ bg: "rgba(255,255,255,0.9)" }}
               >
-                {isLifetime ? "Buy once" : "Get Pro"} <Box as="span">&#8594;</Box>
+                {isLifetime ? "Buy once" : hasUsedTrial ? "Get Pro" : "3 day free trial"} <Box as="span">&#8594;</Box>
               </Box>
             </Box>
 

@@ -22,6 +22,7 @@ interface Subscription {
   billing_type: string;
   lemon_squeezy_customer_id: string | null;
   current_period_end: string | null;
+  has_used_trial: boolean;
 }
 
 function AccountNavbar({ onSignOut }: { onSignOut: () => void }) {
@@ -104,7 +105,7 @@ export default function AccountPage() {
 
       const { data } = await supabase
         .from("subscriptions")
-        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end")
+        .select("plan, status, billing_type, lemon_squeezy_customer_id, current_period_end, has_used_trial")
         .eq("user_id", session.user.id)
         .single();
 
@@ -115,6 +116,7 @@ export default function AccountPage() {
           billing_type: "monthly",
           lemon_squeezy_customer_id: null,
           current_period_end: null,
+          has_used_trial: false,
         }
       );
       setLoading(false);
@@ -129,9 +131,14 @@ export default function AccountPage() {
   }
 
   function handleUpgrade(type: "monthly" | "lifetime") {
-    const checkoutUrl = type === "lifetime"
-      ? process.env.NEXT_PUBLIC_LEMONSQUEEZY_LIFETIME_CHECKOUT_URL
-      : process.env.NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL;
+    let checkoutUrl: string | undefined;
+    if (type === "lifetime") {
+      checkoutUrl = process.env.NEXT_PUBLIC_LEMONSQUEEZY_LIFETIME_CHECKOUT_URL;
+    } else if (subscription?.has_used_trial) {
+      checkoutUrl = process.env.NEXT_PUBLIC_LEMONSQUEEZY_NOTRIAL_CHECKOUT_URL;
+    } else {
+      checkoutUrl = process.env.NEXT_PUBLIC_LEMONSQUEEZY_CHECKOUT_URL;
+    }
     if (checkoutUrl) {
       window.open(`${checkoutUrl}?checkout[email]=${encodeURIComponent(email)}&checkout[custom][user_id]=${userId}`, "_blank");
     }
@@ -158,6 +165,10 @@ export default function AccountPage() {
 
   const isPro = subscription?.plan === "pro";
   const isLifetime = subscription?.billing_type === "lifetime";
+  const isOnTrial = subscription?.status === "on_trial";
+  const isCancelled = subscription?.status === "cancelled";
+  const isPaymentFailed = subscription?.status === "past_due";
+  const hasUsedTrial = subscription?.has_used_trial ?? false;
   const initial = email ? email[0].toUpperCase() : "?";
 
   return (
@@ -221,10 +232,10 @@ export default function AccountPage() {
                       borderRadius="full"
                       fontSize="11px"
                       fontWeight="600"
-                      bg={isPro ? "rgba(34, 197, 94, 0.1)" : "rgba(107, 114, 128, 0.08)"}
-                      color={isPro ? "#16a34a" : "#9ca3af"}
+                      bg={isOnTrial ? "rgba(245, 158, 11, 0.1)" : isCancelled ? "rgba(239, 68, 68, 0.1)" : isPaymentFailed ? "rgba(239, 68, 68, 0.1)" : isPro ? "rgba(34, 197, 94, 0.1)" : "rgba(107, 114, 128, 0.08)"}
+                      color={isOnTrial ? "#d97706" : isCancelled ? "#dc2626" : isPaymentFailed ? "#dc2626" : isPro ? "#16a34a" : "#9ca3af"}
                     >
-                      {subscription?.status ?? "active"}
+                      {isOnTrial ? "Trial" : isCancelled ? "Cancelling" : isPaymentFailed ? "Past due" : subscription?.status ?? "active"}
                     </Box>
                   </HStack>
                 )}
@@ -237,7 +248,31 @@ export default function AccountPage() {
                 </HStack>
               )}
 
-              {!isLifetime && isPro && subscription?.current_period_end && (
+              {isOnTrial && subscription?.current_period_end && (
+                <HStack justify="space-between" px={6} py={4}>
+                  <Text fontSize="14px" color="#6b7280">Trial ends</Text>
+                  <Text fontSize="14px" fontWeight="600" color="#111827">
+                    {new Date(subscription.current_period_end).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </Text>
+                </HStack>
+              )}
+
+              {isCancelled && subscription?.current_period_end && (
+                <HStack justify="space-between" px={6} py={4}>
+                  <Text fontSize="14px" color="#6b7280">Access until</Text>
+                  <Text fontSize="14px" fontWeight="600" color="#dc2626">
+                    {new Date(subscription.current_period_end).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </Text>
+                </HStack>
+              )}
+
+              {isPaymentFailed && (
+                <HStack justify="space-between" px={6} py={4}>
+                  <Text fontSize="14px" color="#dc2626">Payment failed — please update your billing info to keep access.</Text>
+                </HStack>
+              )}
+
+              {!isOnTrial && !isCancelled && !isPaymentFailed && !isLifetime && isPro && subscription?.current_period_end && (
                 <HStack justify="space-between" px={6} py={4}>
                   <Text fontSize="14px" color="#6b7280">Renews</Text>
                   <Text fontSize="14px" fontWeight="600" color="#111827">
@@ -282,7 +317,7 @@ export default function AccountPage() {
                   _active={{ bg: "#1264c4" }}
                   boxShadow="0 1px 2px rgba(26, 132, 254, 0.2)"
                 >
-                  Upgrade to Pro
+                  {hasUsedTrial ? "Upgrade to Pro" : "Start free trial"}
                 </Button>
               )}
             </Box>

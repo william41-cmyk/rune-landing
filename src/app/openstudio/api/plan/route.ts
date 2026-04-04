@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   const { data: subscription } = await serviceClient
     .from("subscriptions")
-    .select("plan, status, billing_type, current_period_end")
+    .select("plan, status, billing_type, current_period_end, has_used_trial")
     .eq("user_id", user.id)
     .single();
 
@@ -35,5 +35,6 @@ export async function GET(request: NextRequest) {
     status: subscription?.status ?? "active",
     billing_type: subscription?.billing_type ?? "monthly",
     current_period_end: subscription?.current_period_end ?? null,
+    has_used_trial: subscription?.has_used_trial ?? false,
   });
 }

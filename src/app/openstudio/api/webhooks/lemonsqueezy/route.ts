@@ -53,33 +53,65 @@ export async function POST(request: NextRequest) {
     const plan =
       status === "active" || status === "on_trial" ? "pro" : "free";
 
-    await supabase.from("subscriptions").upsert(
-      {
-        user_id: userId,
-        plan,
-        status,
-        billing_type: "monthly",
-        lemon_squeezy_subscription_id: String(payload.data.id),
-        lemon_squeezy_customer_id: String(attrs.customer_id),
-        lemon_squeezy_variant_id: String(attrs.variant_id),
-        current_period_end: attrs.renews_at,
-        updated_at: new Date().toISOString(),
-      },
+    const updateData: Record<string, unknown> = {
+      user_id: userId,
+      plan,
+      status,
+      billing_type: "monthly",
+      lemon_squeezy_subscription_id: String(payload.data.id),
+      lemon_squeezy_customer_id: String(attrs.customer_id),
+      lemon_squeezy_variant_id: String(attrs.variant_id),
+      current_period_end: attrs.renews_at,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (status === "on_trial") {
+      updateData.has_used_trial = true;
+      updateData.trial_started_at = new Date().toISOString();
+    }
+
+    console.log("Webhook upsert data:", JSON.stringify(updateData));
+    const { error: upsertError } = await supabase.from("subscriptions").upsert(
+      updateData,
       { onConflict: "user_id" }
     );
+    if (upsertError) {
+      console.error("Upsert error:", JSON.stringify(upsertError));
+    }
+  }
+
+  if (eventName === "subscription_cancelled") {
+    await supabase
+      .from("subscriptions")
+      .update({
+        status: "cancelled",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId)
+      .neq("billing_type", "lifetime");
   }
 
   if (
-    eventName === "subscription_cancelled" ||
     eventName === "subscription_expired" ||
-    eventName === "subscription_payment_failed" ||
-    eventName === "subscription_paused"
+    eventName === "subscription_payment_failed"
   ) {
     await supabase
       .from("subscriptions")
       .update({
         plan: "free",
         status: attrs.status,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId)
+      .neq("billing_type", "lifetime");
+  }
+
+  if (eventName === "subscription_paused") {
+    await supabase
+      .from("subscriptions")
+      .update({
+        plan: "free",
+        status: "paused",
         updated_at: new Date().toISOString(),
       })
       .eq("user_id", userId)
