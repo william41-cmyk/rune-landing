@@ -372,7 +372,7 @@ function AccountContent() {
             </Box>
           </Box>
 
-          {isPro && subscription?.device_fingerprint && (
+          {isPro && (
             <Box
               bg="white"
               border="1px solid"
@@ -386,33 +386,41 @@ function AccountContent() {
                   Linked Device
                 </Text>
               </HStack>
-              <HStack px={6} py={5} justify="space-between">
-                <HStack spacing={3}>
-                  <Text fontSize="20px">💻</Text>
-                  <VStack align="start" spacing={0}>
-                    <Text fontSize="14px" fontWeight="600" color="#111827">
-                      {subscription.device_name || "Mac"}
-                    </Text>
-                    <Text fontSize="12px" color="#9ca3af">
-                      Currently linked
-                    </Text>
-                  </VStack>
+              {subscription?.device_fingerprint ? (
+                <HStack px={6} py={5} justify="space-between">
+                  <HStack spacing={3}>
+                    <Text fontSize="20px">💻</Text>
+                    <VStack align="start" spacing={0}>
+                      <Text fontSize="14px" fontWeight="600" color="#111827">
+                        {subscription.device_name || "Mac"}
+                      </Text>
+                      <Text fontSize="12px" color="#9ca3af">
+                        Currently linked
+                      </Text>
+                    </VStack>
+                  </HStack>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    fontSize="12px"
+                    fontWeight="600"
+                    color="#6b7280"
+                    borderColor="#e2e8f0"
+                    borderRadius="8px"
+                    _hover={{ bg: "#f8fafc", borderColor: "#d1d5db" }}
+                    onClick={handleUnlinkDevice}
+                    isLoading={isUnlinking}
+                  >
+                    Unlink
+                  </Button>
                 </HStack>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="#6b7280"
-                  borderColor="#e2e8f0"
-                  borderRadius="8px"
-                  _hover={{ bg: "#f8fafc", borderColor: "#d1d5db" }}
-                  onClick={handleUnlinkDevice}
-                  isLoading={isUnlinking}
-                >
-                  Unlink
-                </Button>
-              </HStack>
+              ) : (
+                <Box px={6} py={5}>
+                  <Text fontSize="14px" color="#9ca3af">
+                    No device linked — open the app to link this account to your Mac.
+                  </Text>
+                </Box>
+              )}
             </Box>
           )}
 
