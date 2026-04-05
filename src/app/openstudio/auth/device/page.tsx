@@ -42,6 +42,7 @@ function DeviceAuthContent() {
   const [hasSession, setHasSession] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [lastOtpSentAt, setLastOtpSentAt] = useState(0);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   useEffect(() => {
     if (!stateParam) {
@@ -98,6 +99,36 @@ function DeviceAuthContent() {
 
   async function handleSendCode(e: React.FormEvent) {
     e.preventDefault();
+    const now = Date.now();
+    if (now - lastOtpSentAt < 60000) {
+      setError("Please wait 60 seconds before requesting another code.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
+    const { error: authError } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false },
+    });
+
+    if (authError) {
+      if (authError.message.toLowerCase().includes("signups not allowed")) {
+        setIsNewUser(true);
+        setLoading(false);
+        return;
+      }
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    setLastOtpSentAt(Date.now());
+    setCodeSent(true);
+    setLoading(false);
+  }
+
+  async function handleCreateAccount() {
     const now = Date.now();
     if (now - lastOtpSentAt < 60000) {
       setError("Please wait 60 seconds before requesting another code.");
@@ -278,6 +309,80 @@ function DeviceAuthContent() {
               Continue to OpenStudio
             </Button>
           </VStack>
+        ) : isNewUser && !codeSent ? (
+          <VStack spacing={5} align="stretch">
+            <VStack spacing={3} align="center">
+              <Image
+                src="/openstudio_2.png"
+                alt="OpenStudio"
+                boxSize="48px"
+                borderRadius="12px"
+              />
+              <VStack spacing={1}>
+                <Text fontSize="xl" fontWeight="bold" color="#111827">
+                  Create your account
+                </Text>
+                <Text fontSize="sm" color="#6b7280" textAlign="center">
+                  No account found for {email}. Create one to get started.
+                </Text>
+              </VStack>
+            </VStack>
+
+            {error && (
+              <Box
+                bg="rgba(239, 68, 68, 0.08)"
+                border="1px solid"
+                borderColor="rgba(239, 68, 68, 0.2)"
+                borderRadius="md"
+                px={3}
+                py={2}
+              >
+                <Text fontSize="sm" color="#dc2626">
+                  {error}
+                </Text>
+              </Box>
+            )}
+
+            <Button
+              bg="#1a84fe"
+              color="white"
+              _hover={{ bg: "#1574e0" }}
+              _active={{ bg: "#1264c4" }}
+              fontWeight="semibold"
+              fontSize="sm"
+              isLoading={loading}
+              onClick={handleCreateAccount}
+              w="100%"
+              borderRadius="lg"
+            >
+              Create account & send code
+            </Button>
+
+            <Button
+              variant="ghost"
+              fontSize="sm"
+              color="#6b7280"
+              _hover={{ color: "#111827" }}
+              onClick={() => {
+                setIsNewUser(false);
+                setEmail("");
+                setError("");
+              }}
+            >
+              Use a different email
+            </Button>
+
+            <Text px="30px" fontSize="11px" color="#9ca3af" textAlign="center" lineHeight={1.5}>
+              By creating an account, you agree to our{" "}
+              <Box as="a" href="/terms" color="#6b7280" _hover={{ color: "#111827" }}>
+                Terms of Service
+              </Box>{" "}
+              and{" "}
+              <Box as="a" href="/privacy" color="#6b7280" _hover={{ color: "#111827" }}>
+                Privacy Policy
+              </Box>
+            </Text>
+          </VStack>
         ) : !codeSent ? (
           <VStack
             as="form"
@@ -294,10 +399,10 @@ function DeviceAuthContent() {
               />
               <VStack spacing={1}>
                 <Text fontSize="xl" fontWeight="bold" color="#111827">
-                  Sign in to OpenStudio
+                  Welcome to OpenStudio
                 </Text>
                 <Text fontSize="sm" color="#6b7280" textAlign="center">
-                  Sign in to connect your account to the app
+                  Enter your email to sign in or create an account
                 </Text>
               </VStack>
             </VStack>
@@ -337,6 +442,7 @@ function DeviceAuthContent() {
                   boxShadow: "0 0 0 1px #1a84fe",
                 }}
                 fontSize="sm"
+                sx={{ "&:-webkit-autofill, &:-webkit-autofill:hover, &:-webkit-autofill:focus": { WebkitBoxShadow: "0 0 0px 1000px white inset", WebkitTextFillColor: "#111827" } }}
                 required
               />
             </Box>
@@ -353,8 +459,19 @@ function DeviceAuthContent() {
               w="100%"
               borderRadius="lg"
             >
-              Send code
+              Continue
             </Button>
+
+            <Text px="30px" fontSize="11px" color="#9ca3af" textAlign="center" lineHeight={1.5}>
+              By continuing, you agree to our{" "}
+              <Box as="a" href="/terms" color="#6b7280" _hover={{ color: "#111827" }}>
+                Terms of Service
+              </Box>{" "}
+              and{" "}
+              <Box as="a" href="/privacy" color="#6b7280" _hover={{ color: "#111827" }}>
+                Privacy Policy
+              </Box>
+            </Text>
           </VStack>
         ) : (
           <VStack spacing={5} align="stretch">

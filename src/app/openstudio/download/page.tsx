@@ -14,10 +14,10 @@ import {
 import NextLink from "next/link";
 import { supabase } from "@/lib/supabase";
 
-const CURRENT_VERSION = "0.1.0";
-const CURRENT_BUILD = "1";
-const CURRENT_DATE = "April 4, 2026";
-const DMG_URL = "https://releases.openstudio.gl/OpenStudio-0.1.0.dmg";
+const CURRENT_VERSION = "1.0.0";
+const CURRENT_BUILD = "4";
+const CURRENT_DATE = "April 5, 2026";
+const DMG_URL = "https://releases.openstudio.gl/OpenStudio-1.0.0.dmg";
 const MIN_MACOS = "14.0";
 
 const RELEASE_NOTES: {
@@ -29,22 +29,30 @@ const RELEASE_NOTES: {
   notes: string[];
 }[] = [
   {
-    version: "0.1.0",
-    build: "1",
-    date: "April 4, 2026",
+    version: "1.0.0",
+    build: "4",
+    date: "April 5, 2026",
     url: DMG_URL,
     current: true,
     notes: [
-      "Record full screen, window, or custom area at native resolution",
-      "System audio and microphone capture with per-track volume",
-      "Webcam overlay in circle or rounded square",
+      "Record full screen, individual windows, or custom areas at native resolution",
+      "System audio and microphone capture with separate tracks and per-track volume",
+      "Webcam overlay with circle or rectangle shape and 9-position placement",
       "Timeline editor with trim, cut, and segment arrangement",
-      "Audio fade in/out and video opacity controls",
-      "Adjustable playback speed with undo, redo, and auto-save",
-      "Custom backgrounds, padding, rounded corners, and borders",
-      "Brightness, contrast, and saturation adjustments",
-      "Auto zoom to focus on what matters",
-      "Export to MP4, MOV, or GIF up to 4K",
+      "Audio fade in/out with linear, ease in, ease out, and S-curve types",
+      "Microphone noise reduction",
+      "Auto-zoom that follows your cursor with smooth, snappy, and cinematic easing",
+      "Manual zoom keyframes with up to 10x magnification",
+      "Cursor smoothing, inertia, path smoothing, and motion blur",
+      "7 cursor styles with adjustable scale and shadow",
+      "Click sound effects with volume control",
+      "20+ gradient backgrounds including macOS-inspired themes",
+      "Solid color and custom image backgrounds",
+      "Adjustable padding, corner radius, border, and inset styling",
+      "Brightness, contrast, saturation, vignette, and background blur",
+      "Export to MP4 (H.264), MOV (HEVC), or GIF up to 4K",
+      "24, 30, and 60 fps output with custom bitrate control",
+      "Configurable countdown timer, pause and resume, auto-save",
       "Built with SwiftUI and ScreenCaptureKit",
     ],
   },

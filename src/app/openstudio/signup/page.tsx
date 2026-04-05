@@ -26,6 +26,7 @@ export default function SignupPage() {
   const [codeSent, setCodeSent] = useState(false);
   const [checking, setChecking] = useState(true);
   const [lastOtpSentAt, setLastOtpSentAt] = useState(0);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -47,11 +48,39 @@ export default function SignupPage() {
     setError("");
     setLoading(true);
 
+    const { error: checkError } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false },
+    });
+
+    if (checkError) {
+      if (checkError.message.toLowerCase().includes("signups not allowed")) {
+        setIsNewUser(true);
+        setLoading(false);
+        return;
+      }
+      setError(checkError.message);
+      setLoading(false);
+      return;
+    }
+
+    setLastOtpSentAt(Date.now());
+    setCodeSent(true);
+    setLoading(false);
+  }
+
+  async function handleCreateAccount() {
+    const now = Date.now();
+    if (now - lastOtpSentAt < 60000) {
+      setError("Please wait 60 seconds before requesting another code.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+
     const { error: authError } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        shouldCreateUser: true,
-      },
+      options: { shouldCreateUser: true },
     });
 
     if (authError) {
@@ -106,7 +135,81 @@ export default function SignupPage() {
         p={8}
         boxShadow="0 1px 3px rgba(0,0,0,0.06)"
       >
-        {!codeSent ? (
+        {isNewUser && !codeSent ? (
+          <VStack spacing={5} align="stretch">
+            <VStack spacing={3} align="center">
+              <Image
+                src="/openstudio_2.png"
+                alt="OpenStudio"
+                boxSize="48px"
+                borderRadius="12px"
+              />
+              <VStack spacing={1}>
+                <Text fontSize="xl" fontWeight="bold" color="#111827">
+                  Create your account
+                </Text>
+                <Text fontSize="sm" color="#6b7280" textAlign="center">
+                  No account found for {email}. Create one to get started.
+                </Text>
+              </VStack>
+            </VStack>
+
+            {error && (
+              <Box
+                bg="rgba(239, 68, 68, 0.08)"
+                border="1px solid"
+                borderColor="rgba(239, 68, 68, 0.2)"
+                borderRadius="md"
+                px={3}
+                py={2}
+              >
+                <Text fontSize="sm" color="#dc2626">
+                  {error}
+                </Text>
+              </Box>
+            )}
+
+            <Button
+              bg="#1a84fe"
+              color="white"
+              _hover={{ bg: "#1574e0" }}
+              _active={{ bg: "#1264c4" }}
+              fontWeight="semibold"
+              fontSize="sm"
+              isLoading={loading}
+              onClick={handleCreateAccount}
+              w="100%"
+              borderRadius="lg"
+            >
+              Create account & send code
+            </Button>
+
+            <Button
+              variant="ghost"
+              fontSize="sm"
+              color="#6b7280"
+              _hover={{ color: "#111827" }}
+              onClick={() => {
+                setIsNewUser(false);
+                setEmail("");
+                setError("");
+              }}
+            >
+              Use a different email
+            </Button>
+
+            <Text px="30px" fontSize="11px" color="#9ca3af" textAlign="center" lineHeight={1.5}>
+              By creating an account, you agree to our{" "}
+              <ChakraLink as={NextLink} href="/terms" color="#6b7280" _hover={{ color: "#111827" }}>
+                Terms of Service
+              </ChakraLink>{" "}
+              and{" "}
+              <ChakraLink as={NextLink} href="/privacy" color="#6b7280" _hover={{ color: "#111827" }}>
+                Privacy Policy
+              </ChakraLink>
+            </Text>
+          </VStack>
+        ) : !codeSent ? (
           <VStack as="form" onSubmit={handleSendCode} spacing={5} align="stretch">
             <VStack spacing={3} align="center">
               <Image
@@ -174,7 +277,7 @@ export default function SignupPage() {
               w="100%"
               borderRadius="lg"
             >
-              Send code
+              Continue
             </Button>
 
             <Text fontSize="sm" color="#6b7280" textAlign="center">
