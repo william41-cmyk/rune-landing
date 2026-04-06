@@ -106,6 +106,7 @@ export default function ProductCard({
               boxSize="40px"
               borderRadius="8px"
               objectFit="cover"
+              bg="white"
             />
           ) : icon ? (
             <Icon
@@ -148,6 +149,14 @@ export default function ProductCard({
 
   if (locked || !href) {
     return card;
+  }
+
+  if (href.startsWith("http")) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+        {card}
+      </a>
+    );
   }
 
   return (

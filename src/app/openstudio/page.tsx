@@ -288,21 +288,20 @@ function Hero() {
         maxW="960px"
         mx="auto"
         mt={{ base: 12, md: 16 }}
-        borderRadius="xl"
+        borderRadius="16px"
         overflow="hidden"
         border="1px solid"
         borderColor="#e2e8f0"
         boxShadow="0 4px 24px rgba(0,0,0,0.06)"
         bg="white"
         position="relative"
-        minH={{ base: "240px", md: "480px" }}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
       >
-        <Text color="#9ca3af" fontSize="sm">
-          app screenshot
-        </Text>
+        <Image
+          src="/screenshot1.png"
+          alt="OpenStudio app screenshot"
+          w="100%"
+          display="block"
+        />
       </Box>
     </Box>
   );
@@ -337,7 +336,7 @@ function Features() {
           Everything you need
         </Text>
         <Text fontSize="17px" fontWeight="500" color="#6b7280" maxW="480px">
-          Record, edit, style, and export — all in one app.
+          Record, edit, style, and export - all in one app.
         </Text>
       </VStack>
 
@@ -357,60 +356,51 @@ function Features() {
           </BentoCard>
 
           <BentoCard flex={1} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <Box
-              w="100%"
-              h="160px"
-              bg="#f8fafc"
-              borderRadius="12px"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text fontSize="14px" color="#d1d5db">Image</Text>
+            <Box w="100%" borderRadius="12px" overflow="hidden">
+              <Image src="/native.png" alt="OpenStudio preview" w="100%" display="block" />
             </Box>
           </BentoCard>
 
-          <BentoCard flex={1}>
-            <Text fontSize="15px" fontWeight="500" color="#6b7280" lineHeight={1.7} mb={6}>
-              Record your full screen, a specific window, or a custom area. High quality at native resolution with system audio and microphone.
-            </Text>
-            <Box w="100%" h="1px" bg="#f0f0f0" mb={5} />
-            <Flex align="center" gap={3}>
-              <Box w="40px" h="40px" borderRadius="10px" bg="#f8fafc" display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
-                <Text fontSize="14px" color="#d1d5db">img</Text>
-              </Box>
-              <Box>
-                <Text fontSize="14px" fontWeight="600" color="#111827">Screen Recording</Text>
-                <Text fontSize="13px" fontWeight="500" color="#1a84fe">One-click capture</Text>
-              </Box>
-            </Flex>
+          <BentoCard flex={1} display="flex" flexDirection="column">
+            <Box
+              w="100%"
+              borderRadius="12px"
+              mb={5}
+              overflow="hidden"
+            >
+              <Image src="/tool-bar.png" alt="Screen Recording" w="100%" display="block" />
+            </Box>
+            <Box>
+              <Text fontSize="14px" fontWeight="600" color="#111827">Screen Recording</Text>
+              <Text fontSize="13px" fontWeight="500" color="#1a84fe">One-click capture</Text>
+            </Box>
           </BentoCard>
         </Flex>
 
         <Flex gap={3} mb={3} direction={{ base: "column", md: "row" }}>
-          <BentoCard flex={1}>
-            <Text fontSize="15px" fontWeight="500" color="#6b7280" lineHeight={1.7} mb={4}>
-              Trim, cut, and arrange segments on a visual timeline. Fade audio and video opacity in and out per segment. Adjust volume with a draggable waveform overlay, and control playback speed — all with undo, redo, and auto-save.
-            </Text>
-            <Box w="100%" h="1px" bg="#f0f0f0" mb={5} />
-            <Flex align="center" gap={3}>
-              <Box w="40px" h="40px" borderRadius="10px" bg="#f8fafc" display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
-                <Text fontSize="14px" color="#d1d5db">img</Text>
-              </Box>
-              <Box>
-                <Text fontSize="14px" fontWeight="600" color="#111827">Timeline Editor</Text>
-                <Text fontSize="13px" fontWeight="500" color="#1a84fe">Built-in editing</Text>
-              </Box>
-            </Flex>
+          <BentoCard flex={1} display="flex" flexDirection="column">
+            <Box
+              w="100%"
+              borderRadius="12px"
+              mb={5}
+              overflow="hidden"
+            >
+              <Image src="/export.png" alt="Local Export" w="100%" display="block" />
+            </Box>
+            <Box>
+              <Text fontSize="14px" fontWeight="600" color="#111827">Local Export</Text>
+              <Text fontSize="13px" fontWeight="500" color="#1a84fe">100% on your Mac</Text>
+            </Box>
           </BentoCard>
 
-          <BentoCard flex={1.2}>
+          <BentoCard flex={1.2} display="flex" flexDirection="column" justifyContent="center">
             <Text fontSize="40px" fontWeight="400" color="#111827" lineHeight={1} mb={1}>
               Beautiful
             </Text>
             <Text fontSize="15px" fontWeight="500" color="#9ca3af" mb={5}>
               styling
             </Text>
+            <Box w="100%" h="1px" bg="#f0f0f0" mb={5} />
             <Text fontSize="15px" fontWeight="500" color="#6b7280" lineHeight={1.7}>
               Add backgrounds, padding, rounded corners, and borders. Adjust brightness, contrast, and saturation. Make every recording look polished.
             </Text>
@@ -419,19 +409,27 @@ function Features() {
           <BentoCard flex={1} display="flex" flexDirection="column">
             <Box
               w="100%"
-              h="160px"
-              bg="#f8fafc"
               borderRadius="12px"
               mb={5}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+              overflow="hidden"
             >
-              <Text fontSize="14px" color="#d1d5db">Image</Text>
+              <Box
+                as="video"
+                src="/zoom-example.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                w="100%"
+                display="block"
+              />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Auto Zoom</Text>
-              <Text fontSize="13px" fontWeight="500" color="#1a84fe">Focus on what matters</Text>
+              <Text fontSize="13px" fontWeight="500" color="#1a84fe" mb={2}>Focus on what matters</Text>
+              <Text fontSize="13px" fontWeight="500" color="#9ca3af" lineHeight={1.6}>
+                Keep your audience focused with automatic zoom into key areas.
+              </Text>
             </Box>
           </BentoCard>
         </Flex>
@@ -446,36 +444,46 @@ function Features() {
             </Text>
           </BentoCard>
 
-          <BentoCard flex={1}>
-            <Text fontSize="15px" fontWeight="500" color="#6b7280" lineHeight={1.7} mb={6}>
-              Overlay your webcam in a circle or rounded square. Mix system audio and microphone with per-track volume, fade controls, and noise reduction.
-            </Text>
-            <Box w="100%" h="1px" bg="#f0f0f0" mb={5} />
-            <Flex align="center" gap={3}>
-              <Box w="40px" h="40px" borderRadius="10px" bg="#f8fafc" display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
-                <Text fontSize="14px" color="#d1d5db">img</Text>
-              </Box>
-              <Box>
-                <Text fontSize="14px" fontWeight="600" color="#111827">Webcam & Audio</Text>
-                <Text fontSize="13px" fontWeight="500" color="#1a84fe">Record everything</Text>
-              </Box>
-            </Flex>
+          <BentoCard flex={1} display="flex" flexDirection="column">
+            <Box
+              w="100%"
+              borderRadius="12px"
+              mb={5}
+              overflow="hidden"
+            >
+              <Box
+                as="video"
+                src="/webcam-example.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                w="100%"
+                display="block"
+              />
+            </Box>
+            <Box>
+              <Text fontSize="14px" fontWeight="600" color="#111827">Webcam & Audio</Text>
+              <Text fontSize="13px" fontWeight="500" color="#1a84fe">Record everything</Text>
+            </Box>
           </BentoCard>
 
-          <BentoCard flex={1.2}>
-            <Text fontSize="15px" fontWeight="500" color="#6b7280" lineHeight={1.7} mb={6}>
-              Everything renders locally on your Mac. No uploading, no cloud processing. Export as MP4, MOV, or GIF in any resolution up to 4K.
-            </Text>
-            <Box w="100%" h="1px" bg="#f0f0f0" mb={5} />
-            <Flex align="center" gap={3}>
-              <Box w="40px" h="40px" borderRadius="10px" bg="#f8fafc" display="flex" alignItems="center" justifyContent="center" flexShrink={0}>
-                <Text fontSize="14px" color="#d1d5db">img</Text>
-              </Box>
-              <Box>
-                <Text fontSize="14px" fontWeight="600" color="#111827">Local Export</Text>
-                <Text fontSize="13px" fontWeight="500" color="#1a84fe">100% on your Mac</Text>
-              </Box>
-            </Flex>
+          <BentoCard flex={1.2} display="flex" flexDirection="column">
+            <Box
+              w="100%"
+              borderRadius="12px"
+              mb={5}
+              overflow="hidden"
+            >
+              <Image src="/timeline.png" alt="Timeline Editor" w="100%" display="block" />
+            </Box>
+            <Box>
+              <Text fontSize="14px" fontWeight="600" color="#111827">Timeline Editor</Text>
+              <Text fontSize="13px" fontWeight="500" color="#1a84fe" mb={2}>Built-in editing</Text>
+              <Text fontSize="13px" fontWeight="500" color="#9ca3af" lineHeight={1.6}>
+                Trim, cut, and arrange clips on a visual timeline.
+              </Text>
+            </Box>
           </BentoCard>
         </Flex>
       </Box>

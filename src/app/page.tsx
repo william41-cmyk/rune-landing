@@ -196,6 +196,12 @@ export default function Home() {
                     img="/hugr.webp"
                   />
                   <ProductCard
+                    name="OpenStudio"
+                    description="Record your screen, make it look beautiful, and export."
+                    href="https://openstudio.gl"
+                    img="/openstudio_2.png"
+                  />
+                  <ProductCard
                     name="Rune Bench"
                     description="Evaluate and benchmark agents across real-world tasks."
                     locked

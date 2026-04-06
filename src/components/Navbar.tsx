@@ -15,13 +15,6 @@ import { useScroll, useMotionValueEvent } from "framer-motion";
 import {
   FiChevronRight,
   FiChevronDown,
-  FiBook,
-  FiCpu,
-  FiGitBranch,
-  FiLayers,
-  FiTerminal,
-  FiLayout,
-  FiSettings,
   FiDownload,
   FiMenu,
   FiX,
@@ -38,16 +31,7 @@ const products = [
   { name: "Rune Code", description: "Code the right way", href: "/code", img: "/rune-logo.webp" },
   { name: "Rune Grab", description: "Grab UI context for AI", href: "/grab", img: "/rune-grab-logo.webp" },
   { name: "Hugr", description: "Multi-agent workflows", href: "/hugr", img: "/hugr.webp" },
-];
-
-const docs = [
-  { name: "Getting Started", href: "/docs?getting-started=introduction", icon: FiBook },
-  { name: "Agents", href: "/docs?agents=agent-overview", icon: FiCpu },
-  { name: "Pipelines", href: "/docs?pipelines=visual-editor", icon: FiGitBranch },
-  { name: "Skills", href: "/docs?skills=built-in-skills", icon: FiLayers },
-  { name: "Sessions", href: "/docs?sessions=session-manager", icon: FiTerminal },
-  { name: "App Interface", href: "/docs?app-interface=layout-overview", icon: FiLayout },
-  { name: "Configuration", href: "/docs?configuration=presets", icon: FiSettings },
+  { name: "OpenStudio", description: "Screen recordings", href: "https://openstudio.gl", img: "/openstudio_2.png" },
 ];
 
 const downloads = [
@@ -67,7 +51,6 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
-  const [docsOpen, setDocsOpen] = useState(false);
   const [socialOpen, setSocialOpen] = useState(false);
   const [downloadOpen, setDownloadOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -224,147 +207,73 @@ export default function Navbar() {
                   boxShadow={c.shadow.dropdown}
                   zIndex={1001}
                 >
-                  {products.map((product) => (
-                    <Link key={product.href} href={product.href} onClick={() => setProductsOpen(false)}>
-                      <HStack
-                        spacing={3}
-                        px={4}
-                        py={1.5}
-                        cursor="pointer"
-                        transition="all 0.15s"
-                        role="group"
-                      >
-                        {product.img ? (
-                          <Image
-                            src={product.img}
-                            alt={product.name}
-                            w="28px"
-                            h="28px"
-                            borderRadius="6px"
-                            objectFit="contain"
-                            flexShrink={0}
-                          />
-                        ) : (
-                          <Flex
-                            w="28px"
-                            h="28px"
-                            borderRadius="6px"
-                            bg={c.overlay.hover}
-                            align="center"
-                            justify="center"
-                            flexShrink={0}
-                          >
-                            <Text fontSize="sm" fontWeight={700} color={c.text.muted} userSelect="none">?</Text>
-                          </Flex>
-                        )}
-                        <Box>
-                          <Text
-                letterSpacing="-0.03em"
-                            fontSize="sm"
-                            fontWeight={500}
-                            color={c.text.inactive}
-                            lineHeight={1.3}
-                            transition="color 0.15s"
-                            _groupHover={{ color: c.text.primary }}
-                          >
-                            {product.name}
-                          </Text>
-                          <Text
-                letterSpacing="-0.03em"
-                            fontSize="xs"
-                            color={c.text.faint}
-                            lineHeight={1.3}
-                            transition="color 0.15s"
-                            _groupHover={{ color: c.text.muted }}
-                          >
-                            {product.description}
-                          </Text>
-                        </Box>
-                      </HStack>
-                    </Link>
-                  ))}
-                </Box>
-              )}
-          </Box>
-
-          {/* Documentation Dropdown */}
-          <Box
-            position="relative"
-            onMouseEnter={() => setDocsOpen(true)}
-            onMouseLeave={() => setDocsOpen(false)}
-          >
-            <HStack
-              spacing={1}
-              cursor="pointer"
-              role="button"
-              aria-expanded={docsOpen}
-            >
-              <Text
-                letterSpacing="-0.03em"
-                fontSize="md"
-                fontWeight={500}
-                color={docsOpen ? c.text.primary : c.text.muted}
-                transition="all 0.2s"
-                _hover={{ color: c.text.primary }}
-                userSelect="none"
-              >
-                Documentation
-              </Text>
-              <Icon
-                as={FiChevronRight}
-                boxSize={3.5}
-                color={docsOpen ? c.text.primary : c.text.subtle}
-                transition="all 0.2s"
-                transform={docsOpen ? "rotate(90deg)" : "rotate(0deg)"}
-              />
-            </HStack>
-
-            {/* Invisible bridge */}
-            {docsOpen && (
-              <Box
-                position="absolute"
-                top="100%"
-                left="-20px"
-                right="-20px"
-                h="16px"
-              />
-            )}
-
-            {docsOpen && (
-                <Box
-                  position="absolute"
-                  top="calc(100% + 12px)"
-                  left="50%"
-                  transform="translateX(-50%)"
-                  minW="180px"
-                  py={1}
-                  borderRadius="2xl"
-                  border="1px solid"
-                  borderColor={c.border.subtle}
-                  bg={c.bg}
-                  backdropFilter="blur(20px)"
-                  sx={{ WebkitBackdropFilter: "blur(20px)" }}
-                  boxShadow={c.shadow.dropdown}
-                  zIndex={1001}
-                >
-                  {docs.map((doc) => (
-                    <Link key={doc.href} href={doc.href} onClick={() => setDocsOpen(false)}>
-                      <HStack
-                        spacing={2.5}
-                        px={4}
-                        py={1.5}
-                        cursor="pointer"
-                        transition="color 0.15s"
-                        color={c.text.inactive}
-                        _hover={{ color: c.text.primary }}
-                      >
-                        <Icon as={doc.icon} boxSize={3.5} />
-                        <Text fontSize="sm" fontWeight={500} letterSpacing="-0.03em">
-                          {doc.name}
-                        </Text>
-                      </HStack>
-                    </Link>
-                  ))}
+                  {products.map((product) => {
+                    const isExternal = product.href.startsWith("http");
+                    const linkProps = isExternal
+                      ? { as: "a" as const, href: product.href, target: "_blank", rel: "noopener noreferrer" }
+                      : {};
+                    const Wrapper = isExternal ? ChakraLink : Link;
+                    return (
+                      <Wrapper key={product.href} href={product.href} onClick={() => setProductsOpen(false)} {...(isExternal ? { isExternal: true, _hover: { textDecoration: "none" } } : {})}>
+                        <HStack
+                          spacing={3}
+                          px={4}
+                          py={1.5}
+                          cursor="pointer"
+                          transition="all 0.15s"
+                          role="group"
+                        >
+                          {product.img ? (
+                            <Image
+                              src={product.img}
+                              alt={product.name}
+                              w="28px"
+                              h="28px"
+                              borderRadius="6px"
+                              objectFit="contain"
+                              flexShrink={0}
+                              bg="white"
+                            />
+                          ) : (
+                            <Flex
+                              w="28px"
+                              h="28px"
+                              borderRadius="6px"
+                              bg={c.overlay.hover}
+                              align="center"
+                              justify="center"
+                              flexShrink={0}
+                            >
+                              <Text fontSize="sm" fontWeight={700} color={c.text.muted} userSelect="none">?</Text>
+                            </Flex>
+                          )}
+                          <Box>
+                            <Text
+                  letterSpacing="-0.03em"
+                              fontSize="sm"
+                              fontWeight={500}
+                              color={c.text.inactive}
+                              lineHeight={1.3}
+                              transition="color 0.15s"
+                              _groupHover={{ color: c.text.primary }}
+                            >
+                              {product.name}
+                            </Text>
+                            <Text
+                  letterSpacing="-0.03em"
+                              fontSize="xs"
+                              color={c.text.faint}
+                              lineHeight={1.3}
+                              transition="color 0.15s"
+                              _groupHover={{ color: c.text.muted }}
+                            >
+                              {product.description}
+                            </Text>
+                          </Box>
+                        </HStack>
+                      </Wrapper>
+                    );
+                  })}
                 </Box>
               )}
           </Box>
@@ -590,64 +499,32 @@ export default function Navbar() {
             </Flex>
             {mobileSection === "products" && (
               <Box pl={2} pb={2}>
-                {products.map((product) => (
-                  <Link key={product.href} href={product.href} onClick={() => setMobileOpen(false)}>
-                    <HStack spacing={3} py={2} px={2} borderRadius="8px" _hover={{ bg: c.overlay.soft }}>
-                      <Image
-                        src={product.img}
-                        alt={product.name}
-                        w="24px"
-                        h="24px"
-                        borderRadius="6px"
-                        objectFit="contain"
-                      />
-                      <Box>
-                        <Text fontSize="sm" fontWeight={500} color={c.text.muted} letterSpacing="-0.03em">
-                          {product.name}
-                        </Text>
-                        <Text fontSize="xs" color={c.text.faint} letterSpacing="-0.03em">
-                          {product.description}
-                        </Text>
-                      </Box>
-                    </HStack>
-                  </Link>
-                ))}
-              </Box>
-            )}
-          </Box>
-
-          {/* Documentation */}
-          <Box mb={1}>
-            <Flex
-              align="center"
-              justify="space-between"
-              py={2.5}
-              cursor="pointer"
-              onClick={() => setMobileSection(mobileSection === "docs" ? null : "docs")}
-            >
-              <Text fontSize="md" fontWeight={500} color={c.text.primary} letterSpacing="-0.03em">
-                Documentation
-              </Text>
-              <Icon
-                as={FiChevronRight}
-                boxSize={3.5}
-                color={c.text.subtle}
-                transition="transform 0.2s"
-                transform={mobileSection === "docs" ? "rotate(90deg)" : "rotate(0deg)"}
-              />
-            </Flex>
-            {mobileSection === "docs" && (
-              <Box pl={2} pb={2}>
-                {docs.map((doc) => (
-                  <Link key={doc.href} href={doc.href} onClick={() => setMobileOpen(false)}>
-                    <HStack spacing={2.5} py={2} px={2} borderRadius="8px" _hover={{ bg: c.overlay.soft }}>
-                      <Icon as={doc.icon} boxSize={3.5} color={c.text.muted} />
-                      <Text fontSize="sm" fontWeight={500} color={c.text.muted} letterSpacing="-0.03em">
-                        {doc.name}
-                      </Text>
-                    </HStack>
-                  </Link>
-                ))}
+                {products.map((product) => {
+                  const isExternal = product.href.startsWith("http");
+                  const Wrapper = isExternal ? ChakraLink : Link;
+                  return (
+                    <Wrapper key={product.href} href={product.href} onClick={() => setMobileOpen(false)} {...(isExternal ? { isExternal: true, _hover: { textDecoration: "none" } } : {})}>
+                      <HStack spacing={3} py={2} px={2} borderRadius="8px" _hover={{ bg: c.overlay.soft }}>
+                        <Image
+                          src={product.img}
+                          alt={product.name}
+                          w="24px"
+                          h="24px"
+                          borderRadius="6px"
+                          objectFit="contain"
+                        />
+                        <Box>
+                          <Text fontSize="sm" fontWeight={500} color={c.text.muted} letterSpacing="-0.03em">
+                            {product.name}
+                          </Text>
+                          <Text fontSize="xs" color={c.text.faint} letterSpacing="-0.03em">
+                            {product.description}
+                          </Text>
+                        </Box>
+                      </HStack>
+                    </Wrapper>
+                  );
+                })}
               </Box>
             )}
           </Box>
