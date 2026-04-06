@@ -297,7 +297,7 @@ function Hero() {
         position="relative"
       >
         <Image
-          src="/screenshot1.png"
+          src="/screenshot1.webp"
           alt="OpenStudio app screenshot"
           w="100%"
           display="block"
@@ -357,7 +357,7 @@ function Features() {
 
           <BentoCard flex={1} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box w="100%" borderRadius="12px" overflow="hidden">
-              <Image src="/native.png" alt="OpenStudio preview" w="100%" display="block" />
+              <Image src="/native.webp" alt="OpenStudio preview" w="100%" display="block" />
             </Box>
           </BentoCard>
 
@@ -368,7 +368,7 @@ function Features() {
               mb={5}
               overflow="hidden"
             >
-              <Image src="/tool-bar.png" alt="Screen Recording" w="100%" display="block" />
+              <Image src="/tool-bar.webp" alt="Screen Recording" w="100%" display="block" />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Screen Recording</Text>
@@ -385,7 +385,7 @@ function Features() {
               mb={5}
               overflow="hidden"
             >
-              <Image src="/export.png" alt="Local Export" w="100%" display="block" />
+              <Image src="/export.webp" alt="Local Export" w="100%" display="block" />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Local Export</Text>
@@ -475,7 +475,7 @@ function Features() {
               mb={5}
               overflow="hidden"
             >
-              <Image src="/timeline.png" alt="Timeline Editor" w="100%" display="block" />
+              <Image src="/timeline.webp" alt="Timeline Editor" w="100%" display="block" />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Timeline Editor</Text>
