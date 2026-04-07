@@ -8,10 +8,10 @@ import {
   VStack,
   Text,
   Button,
-  Image,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import NextImage from "next/image";
 import { supabase } from "@/lib/supabase";
 
 
@@ -56,12 +56,15 @@ function OpenStudioNavbar() {
       >
         <ChakraLink as={NextLink} href="/" _hover={{ textDecoration: "none" }}>
           <HStack spacing={2}>
-            <Image
-              src="/openstudio_2.png"
-              alt="OpenStudio"
-              boxSize="26px"
-              borderRadius="6px"
-            />
+            <Box borderRadius="6px" overflow="hidden" w="26px" h="26px">
+              <NextImage
+                src="/openstudio_2.png"
+                alt="OpenStudio"
+                width={26}
+                height={26}
+                priority
+              />
+            </Box>
             <Text fontSize="sm" fontWeight="bold" color="#111827">
               OpenStudio
             </Text>
@@ -296,11 +299,14 @@ function Hero() {
         bg="white"
         position="relative"
       >
-        <Image
+        <NextImage
           src="/screenshot1.webp"
           alt="OpenStudio app screenshot"
-          w="100%"
-          display="block"
+          width={1920}
+          height={1200}
+          priority
+          sizes="(max-width: 768px) 100vw, 960px"
+          style={{ width: "100%", height: "auto", display: "block" }}
         />
       </Box>
     </Box>
@@ -357,7 +363,14 @@ function Features() {
 
           <BentoCard flex={1} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
             <Box w="100%" borderRadius="12px" overflow="hidden">
-              <Image src="/native.webp" alt="OpenStudio preview" w="100%" display="block" />
+              <NextImage
+                src="/native.webp"
+                alt="OpenStudio preview"
+                width={1200}
+                height={900}
+                sizes="(max-width: 768px) 100vw, 320px"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
             </Box>
           </BentoCard>
 
@@ -368,7 +381,14 @@ function Features() {
               mb={5}
               overflow="hidden"
             >
-              <Image src="/tool-bar.webp" alt="Screen Recording" w="100%" display="block" />
+              <NextImage
+                src="/tool-bar.webp"
+                alt="Screen Recording"
+                width={1200}
+                height={600}
+                sizes="(max-width: 768px) 100vw, 320px"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Screen Recording</Text>
@@ -385,7 +405,14 @@ function Features() {
               mb={5}
               overflow="hidden"
             >
-              <Image src="/export.webp" alt="Local Export" w="100%" display="block" />
+              <NextImage
+                src="/export.webp"
+                alt="Local Export"
+                width={1000}
+                height={1000}
+                sizes="(max-width: 768px) 100vw, 320px"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Local Export</Text>
@@ -475,7 +502,14 @@ function Features() {
               mb={5}
               overflow="hidden"
             >
-              <Image src="/timeline.webp" alt="Timeline Editor" w="100%" display="block" />
+              <NextImage
+                src="/timeline.webp"
+                alt="Timeline Editor"
+                width={1600}
+                height={1000}
+                sizes="(max-width: 768px) 100vw, 380px"
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
             </Box>
             <Box>
               <Text fontSize="14px" fontWeight="600" color="#111827">Timeline Editor</Text>
@@ -771,12 +805,14 @@ function OpenStudioFooter() {
         gap={4}
       >
         <HStack spacing={2.5}>
-          <Image
-            src="/openstudio_2.png"
-            alt="OpenStudio"
-            boxSize="24px"
-            borderRadius="6px"
-          />
+          <Box borderRadius="6px" overflow="hidden" w="24px" h="24px">
+            <NextImage
+              src="/openstudio_2.png"
+              alt="OpenStudio"
+              width={24}
+              height={24}
+            />
+          </Box>
           <Text fontSize="15px" fontWeight="500" color="#6b7280">
             © {new Date().getFullYear()} OpenStudio by{" "}
             <ChakraLink
